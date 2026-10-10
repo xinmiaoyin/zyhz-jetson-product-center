@@ -90,6 +90,26 @@ test("review malformed source URL retains source field diagnostics", async t => 
   await assert.rejects(access(join(rootDir, "dist")), { code: "ENOENT" });
 });
 
+for (const [field, invalid, reason] of [["verifiedAt", "2026-02-30", /Invalid ISO date/], ["value", 0, /expected number to be >0/]]) {
+  test(`review invalid performance ${field} keeps full build diagnostics and preserves dist`, async t => {
+    const rootDir = await fixture(t, products => { products[0].performanceMetrics[0][field] = invalid; });
+    const outDir = join(rootDir, "dist");
+    const diagnostic = error => {
+      assert.match(error.message, new RegExp(`jetson-agx-thor-developer-kit performanceMetrics\\.0\\.${field}:`));
+      assert.match(error.message, reason);
+      return true;
+    };
+    await assert.rejects(buildSite({ rootDir, outDir }), diagnostic);
+    await assert.rejects(access(outDir), { code: "ENOENT" });
+    await mkdir(outDir);
+    await writeFile(join(outDir, "index.html"), "previous successful build");
+    await assert.rejects(buildSite({ rootDir, outDir }), diagnostic);
+    assert.equal(await readFile(join(outDir, "index.html"), "utf8"), "previous successful build");
+    const [product] = JSON.parse(await readFile(join(rootDir, "data/products.json"), "utf8"));
+    assert.equal(productSchema.safeParse(product).success, false);
+  });
+}
+
 test("performance strings preserve precision, density and power context", async () => {
   assert.equal(formatPerformance({ label: "AI", value: 2070, unit: "TFLOPS", precision: "FP4", sparsity: "sparse", powerMode: "130 W", sourceReference: "thor", verifiedAt: "2026-10-10" }), "2070 TFLOPS · FP4 · sparse（稀疏） · 130 W");
   assert.match(formatPerformance({ label: "GPU", value: 85, unit: "TOPS", precision: "INT8", sparsity: "dense", powerMode: "官方峰值模式", sourceReference: "orin", verifiedAt: "2026-10-10" }), /INT8.*dense（稠密）.*官方峰值模式/);

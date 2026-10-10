@@ -51,7 +51,13 @@ export const productSchema = z.object({
   }
   // Customer-facing performance is a formatted projection of verified metrics,
   // never an independent numeric claim in otherwise unvalidated free text.
-  const displays = new Map(product.performanceMetrics.map(metric => [formatPerformance(metric), metric]));
+  const displays = new Map();
+  for (const metric of product.performanceMetrics) {
+    // Zod may run refinements after a field constraint has already failed.
+    // Keep those nested issues intact instead of throwing from the formatter.
+    const result = performanceMetricSchema.safeParse(metric);
+    if (result.success) displays.set(formatPerformance(result.data), result.data);
+  }
   const fields = [{ value: product, path: [] }];
   while (fields.length) {
     const { value, path } = fields.pop();

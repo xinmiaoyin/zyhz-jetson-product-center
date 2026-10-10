@@ -20,17 +20,17 @@ test("writePage creates directory-style routes", async () => {
 
 test("buildSite writes the home page and route manifest", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-build-"));
-  await cp(join(process.cwd(), "data"), join(rootDir, "data"), { recursive: true });
+  for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
-  assert.deepEqual(result.routes, ["/"]);
+  assert.deepEqual(result.routes, ["/", "/products/"]);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
-  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), ["/"]);
+  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), ["/", "/products/"]);
 });
 
 test("dev server serves directory pages and returns 404 for missing files", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-server-"));
-  await cp(join(process.cwd(), "data"), join(rootDir, "data"), { recursive: true });
+  for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   await buildSite({ rootDir, outDir });
   const server = createDevServer({ outDir });

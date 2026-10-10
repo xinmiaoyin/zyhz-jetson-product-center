@@ -2,12 +2,14 @@ import { lstat, mkdir, rm, writeFile } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writePage } from "./lib/site.mjs";
+import { loadCatalog } from "./lib/products.mjs";
 
 export async function buildSite({ rootDir, outDir }) {
   const projectDist = resolve(rootDir, "dist");
   if (resolve(outDir) !== projectDist) {
     throw new Error("outDir must be the project's dist directory");
   }
+  await loadCatalog(rootDir);
 
   const existing = await lstat(projectDist).catch((error) => {
     if (error.code === "ENOENT") return null;

@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "thor",
+    "name": "Jetson Thor",
+    "order": 1
+  },
+  {
+    "slug": "agx-orin",
+    "name": "Jetson AGX Orin",
+    "order": 2
+  },
+  {
+    "slug": "orin-nx",
+    "name": "Jetson Orin NX",
+    "order": 3
+  },
+  {
+    "slug": "orin-nano",
+    "name": "Jetson Orin Nano",
+    "order": 4
+  }
+]

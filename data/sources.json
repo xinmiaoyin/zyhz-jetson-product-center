@@ -1,0 +1,114 @@
+[
+  {
+    "id": "linux-39-2-1-release",
+    "title": "Jetson Linux 39.2.1 发布说明（第 12 页 MIG 软件限制）",
+    "url": "https://docs.nvidia.com/jetson/archives/r39.2.1/ReleaseNotes/Jetson_Linux_Release_Notes_r39.2.1.pdf",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "jetpack-7-2",
+    "title": "JetPack 7.2 官方归档：AGX Orin 32GB MAXN_SUPER",
+    "url": "https://developer.nvidia.com/embedded/jetpack/downloads/archive-7.2",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "thor-spec",
+    "title": "Jetson Thor 官方产品规格",
+    "url": "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "orin-spec",
+    "title": "Jetson Orin 官方产品规格与计算口径对照",
+    "url": "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "lifecycle",
+    "title": "Jetson 产品生命周期",
+    "url": "https://developer.nvidia.com/embedded/lifecycle",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "faq",
+    "title": "Jetson 官方开发者 FAQ：料号、工业指标与载板兼容",
+    "url": "https://developer.nvidia.com/embedded/faq",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "jetpack",
+    "title": "JetPack SDK 下载与支持说明",
+    "url": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "thor-guide",
+    "title": "Jetson AGX Thor 开发套件快速开始",
+    "url": "https://docs.nvidia.com/jetson/agx-thor-devkit/user-guide/latest/quick_start.html",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "agx-guide",
+    "title": "Jetson AGX Orin 开发套件快速开始",
+    "url": "https://docs.nvidia.com/jetson/agx-orin-devkit/user-guide/latest/quick_start.html",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "nano-guide",
+    "title": "Jetson Orin Nano 开发套件快速开始",
+    "url": "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "thor-image",
+    "title": "NVIDIA 官方图片引用（thor-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-thor/_jcr_content/root/responsivegrid/nv_container_copy/nv_container_1143095/nv_container_852351204/nv_image.coreimg.jpeg/1784156864542/jetson-thor-highlights-ari-1920x1080.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "agx-image",
+    "title": "NVIDIA 官方图片引用（agx-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser.coreimg.jpeg/1787666716551/nvidia-jetson-agx-orin-3c33-d-2x.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "nx-image",
+    "title": "NVIDIA 官方图片引用（nx-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy.coreimg.jpeg/1787666716561/nvidia-jetson-orin-nx-3c33-d-2x.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "nano-image",
+    "title": "NVIDIA 官方图片引用（nano-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy_1995786452.coreimg.jpeg/1787666716572/nvidia-jetson-orin-nano-3c33-d-2x.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "nano-kit-image",
+    "title": "NVIDIA 官方图片引用（nano-kit-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_1336425203/nv_image.coreimg.jpeg/1787666715871/jetson-orin-nano-super-dev-kit-ari.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "agx-kit-image",
+    "title": "NVIDIA 官方图片引用（agx-kit-image；仅远程引用，未授予本地再分发许可）",
+    "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_1736846491/nv_image.coreimg.jpeg/1787666716022/jetson-agx-orin-developer-kit-assets-2c50-d-2x.jpeg",
+    "publisher": "NVIDIA",
+    "checkedAt": "2026-10-10"
+  }
+]

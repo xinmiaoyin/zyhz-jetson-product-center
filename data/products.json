@@ -1,0 +1,2311 @@
+[
+  {
+    "slug": "jetson-agx-thor-developer-kit",
+    "series": "thor",
+    "nameZh": "Jetson AGX Thor 开发套件",
+    "nameEn": "Jetson AGX Thor Developer Kit",
+    "productType": "developer-kit",
+    "status": "contact-sales",
+    "shortPositioning": "面向物理 AI 与机器人研发的 Blackwell 开发平台",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-thor/_jcr_content/root/responsivegrid/nv_container_copy/nv_container_1143095/nv_container_852351204/nv_image.coreimg.jpeg/1784156864542/jetson-thor-highlights-ari-1920x1080.jpeg",
+    "officialPartNumber": "945-14070-0080-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "2070 TFLOPS · FP4 · sparse（稀疏）",
+        "note": "130 W（官方实测峰值）"
+      },
+      {
+        "label": "内存",
+        "value": "128 GB 256-bit LPDDR5X"
+      },
+      {
+        "label": "功耗",
+        "value": "40–130 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "开发套件"
+      }
+    ],
+    "highlights": [
+      "128 GB 统一内存用于边缘 AI 工作负载",
+      "14 核 Arm Neoverse-V3AE 提供主机侧处理能力",
+      "273 GB/s 内存带宽，指标来源可追溯",
+      "提供参考硬件，便于进行原型验证"
+    ],
+    "useCases": [
+      "人形机器人",
+      "生成式 AI",
+      "多传感器融合"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "2070 TFLOPS · FP4 · sparse（稀疏）；130 W（官方实测峰值）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "2560 核 NVIDIA Blackwell GPU，第五代 Tensor Core",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "14 核 Arm Neoverse-V3AE",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "128 GB 256-bit LPDDR5X",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "273 GB/s",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 硬件能力",
+            "value": "产品规格列出 10 TPC；实际可用性见 MIG 软件状态",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 软件状态",
+            "value": "Jetson Linux 39.2.1：技术预览；建议仅使用 profiles 78 与 83",
+            "sourceReference": "linux-39-2-1-release",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "40–130 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "243.19 × 112.40 × 56.88 mm",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "1 TB NVMe（M.2 Key M）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "2 × USB-A 3.2 Gen2；2 × USB-C 3.1；HDMI 2.0b；DisplayPort 1.4a；QSFP28；5GbE RJ45",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "945-14070-0080-000（适用地区含中国；其他地区请核对官方料号表）",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "NVIDIA 未为开发套件指定生命周期；用于软件开发和系统原型",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "包装内容",
+            "value": "Jetson AGX Thor 开发套件；交流电源线；USB-C 转 USB-A 线；USB-C 接头直流电源",
+            "sourceReference": "thor-guide",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "快速开始",
+            "value": "按 NVIDIA 快速开始文档进行存储准备、固件核对与系统安装",
+            "sourceReference": "thor-guide",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 2070,
+        "unit": "TFLOPS",
+        "precision": "FP4",
+        "sparsity": "sparse",
+        "powerMode": "130 W（官方实测峰值）",
+        "sourceReference": "thor-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "thor-spec",
+      "faq",
+      "lifecycle",
+      "thor-guide"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [
+      "Jetson AGX Thor 开发套件",
+      "交流电源线",
+      "USB-C 转 USB-A 线",
+      "USB-C 接头直流电源"
+    ],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-t5000",
+      "jetson-t4000"
+    ],
+    "sourceReferences": [
+      "thor-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "thor-image",
+      "linux-39-2-1-release",
+      "thor-guide"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Thor 系列 T5000 结构示意图（Jetson AGX Thor Developer Kit 产品使用系列示意图）"
+  },
+  {
+    "slug": "jetson-t5000",
+    "series": "thor",
+    "nameZh": "Jetson T5000 量产模组",
+    "nameEn": "Jetson T5000",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向物理 AI 量产系统的大内存 Blackwell 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-thor/_jcr_content/root/responsivegrid/nv_container_copy/nv_container_1143095/nv_container_852351204/nv_image.coreimg.jpeg/1784156864542/jetson-thor-highlights-ari-1920x1080.jpeg",
+    "officialPartNumber": "900-13834-0080-001",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "2070 TFLOPS · FP4 · sparse（稀疏）",
+        "note": "130 W（官方实测峰值）"
+      },
+      {
+        "label": "内存",
+        "value": "128 GB 256-bit LPDDR5X"
+      },
+      {
+        "label": "功耗",
+        "value": "40–130 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "128 GB 统一内存用于边缘 AI 工作负载",
+      "14 核 Arm Neoverse-V3AE 提供主机侧处理能力",
+      "273 GB/s 内存带宽，指标来源可追溯",
+      "100 × 87 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "人形机器人",
+      "生成式 AI",
+      "多传感器融合"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "2070 TFLOPS · FP4 · sparse（稀疏）；130 W（官方实测峰值）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "2560 核 NVIDIA Blackwell GPU，第五代 Tensor Core",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "14 核 Arm Neoverse-V3AE",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "128 GB 256-bit LPDDR5X",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "273 GB/s",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 硬件能力",
+            "value": "产品规格列出 10 TPC；实际可用性见 MIG 软件状态",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 软件状态",
+            "value": "Jetson Linux 39.2.1：技术预览；建议仅使用 profiles 78 与 83",
+            "sourceReference": "linux-39-2-1-release",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "40–130 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 87 mm",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "支持通过 PCIe 连接 NVMe、通过 USB 3.2 连接 SSD",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen5；4 × 25GbE；MIPI CSI-2",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "699-pin B2B",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Thor 系列内部针脚与外形兼容；与 AGX Orin 仅外形兼容，需逐项核对接口",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13834-0080-001",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2035 年 8 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 2070,
+        "unit": "TFLOPS",
+        "precision": "FP4",
+        "sparsity": "sparse",
+        "powerMode": "130 W（官方实测峰值）",
+        "sourceReference": "thor-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "thor-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-thor-developer-kit",
+      "jetson-t4000"
+    ],
+    "sourceReferences": [
+      "thor-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "thor-image",
+      "linux-39-2-1-release"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Thor 系列 T5000 结构示意图（Jetson T5000 产品使用系列示意图）"
+  },
+  {
+    "slug": "jetson-t4000",
+    "series": "thor",
+    "nameZh": "Jetson T4000 量产模组",
+    "nameEn": "Jetson T4000",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向机器人与边缘生成式 AI 的 Blackwell 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-thor/_jcr_content/root/responsivegrid/nv_container_copy/nv_container_1143095/nv_container_852351204/nv_image.coreimg.jpeg/1784156864542/jetson-thor-highlights-ari-1920x1080.jpeg",
+    "officialPartNumber": "900-13834-0000-001",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "1200 TFLOPS · FP4 · sparse（稀疏）",
+        "note": "可配置 40–70 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "64 GB 256-bit LPDDR5X"
+      },
+      {
+        "label": "功耗",
+        "value": "40–70 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "64 GB 统一内存用于边缘 AI 工作负载",
+      "12 核 Arm Neoverse-V3AE 提供主机侧处理能力",
+      "273 GB/s 内存带宽，指标来源可追溯",
+      "100 × 87 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器人",
+      "生成式 AI",
+      "多传感器融合"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "1200 TFLOPS · FP4 · sparse（稀疏）；可配置 40–70 W；官方未单列峰值测量功耗档",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1536 核 NVIDIA Blackwell GPU，第五代 Tensor Core",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "12 核 Arm Neoverse-V3AE",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "64 GB 256-bit LPDDR5X",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "273 GB/s",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 硬件能力",
+            "value": "产品规格列出 6 TPC；实际可用性见 MIG 软件状态",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "MIG 软件状态",
+            "value": "Jetson Linux 39.2.1：当前不支持 T4000 的 MIG；产品页所列为硬件能力",
+            "sourceReference": "linux-39-2-1-release",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "40–70 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 87 mm",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "支持通过 PCIe 连接 NVMe、通过 USB 3.2 连接 SSD",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen5；3 × 25GbE；MIPI CSI-2",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "699-pin B2B",
+            "sourceReference": "thor-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Thor 系列内部针脚与外形兼容；与 AGX Orin 仅外形兼容，需逐项核对接口",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13834-0000-001",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2036 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 1200,
+        "unit": "TFLOPS",
+        "precision": "FP4",
+        "sparsity": "sparse",
+        "powerMode": "可配置 40–70 W；官方未单列峰值测量功耗档",
+        "sourceReference": "thor-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "thor-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-thor-developer-kit",
+      "jetson-t5000"
+    ],
+    "sourceReferences": [
+      "thor-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "thor-image",
+      "linux-39-2-1-release"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Thor 系列 T5000 结构示意图（Jetson T4000 产品使用系列示意图）"
+  },
+  {
+    "slug": "jetson-agx-orin-developer-kit",
+    "series": "agx-orin",
+    "nameZh": "Jetson AGX Orin 开发套件",
+    "nameEn": "Jetson AGX Orin Developer Kit",
+    "productType": "developer-kit",
+    "status": "contact-sales",
+    "shortPositioning": "支持 Orin 系列性能模拟的机器人与视觉研发平台",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_1736846491/nv_image.coreimg.jpeg/1787666716022/jetson-agx-orin-developer-kit-assets-2c50-d-2x.jpeg",
+    "officialPartNumber": "945-13730-0050-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "275 TOPS · INT8 · sparse（稀疏）",
+        "note": "可配置 15–60 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "64 GB 256-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "15–60 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "开发套件"
+      }
+    ],
+    "highlights": [
+      "64 GB 统一内存用于边缘 AI 工作负载",
+      "12 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "204.8 GB/s 内存带宽，指标来源可追溯",
+      "提供参考硬件，便于进行原型验证"
+    ],
+    "useCases": [
+      "机器人",
+      "机器视觉",
+      "生成式 AI"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "275 TOPS · INT8 · sparse（稀疏）；可配置 15–60 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "2048 核 NVIDIA Ampere GPU，64 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "12 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "64 GB 256-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "204.8 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "15–60 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "110 × 110 × 71.65 mm（含支脚、载板、模组和散热组件）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "64 GB eMMC 5.1",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "USB Type-C / Type-A / Micro-B；DisplayPort 1.4a；最高 10GbE RJ45；PCIe x16 插槽（x8 Gen4）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "945-13730-0050-000（适用地区含中国；其他地区请核对官方料号表）",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "NVIDIA 未为开发套件指定生命周期；用于软件开发和系统原型",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "包装内容",
+            "value": "Jetson AGX Orin 模组；参考载板；Wi-Fi 模组；USB Type-C 电源；USB Type-C 转 USB Type-A 线",
+            "sourceReference": "agx-guide",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "快速开始",
+            "value": "按 NVIDIA 快速开始文档进行存储准备、固件核对与系统安装",
+            "sourceReference": "agx-guide",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 275,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "可配置 15–60 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle",
+      "agx-guide"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [
+      "Jetson AGX Orin 模组",
+      "参考载板",
+      "Wi-Fi 模组",
+      "USB Type-C 电源",
+      "USB Type-C 转 USB Type-A 线"
+    ],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-orin-64gb",
+      "jetson-agx-orin-industrial",
+      "jetson-agx-orin-32gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "agx-kit-image",
+      "agx-guide"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson AGX Orin Developer Kit 官方产品图"
+  },
+  {
+    "slug": "jetson-agx-orin-64gb",
+    "series": "agx-orin",
+    "nameZh": "Jetson AGX Orin 64GB 量产模组",
+    "nameEn": "Jetson AGX Orin 64GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向机器人与多路视觉推理的高内存 Orin 量产模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser.coreimg.jpeg/1787666716551/nvidia-jetson-agx-orin-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13701-0050-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "275 TOPS · INT8 · sparse（稀疏）",
+        "note": "可配置 15–60 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "64 GB 256-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "15–60 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "64 GB 统一内存用于边缘 AI 工作负载",
+      "12 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "204.8 GB/s 内存带宽，指标来源可追溯",
+      "100 × 87 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器人",
+      "机器视觉",
+      "生成式 AI"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "275 TOPS · INT8 · sparse（稀疏）；可配置 15–60 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "2048 核 NVIDIA Ampere GPU，64 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "12 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "64 GB 256-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "204.8 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "15–60 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 87 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "64 GB eMMC 5.1",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen4；1 × GbE 与 1 × 10GbE；16-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "699-pin Molex Mirror Mezz",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "AGX Orin 系列内部针脚与外形兼容，仍需核对接口配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13701-0050-000",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 275,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "可配置 15–60 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-orin-developer-kit",
+      "jetson-agx-orin-industrial",
+      "jetson-agx-orin-32gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "agx-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson AGX Orin 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-agx-orin-industrial",
+    "series": "agx-orin",
+    "nameZh": "Jetson AGX Orin 工业模组",
+    "nameEn": "Jetson AGX Orin Industrial",
+    "productType": "industrial-module",
+    "status": "contact-sales",
+    "shortPositioning": "提供宽温与内联 DRAM ECC 的工业边缘 AI 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser.coreimg.jpeg/1787666716551/nvidia-jetson-agx-orin-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13701-0080-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "248 TOPS · INT8 · sparse（稀疏）",
+        "note": "可配置 15–75 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "64 GB 256-bit LPDDR5（支持 ECC）"
+      },
+      {
+        "label": "功耗",
+        "value": "15–75 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "工业模组"
+      }
+    ],
+    "highlights": [
+      "64 GB 统一内存用于边缘 AI 工作负载",
+      "12 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "204.8 GB/s 内存带宽，指标来源可追溯",
+      "100 × 87 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "工业自动化",
+      "机器视觉",
+      "机器人"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "248 TOPS · INT8 · sparse（稀疏）；可配置 15–75 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "2048 核 NVIDIA Ampere GPU，64 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "12 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "64 GB 256-bit LPDDR5（支持 ECC）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "204.8 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "15–75 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 87 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "64 GB eMMC 5.1",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen4；1 × GbE 与 1 × 10GbE；16-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "699-pin Molex Mirror Mezz",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "AGX Orin 系列内部针脚与外形兼容，仍需核对接口配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13701-0080-000",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2033 年 7 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "ECC",
+            "value": "支持内联 DRAM ECC",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "工作温度",
+            "value": "−40°C 至 85°C（TTP 表面温度，非环境温度）",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "可靠性",
+            "value": "运行冲击 50G / 11 ms；运行振动 5G；通电湿热 85°C / 85% RH / 1000 小时",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "工作寿命",
+            "value": "10 年（官方规定条件；与供货期限分别理解）",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 248,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "可配置 15–75 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-orin-developer-kit",
+      "jetson-agx-orin-64gb",
+      "jetson-agx-orin-32gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "agx-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson AGX Orin 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-agx-orin-32gb",
+    "series": "agx-orin",
+    "nameZh": "Jetson AGX Orin 32GB 量产模组",
+    "nameEn": "Jetson AGX Orin 32GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向嵌入式机器人与视觉系统的 32GB Orin 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser.coreimg.jpeg/1787666716551/nvidia-jetson-agx-orin-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13701-0040-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "200 TOPS · INT8 · sparse（稀疏）",
+        "note": "官方计算对照表基准口径；可配置 15–60 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "32 GB 256-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "15–60 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "32 GB 统一内存用于边缘 AI 工作负载",
+      "8 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "204.8 GB/s 内存带宽，指标来源可追溯",
+      "100 × 87 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器人",
+      "机器视觉"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "200 TOPS · INT8 · sparse（稀疏）；官方计算对照表基准口径；可配置 15–60 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1792 核 NVIDIA Ampere GPU，56 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "8 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "32 GB 256-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "204.8 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "性能口径说明",
+            "value": "比较指标采用官方计算对照表明确标注的 200 SPARSE INT8 TOPS 基准值；Super 模式新值另列，不将未独立标明精度与稀疏性的数值并入比较。",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式补充说明",
+            "value": "JetPack 7.2 新增 MAXN_SUPER，使官方 AI 性能由 200 提升至 241 TOPS；该发布说明未单列精度与稀疏性。",
+            "sourceReference": "jetpack-7-2",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "15–60 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 87 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "64 GB eMMC 5.1",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen4；1 × GbE 与 1 × 10GbE；16-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "699-pin Molex Mirror Mezz",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "AGX Orin 系列内部针脚与外形兼容，仍需核对接口配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13701-0040-000",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "AI 性能（官方计算对照表基准口径）",
+        "value": 200,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "官方计算对照表基准口径；可配置 15–60 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-agx-orin-developer-kit",
+      "jetson-agx-orin-64gb",
+      "jetson-agx-orin-industrial"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "jetpack-7-2",
+      "agx-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson AGX Orin 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-orin-nx-16gb",
+    "series": "orin-nx",
+    "nameZh": "Jetson Orin NX 16GB 量产模组",
+    "nameEn": "Jetson Orin NX 16GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向紧凑型机器人与边缘视觉系统的 16GB 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy.coreimg.jpeg/1787666716561/nvidia-jetson-orin-nx-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13767-0000-001",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "157 TOPS · INT8 · sparse（稀疏）",
+        "note": "Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "16 GB 128-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "10 / 15 / 25 / 40 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "16 GB 统一内存用于边缘 AI 工作负载",
+      "8 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "102.4 GB/s 内存带宽，指标来源可追溯",
+      "69.6 × 45 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器人",
+      "机器视觉"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "157 TOPS · INT8 · sparse（稀疏）；Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1024 核 NVIDIA Ampere GPU，32 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "8 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "16 GB 128-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "102.4 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "10 / 15 / 25 / 40 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "69.6 × 45 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "外接 NVMe",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen4（1 × x4 + 3 × x1）；GbE；8-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "260-pin SO-DIMM",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Orin NX 与 Orin Nano 系列针脚与外形兼容；接口和供电须按具体模组核对",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式适配",
+            "value": "需要支持 HV 电源轨的载板及支持 40 W 的散热设计",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13767-0000-001",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 157,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-orin-nx-8gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "nx-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Orin NX 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-orin-nx-8gb",
+    "series": "orin-nx",
+    "nameZh": "Jetson Orin NX 8GB 量产模组",
+    "nameEn": "Jetson Orin NX 8GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向空间受限边缘 AI 设备的 8GB Orin NX 模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy.coreimg.jpeg/1787666716561/nvidia-jetson-orin-nx-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13767-0010-001",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "117 TOPS · INT8 · sparse（稀疏）",
+        "note": "Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "8 GB 128-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "10 / 15 / 25 / 40 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "8 GB 统一内存用于边缘 AI 工作负载",
+      "6 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "102.4 GB/s 内存带宽，指标来源可追溯",
+      "69.6 × 45 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器人",
+      "机器视觉"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "117 TOPS · INT8 · sparse（稀疏）；Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1024 核 NVIDIA Ampere GPU，32 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "6 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "8 GB 128-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "102.4 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "10 / 15 / 25 / 40 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "69.6 × 45 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "外接 NVMe",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen4（1 × x4 + 3 × x1）；GbE；8-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "260-pin SO-DIMM",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Orin NX 与 Orin Nano 系列针脚与外形兼容；接口和供电须按具体模组核对",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式适配",
+            "value": "需要支持 HV 电源轨的载板及支持 40 W 的散热设计",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13767-0010-001",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 117,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式；可配置 10 / 15 / 25 / 40 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-orin-nx-16gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "nx-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Orin NX 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-orin-nano-super-developer-kit",
+    "series": "orin-nano",
+    "nameZh": "Jetson Orin Nano Super 开发套件",
+    "nameEn": "Jetson Orin Nano Super Developer Kit",
+    "productType": "developer-kit",
+    "status": "contact-sales",
+    "shortPositioning": "面向边缘生成式 AI 学习与机器人原型的紧凑开发套件",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_1336425203/nv_image.coreimg.jpeg/1787666715871/jetson-orin-nano-super-dev-kit-ari.jpeg",
+    "officialPartNumber": "945-13766-0000-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "67 TOPS · INT8 · sparse（稀疏）",
+        "note": "Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "8 GB 128-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "7 / 15 / 25 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "开发套件"
+      }
+    ],
+    "highlights": [
+      "8 GB 统一内存用于边缘 AI 工作负载",
+      "6 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "102 GB/s 内存带宽，指标来源可追溯",
+      "提供参考硬件，便于进行原型验证"
+    ],
+    "useCases": [
+      "教学研发",
+      "机器人",
+      "生成式 AI"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "67 TOPS · INT8 · sparse（稀疏）；Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1024 核 NVIDIA Ampere GPU，32 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "6 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "8 GB 128-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "102 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "7 / 15 / 25 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "100 × 79 × 21 mm（含支脚、载板、模组和散热组件）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "microSD 或外接 NVMe（包装不含可移动存储）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "4 × USB-A 3.2 Gen2；USB-C UFP；GbE；DisplayPort 1.2；2 × 22-pin MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式适配",
+            "value": "载板和散热设计可参考 Orin Nano 开发套件；需匹配 Super 刷机配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "945-13766-0000-000（适用地区含中国；其他地区请核对官方料号表）",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "NVIDIA 未为开发套件指定生命周期；用于软件开发和系统原型",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "包装内容",
+            "value": "Jetson Orin Nano 开发套件；19 V 电源；快速开始与支持卡",
+            "sourceReference": "nano-guide",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "快速开始",
+            "value": "按 NVIDIA 快速开始文档进行存储准备、固件核对与系统安装",
+            "sourceReference": "nano-guide",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 67,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle",
+      "nano-guide"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [
+      "Jetson Orin Nano 开发套件",
+      "19 V 电源",
+      "快速开始与支持卡"
+    ],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-orin-nano-8gb",
+      "jetson-orin-nano-4gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "nano-kit-image",
+      "nano-guide"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Orin Nano Super Developer Kit 官方产品图"
+  },
+  {
+    "slug": "jetson-orin-nano-8gb",
+    "series": "orin-nano",
+    "nameZh": "Jetson Orin Nano 8GB 量产模组",
+    "nameEn": "Jetson Orin Nano 8GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向紧凑型视觉设备与入门边缘 AI 的 8GB 量产模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy_1995786452.coreimg.jpeg/1787666716572/nvidia-jetson-orin-nano-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13767-0030-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "67 TOPS · INT8 · sparse（稀疏）",
+        "note": "Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "8 GB 128-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "7 / 15 / 25 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "8 GB 统一内存用于边缘 AI 工作负载",
+      "6 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "102 GB/s 内存带宽，指标来源可追溯",
+      "69.6 × 45 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器视觉",
+      "机器人",
+      "生成式 AI"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "67 TOPS · INT8 · sparse（稀疏）；Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "1024 核 NVIDIA Ampere GPU，32 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "6 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "8 GB 128-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "102 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "7 / 15 / 25 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "69.6 × 45 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "外接 NVMe",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen3（1 × x4 + 3 × x1）；GbE；8-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "260-pin SO-DIMM",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Orin NX 与 Orin Nano 系列针脚与外形兼容；接口和供电须按具体模组核对",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式适配",
+            "value": "载板和散热设计可参考 Orin Nano 开发套件；需匹配 Super 刷机配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13767-0030-000",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 67,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式；可配置 7 / 15 / 25 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-orin-nano-super-developer-kit",
+      "jetson-orin-nano-4gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "nano-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Orin Nano 系列 官方产品图"
+  },
+  {
+    "slug": "jetson-orin-nano-4gb",
+    "series": "orin-nano",
+    "nameZh": "Jetson Orin Nano 4GB 量产模组",
+    "nameEn": "Jetson Orin Nano 4GB",
+    "productType": "production-module",
+    "status": "contact-sales",
+    "shortPositioning": "面向轻量视觉推理与紧凑嵌入式系统的 4GB 量产模组",
+    "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy_1995786452.coreimg.jpeg/1787666716572/nvidia-jetson-orin-nano-3c33-d-2x.jpeg",
+    "officialPartNumber": "900-13767-0040-000",
+    "coreMetrics": [
+      {
+        "label": "AI 性能",
+        "value": "34 TOPS · INT8 · sparse（稀疏）",
+        "note": "Super 模式；可配置 7 / 10 / 25 W；官方未单列峰值测量功耗档"
+      },
+      {
+        "label": "内存",
+        "value": "4 GB 64-bit LPDDR5"
+      },
+      {
+        "label": "功耗",
+        "value": "7 / 10 / 25 W",
+        "note": "模组配置范围；整机功耗与外围设备有关"
+      },
+      {
+        "label": "形态",
+        "value": "量产模组"
+      }
+    ],
+    "highlights": [
+      "4 GB 统一内存用于边缘 AI 工作负载",
+      "6 核 Arm Cortex-A78AE 提供主机侧处理能力",
+      "51 GB/s 内存带宽，指标来源可追溯",
+      "69.6 × 45 mm 模组形态，便于系统集成"
+    ],
+    "useCases": [
+      "机器视觉",
+      "机器人"
+    ],
+    "specGroups": [
+      {
+        "title": "计算与内存",
+        "rows": [
+          {
+            "label": "AI 性能",
+            "value": "34 TOPS · INT8 · sparse（稀疏）；Super 模式；可配置 7 / 10 / 25 W；官方未单列峰值测量功耗档",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "GPU",
+            "value": "512 核 NVIDIA Ampere GPU，16 个 Tensor Core",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "CPU",
+            "value": "6 核 Arm Cortex-A78AE",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存",
+            "value": "4 GB 64-bit LPDDR5",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "内存带宽",
+            "value": "51 GB/s",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "接口与集成",
+        "rows": [
+          {
+            "label": "功耗",
+            "value": "7 / 10 / 25 W（模组配置范围，不是整机输入功率）",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "尺寸",
+            "value": "69.6 × 45 mm",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "存储",
+            "value": "外接 NVMe",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "I/O",
+            "value": "PCIe Gen3（1 × x4 + 3 × x1）；GbE；8-lane MIPI CSI-2",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "连接器",
+            "value": "260-pin SO-DIMM",
+            "sourceReference": "orin-spec",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "载板适配",
+            "value": "Orin NX 与 Orin Nano 系列针脚与外形兼容；接口和供电须按具体模组核对",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "Super 模式适配",
+            "value": "载板和散热设计可参考 Orin Nano 开发套件；需匹配 Super 刷机配置",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      },
+      {
+        "title": "软件与供货信息",
+        "rows": [
+          {
+            "label": "官方料号",
+            "value": "900-13767-0040-000",
+            "sourceReference": "faq",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "软件支持",
+            "value": "JetPack 7.2.1 / Jetson Linux 39.2.1；具体功能以对应发布说明为准",
+            "sourceReference": "jetpack",
+            "verifiedAt": "2026-10-10"
+          },
+          {
+            "label": "生命周期",
+            "value": "官方计划供货至 2032 年 1 月；不等同于本地库存承诺",
+            "sourceReference": "lifecycle",
+            "verifiedAt": "2026-10-10"
+          }
+        ]
+      }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 34,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式；可配置 7 / 10 / 25 W；官方未单列峰值测量功耗档",
+        "sourceReference": "orin-spec",
+        "verifiedAt": "2026-10-10"
+      }
+    ],
+    "softwareSupport": [
+      "JetPack 7.2.1",
+      "Jetson Linux 39.2.1"
+    ],
+    "documents": [
+      "orin-spec",
+      "faq",
+      "lifecycle"
+    ],
+    "downloads": [
+      "jetpack"
+    ],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "jetson-orin-nano-super-developer-kit",
+      "jetson-orin-nano-8gb"
+    ],
+    "sourceReferences": [
+      "orin-spec",
+      "lifecycle",
+      "faq",
+      "jetpack",
+      "nano-image"
+    ],
+    "verifiedAt": "2026-10-10",
+    "imageAlt": "NVIDIA Jetson Orin Nano 系列 官方产品图"
+  }
+]

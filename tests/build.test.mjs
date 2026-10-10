@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { escapeHtml } from "../scripts/lib/html.mjs";
@@ -20,6 +20,7 @@ test("writePage creates directory-style routes", async () => {
 
 test("buildSite writes the home page and route manifest", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-build-"));
+  await cp(join(process.cwd(), "data"), join(rootDir, "data"), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
   assert.deepEqual(result.routes, ["/"]);
@@ -29,6 +30,7 @@ test("buildSite writes the home page and route manifest", async () => {
 
 test("dev server serves directory pages and returns 404 for missing files", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-server-"));
+  await cp(join(process.cwd(), "data"), join(rootDir, "data"), { recursive: true });
   const outDir = join(rootDir, "dist");
   await buildSite({ rootDir, outDir });
   const server = createDevServer({ outDir });

@@ -6,7 +6,9 @@ const text = z.string().trim().min(1);
 const date = z.iso.date();
 const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const seriesSlugs = ["thor", "agx-orin", "orin-nx", "orin-nano"];
+const quickStartSources = { thor: "thor-guide", "agx-orin": "agx-guide", "orin-nano": "nano-guide" };
 const officialUrl = z.url().refine(value => {
+  if (!URL.canParse(value)) return false;
   const url = new URL(value);
   return url.protocol === "https:" && (url.hostname === "nvidia.com" || url.hostname.endsWith(".nvidia.com"));
 }, "must be an HTTPS NVIDIA official URL");
@@ -29,19 +31,43 @@ export const productSchema = z.object({
   highlights: z.array(z.string().min(8)).min(4).max(6),
   useCases: z.array(text).min(1),
   specGroups: z.array(z.object({ title: text, rows: z.array(specRowSchema).min(1) })).min(1),
-  performanceMetrics: z.array(performanceMetricSchema),
+  performanceMetrics: z.array(performanceMetricSchema).min(1),
   softwareSupport: z.array(text), documents: z.array(text), downloads: z.array(text),
   packageContents: z.array(text), optionalAccessories: z.array(text),
   relatedProducts: z.array(slug), sourceReferences: z.array(text).min(1),
   verifiedAt: date, imageAlt: text,
 }).superRefine((product, ctx) => {
   const labels = new Set(product.specGroups.flatMap(group => group.rows.map(row => row.label)));
-  const required = product.productType === "developer-kit" ? ["I/O"] : ["尺寸", "连接器", "功耗", "生命周期"];
+  const required = product.productType === "developer-kit" ? ["I/O", "快速开始"] : ["尺寸", "连接器", "功耗", "生命周期", "载板适配"];
   if (product.productType === "industrial-module") required.push("ECC", "工作温度", "可靠性", "工作寿命");
   for (const label of required) if (!labels.has(label)) ctx.addIssue({ code: "custom", path: ["specGroups"], message: `missing type-specific specification: ${label}` });
   if (product.productType === "developer-kit") {
     for (const field of ["packageContents", "documents"]) if (!product[field].length) ctx.addIssue({ code: "custom", path: [field], message: "developer kit requires nonempty content" });
+    const guide = quickStartSources[product.series];
+    if (!product.documents.includes(guide)) ctx.addIssue({ code: "custom", path: ["documents"], message: `developer kit requires its quick start document: ${guide}` });
+    product.specGroups.forEach((group, i) => group.rows.forEach((row, j) => {
+      if (row.label === "快速开始" && row.sourceReference !== guide) ctx.addIssue({ code: "custom", path: ["specGroups", i, "rows", j, "sourceReference"], message: `快速开始 sourceReference must be ${guide}` });
+    }));
   }
+  // Customer-facing performance is a formatted projection of verified metrics,
+  // never an independent numeric claim in otherwise unvalidated free text.
+  const displays = new Map(product.performanceMetrics.map(metric => [formatPerformance(metric), metric]));
+  const fields = [{ value: product, path: [] }];
+  while (fields.length) {
+    const { value, path } = fields.pop();
+    if (value && typeof value === "object") {
+      for (const [key, child] of Object.entries(value)) fields.push({ value: child, path: [...path, Array.isArray(value) ? Number(key) : key] });
+    } else if (typeof value === "string" && /(?<![a-z])(?:[KMGTPE]?FLOPS|[KMGTPE]?OPS)\b/i.test(value)) {
+      if (path[0] === "performanceMetrics" && path[2] === "unit") continue;
+      if (!displays.has(value)) ctx.addIssue({ code: "custom", path, message: "performance text must exactly match a complete validated performance metric" });
+    }
+  }
+  const core = product.coreMetrics.findIndex(metric => metric.label === "AI 性能");
+  if (core < 0 || !displays.has(product.coreMetrics[core].value)) ctx.addIssue({ code: "custom", path: ["coreMetrics", core < 0 ? 0 : core, "value"], message: "AI performance display must reference a validated performance metric" });
+  product.specGroups.forEach((group, i) => group.rows.forEach((row, j) => {
+    if (row.label !== "AI 性能" && !displays.has(row.value)) return;
+    if (!displays.has(row.value)) ctx.addIssue({ code: "custom", path: ["specGroups", i, "rows", j, "value"], message: "performance display must match a validated performance metric" });
+  }));
 });
 
 const seriesSchema = z.array(z.object({ slug: z.enum(seriesSlugs), name: text, order: z.number().int().positive() })).length(4);
@@ -99,6 +125,10 @@ export async function loadCatalog(rootDir) {
         if (product.verifiedAt < row.verifiedAt) errors.push(`${prefix} verifiedAt: predates individual evidence`);
       }
     }
+    product.specGroups.forEach((group, i) => group.rows.forEach((row, j) => {
+      const metric = product.performanceMetrics.find(item => formatPerformance(item) === row.value);
+      if (metric && (metric.sourceReference !== row.sourceReference || metric.verifiedAt !== row.verifiedAt)) errors.push(`${prefix} specGroups.${i}.rows.${j}: performance evidence must match the validated performance metric`);
+    }));
     for (const field of ["documents", "downloads"]) for (const [index, id] of product[field].entries()) {
       if (!sourceById.has(id) || !product.sourceReferences.includes(id)) errors.push(`${prefix} ${field}.${index}: unknown or undeclared source ${id}`);
     }

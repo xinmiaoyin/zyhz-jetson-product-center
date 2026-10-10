@@ -24,6 +24,70 @@ test("catalog validates all twelve unique products and series order", async () =
   assert.deepEqual(catalog.series.map(s => s.slug), ["thor", "agx-orin", "orin-nx", "orin-nano"]);
   assert.deepEqual(new Set(catalog.products.map(p => p.series)), new Set(catalog.series.map(s => s.slug)));
   for (const product of catalog.products) assert.ok(productSchema.safeParse(product).success);
+  assert.deepEqual(catalog.products.map(({ slug, series, productType }) => [slug, series, productType]), [
+    ["jetson-agx-thor-developer-kit", "thor", "developer-kit"],
+    ["jetson-t5000", "thor", "production-module"],
+    ["jetson-t4000", "thor", "production-module"],
+    ["jetson-agx-orin-developer-kit", "agx-orin", "developer-kit"],
+    ["jetson-agx-orin-64gb", "agx-orin", "production-module"],
+    ["jetson-agx-orin-industrial", "agx-orin", "industrial-module"],
+    ["jetson-agx-orin-32gb", "agx-orin", "production-module"],
+    ["jetson-orin-nx-16gb", "orin-nx", "production-module"],
+    ["jetson-orin-nx-8gb", "orin-nx", "production-module"],
+    ["jetson-orin-nano-super-developer-kit", "orin-nano", "developer-kit"],
+    ["jetson-orin-nano-8gb", "orin-nano", "production-module"],
+    ["jetson-orin-nano-4gb", "orin-nano", "production-module"],
+  ]);
+});
+
+test("review performance display uses only complete validated metrics", async () => {
+  const catalog = await loadCatalog(process.cwd());
+  for (const product of catalog.products) {
+    assert.ok(product.performanceMetrics.length);
+    assert.ok(product.performanceMetrics.some(m => formatPerformance(m) === product.coreMetrics[0].value));
+    assert.ok(product.specGroups.flatMap(g => g.rows).filter(r => r.label === "AI 性能").every(r => product.performanceMetrics.some(m => formatPerformance(m) === r.value)));
+  }
+  assert.doesNotMatch(JSON.stringify(catalog.products), /241\s*TOPS/i);
+});
+
+const reviewCases = [
+  ["bare core performance", p => { p[0].coreMetrics[0].value = "999 TOPS"; }, /coreMetrics\.0\.value.*performance/],
+  ["contextual but unmatched performance", p => { p[0].coreMetrics[0].value = "999 TOPS · INT8 · sparse（稀疏） · 130 W"; }, /coreMetrics\.0\.value.*performance/],
+  ["bare performance in highlight", p => { p[0].highlights[0] = "性能达到 999 TOPS 的新产品"; }, /highlights\.0.*performance/],
+  ["bare performance in specification", p => { p[0].specGroups[0].rows[1].value = "999 TOPS"; }, /specGroups\.0\.rows\.1\.value.*performance/],
+  ["performance hidden in note", p => { p[0].coreMetrics[1].note = "999 TOPS"; }, /coreMetrics\.1\.note.*performance/],
+  ["empty performance metrics", p => { p[0].performanceMetrics = []; }, /performanceMetrics/],
+  ["mismatched AI specification evidence", p => { p[0].specGroups[0].rows[0].sourceReference = "faq"; }, /specGroups\.0\.rows\.0.*performance/],
+  ["module without carrier compatibility", p => { p[1].specGroups.forEach(g => { g.rows = g.rows.filter(r => r.label !== "载板适配"); }); }, /载板适配/],
+  ["kit without quick start row", p => { p[0].specGroups.forEach(g => { g.rows = g.rows.filter(r => r.label !== "快速开始"); }); }, /快速开始/],
+  ["kit without quick start document", p => { p[0].documents = ["thor-spec"]; }, /documents.*quick start/],
+  ["kit with wrong quick start source", p => { p[0].specGroups.flatMap(g => g.rows).find(r => r.label === "快速开始").sourceReference = "thor-spec"; }, /快速开始.*sourceReference/],
+  ["malformed hero URL", p => { p[0].heroImage = "not-a-url"; }, /heroImage.*URL/i],
+];
+for (const [name, mutate, reason] of reviewCases) test(`review rejects ${name} before build writes`, async t => {
+  const rootDir = await fixture(t, mutate);
+  const outDir = join(rootDir, "dist");
+  await assert.rejects(buildSite({ rootDir, outDir }), error => {
+    assert.ok(!(error instanceof TypeError));
+    assert.match(error.message, /jetson-/);
+    assert.match(error.message, reason);
+    return true;
+  });
+  await assert.rejects(access(outDir), { code: "ENOENT" });
+});
+
+test("review malformed source URL retains source field diagnostics", async t => {
+  const rootDir = await fixture(t);
+  const path = join(rootDir, "data/sources.json");
+  const sources = JSON.parse(await readFile(path, "utf8"));
+  sources[0].url = "not-a-url";
+  await writeFile(path, JSON.stringify(sources));
+  await assert.rejects(buildSite({ rootDir, outDir: join(rootDir, "dist") }), error => {
+    assert.ok(!(error instanceof TypeError));
+    assert.match(error.message, /sources\.0\.url.*URL/i);
+    return true;
+  });
+  await assert.rejects(access(join(rootDir, "dist")), { code: "ENOENT" });
 });
 
 test("performance strings preserve precision, density and power context", async () => {

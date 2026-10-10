@@ -2,14 +2,15 @@ import { escapeHtml as e } from "../scripts/lib/html.mjs";
 import { renderLayout } from "./layout.mjs";
 
 export const productTypeLabels = { "developer-kit": "开发套件", "production-module": "量产模组", "industrial-module": "工业模组" };
-const statusLabels = { available: "可供货", new: "新品", "contact-sales": "供货请咨询" };
+export const statusLabels = { available: "可供货", new: "新品", "contact-sales": "供货请咨询" };
 
-export function renderProductImage(product, className = "") {
+export function renderProductImage(product, className = "", loading = "lazy") {
   const fallback = `/assets/product-fallbacks/${product.slug}.svg`;
-  return `<div class="product-visual ${e(className)}"><img class="product-image" src="${e(product.heroImage)}" data-fallback="${e(fallback)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${e(product.imageAlt)}" width="640" height="400" loading="lazy" decoding="async"><noscript><img class="product-fallback" src="${e(fallback)}" alt="${e(product.nameZh)} 产品图片占位" width="640" height="400" loading="lazy"></noscript></div>`;
+  const fallbackAlt = `${product.nameZh}，产品图片暂不可用`;
+  return `<div class="product-visual ${e(className)}"><img class="product-image" src="${e(product.heroImage)}" data-fallback="${e(fallback)}" data-fallback-alt="${e(fallbackAlt)}" onerror="this.onerror=null;this.alt=this.dataset.fallbackAlt;this.src=this.dataset.fallback" alt="${e(product.imageAlt)}" width="640" height="400" loading="${e(loading)}" decoding="async"><noscript><img class="product-fallback" src="${e(fallback)}" alt="${e(fallbackAlt)}" width="640" height="400" loading="${e(loading)}"></noscript></div>`;
 }
 
-function renderProductCard(product) {
+export function renderProductCard(product) {
   return `<article class="product-card" data-product="${e(product.slug)}">
     ${renderProductImage(product)}
     <div class="product-card-body">

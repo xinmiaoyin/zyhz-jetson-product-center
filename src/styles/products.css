@@ -68,7 +68,69 @@
 .core-metrics dd { margin: 0; overflow-wrap: anywhere; }
 .core-metrics small { display: block; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 .card-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--border); font-size: 13px; }
+.breadcrumb { padding-block: 24px; font-size: 13px; color: var(--text-muted); }
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.breadcrumb li + li::before { content: "/"; margin-right: 8px; color: var(--border); }
+.detail-overview { padding-block: 16px 56px; }
+.detail-hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; }
+.detail-hero > div { min-width: 0; }
+.detail-hero .card-meta { justify-content: flex-start; gap: 16px; }
+.detail-hero h1 { font-size: clamp(30px, 3.4vw, 44px); overflow-wrap: anywhere; }
+.detail-hero .lead { margin-top: 16px; }
+.product-english-name { margin-top: 12px; color: var(--text-muted); font-size: 13px; }
+.detail-visual { border: 1px solid var(--border); border-radius: var(--radius); }
+.detail-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 32px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-muted); overflow: hidden; }
+.detail-metrics > div { display: block; padding: 24px; border-top: 0; }
+.detail-metrics > div + div { border-left: 1px solid var(--border); }
+.detail-metrics dd { margin-top: 12px; font-size: 16px; }
+.detail-metrics small { font-size: 12px; }
+.detail-section { border-top: 1px solid var(--border); }
+.highlights-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; list-style: none; padding: 0; margin: 0; }
+.highlights-grid li { display: flex; gap: 20px; padding: 24px; background: var(--surface-muted); border-radius: var(--radius); }
+.highlight-number { color: var(--brand-700); font-size: 13px; font-variant-numeric: tabular-nums; }
+.detail-use-cases { display: flex; flex-wrap: wrap; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.detail-use-cases li { border: 1px solid var(--border); border-radius: 6px; padding: 16px 24px; }
+.spec-group + .spec-group { margin-top: 32px; }
+.spec-table { width: 100%; border-collapse: collapse; text-align: left; }
+.spec-table caption { text-align: left; font-size: 19px; font-weight: 600; padding-bottom: 16px; }
+.spec-table th, .spec-table td { border-bottom: 1px solid var(--border); padding: 16px 20px; vertical-align: top; overflow-wrap: anywhere; }
+.spec-table th { width: 22%; font-weight: 500; background: var(--surface-muted); }
+.spec-evidence { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+.spec-evidence summary { cursor: pointer; width: fit-content; }
+.spec-evidence a { display: block; color: var(--brand-700); margin-top: 8px; }
+.spec-evidence a:hover { text-decoration: underline; }
+.spec-evidence span { display: block; margin-top: 4px; }
+.comparison-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.series-comparison-table { width: 100%; min-width: 740px; border-collapse: collapse; text-align: left; font-size: 13px; }
+.series-comparison-table th, .series-comparison-table td { padding: 20px; vertical-align: top; border-bottom: 1px solid var(--border); }
+.series-comparison-table thead { background: var(--surface-muted); }
+.series-comparison-table th { font-weight: 500; }
+.series-comparison-table tbody th { width: 23%; }
+.series-comparison-table tbody td:nth-child(2) { width: 35%; }
+.series-comparison-table tbody td:last-child { white-space: nowrap; }
+.series-comparison-table tbody tr:last-child > * { border-bottom: 0; }
+.series-comparison-table .current-product { background: var(--brand-100); }
+.series-comparison-table small { display: block; color: var(--text-muted); font-weight: 400; margin-top: 8px; }
+.series-comparison-table p + p, .series-comparison-table dl > div + div { margin-top: 12px; }
+.series-comparison-table dt { color: var(--text-muted); }
+.series-comparison-table dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+.series-comparison-table tbody th a:hover { text-decoration: underline; }
+.software-support { margin-bottom: 24px; padding: 24px; background: var(--surface-muted); border-radius: var(--radius); }
+.software-support ul { margin-bottom: 0; }
+.detail-section .resource-card { overflow-wrap: anywhere; }
+.detail-section .resource-card .eyebrow { margin-top: 0; color: var(--brand-700); }
+.detail-section .resource-card h3 { font-size: 18px; }
+.purchasing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.purchasing-grid > div { min-width: 0; }
+.purchase-facts > div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 16px; padding-bottom: 16px; }
+.purchase-facts dt { color: var(--text-muted); }
+.purchase-facts dd { margin: 0; overflow-wrap: anywhere; }
+.purchasing-grid .button { margin-top: 24px; }
 @media (max-width: 960px) {
+  .detail-hero { gap: 24px; }
+  .detail-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-metrics > div:nth-child(3) { border-left: 0; }
+  .detail-metrics > div:nth-child(n + 3) { border-top: 1px solid var(--border); }
   .hero-inner { gap: 32px; grid-template-columns: 1.5fr 1fr; padding-block: 40px; }
   .catalog-summary { padding-left: 24px; }
   .catalog-summary dl { gap: 24px; }
@@ -78,6 +140,21 @@
   .sales-section { padding: 32px; align-items: flex-start; flex-direction: column; gap: 24px; }
 }
 @media (max-width: 680px) {
+  .breadcrumb { padding-block: 16px; font-size: 12px; }
+  .detail-overview { padding-block: 8px 32px; }
+  .detail-hero, .highlights-grid, .purchasing-grid { grid-template-columns: 1fr; }
+  .detail-visual { max-width: 480px; width: 100%; justify-self: center; }
+  .detail-metrics > div { padding: 16px; }
+  .detail-metrics dd { font-size: 14px; }
+  .detail-overview .actions { gap: 8px; }
+  .detail-overview .button { padding-inline: 16px; font-size: 14px; }
+  .highlights-grid { gap: 16px; }
+  .highlights-grid li { padding: 20px; }
+  .detail-use-cases { gap: 8px; }
+  .detail-use-cases li { padding: 12px 16px; font-size: 14px; }
+  .spec-table { font-size: 13px; }
+  .spec-table th { width: 29%; }
+  .spec-table th, .spec-table td { padding: 12px; }
   .hero-inner { grid-template-columns: 1fr; gap: 32px; padding-block: 32px; }
   .hero .actions { gap: 8px; }
   .hero .button { padding-inline: 16px; font-size: 14px; }

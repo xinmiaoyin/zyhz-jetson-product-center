@@ -7,6 +7,7 @@ import { escapeHtml } from "../scripts/lib/html.mjs";
 import { writePage } from "../scripts/lib/site.mjs";
 import { buildSite } from "../scripts/build.mjs";
 import { createDevServer } from "../scripts/dev-server.mjs";
+import { loadCatalog } from "../scripts/lib/products.mjs";
 
 test("escapeHtml protects generated markup", () => {
   assert.equal(escapeHtml('<img src=x onerror="x">'), "&lt;img src=x onerror=&quot;x&quot;&gt;");
@@ -23,9 +24,12 @@ test("buildSite writes the home page and route manifest", async () => {
   for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
-  assert.deepEqual(result.routes, ["/", "/products/"]);
+  const catalog = await loadCatalog(rootDir);
+  const routes = ["/", "/products/", ...catalog.products.map(product => `/products/${product.slug}/`)];
+  assert.equal(routes.length, 14);
+  assert.deepEqual(result.routes, routes);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
-  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), ["/", "/products/"]);
+  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), routes);
 });
 
 test("dev server serves directory pages and returns 404 for missing files", async () => {

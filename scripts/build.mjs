@@ -2,10 +2,11 @@ import { lstat, mkdir, rm, writeFile } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writePage } from "./lib/site.mjs";
-import { loadCatalog } from "./lib/products.mjs";
+import { loadCatalog, getRelatedProducts } from "./lib/products.mjs";
 import { copyAssets } from "./lib/assets.mjs";
 import { renderHome } from "../templates/home.mjs";
 import { renderProductsIndex } from "../templates/products.mjs";
+import { renderProductDetail } from "../templates/product-detail.mjs";
 
 export async function buildSite({ rootDir, outDir }) {
   const projectDist = resolve(rootDir, "dist");
@@ -26,6 +27,10 @@ export async function buildSite({ rootDir, outDir }) {
 
   await copyAssets({ rootDir, outDir: projectDist, products: catalog.products });
   const pages = [["/", renderHome(catalog)], ["/products/", renderProductsIndex(catalog)]];
+  for (const product of catalog.products) pages.push([
+    `/products/${product.slug}/`,
+    renderProductDetail({ product, related: getRelatedProducts(product, catalog), catalog }),
+  ]);
   const routes = pages.map(([route]) => route);
   for (const [route, html] of pages) await writePage({ route, html, outDir: projectDist });
   await writeFile(join(projectDist, "routes.json"), `${JSON.stringify(routes, null, 2)}\n`, "utf8");

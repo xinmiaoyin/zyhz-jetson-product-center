@@ -76,6 +76,57 @@ function pageErrors({ document, file, route }) {
   return errors;
 }
 
+async function readJsonArtifact(path, label, errors) {
+  let source;
+  try { source = await readFile(path, "utf8"); }
+  catch (error) {
+    errors.push(`${label} missing: ${path}`);
+    return null;
+  }
+  try { return JSON.parse(source); }
+  catch { errors.push(`${label} malformed JSON: ${path}`); return null; }
+}
+
+function validateRouteManifest(manifest, generatedRoutes, errors) {
+  if (!Array.isArray(manifest) || manifest.some(route => typeof route !== "string" || !/^\/(?:[a-z0-9-]+\/)*$/u.test(route))) {
+    errors.push("route manifest must be an array of canonical directory routes");
+    return;
+  }
+  if (new Set(manifest).size !== manifest.length) errors.push("route manifest contains duplicate routes");
+  const declared = new Set(manifest);
+  for (const route of generatedRoutes) if (!declared.has(route)) errors.push(`route manifest: generated route not declared ${route}`);
+  for (const route of declared) if (!generatedRoutes.has(route)) errors.push(`route manifest: declared route without generated HTML ${route}`);
+}
+
+function validateSearchIndex(records, generatedRoutes, errors) {
+  const safeKeys = ["product", "text", "title", "type", "url"];
+  const docsRoutes = [...generatedRoutes].filter(route => /^\/docs\/[^/]+\/[^/]+\/$/.test(route));
+  const expectedCount = 12 + docsRoutes.length;
+  if (!Array.isArray(records) || records.length !== expectedCount) {
+    errors.push(`search-index safe structure requires exactly ${expectedCount} records`);
+    return;
+  }
+  const identities = new Set();
+  for (const [index, record] of records.entries()) {
+    const keys = record && typeof record === "object" && !Array.isArray(record) ? Object.keys(record).sort() : [];
+    if (keys.length !== safeKeys.length || keys.some((key, i) => key !== safeKeys[i])) {
+      errors.push(`search-index safe structure has unexpected fields at record ${index}`);
+      continue;
+    }
+    if (![record.product, record.text, record.title, record.url].every(value => typeof value === "string") || !["product", "document"].includes(record.type)) {
+      errors.push(`search-index safe structure has invalid field types at record ${index}`);
+      continue;
+    }
+    const routePattern = record.type === "product" ? /^\/products\/[a-z0-9-]+\/$/ : /^\/docs\/[a-z0-9-]+\/[a-z0-9-]+\/$/;
+    if (!record.title.trim() || !record.product.trim() || !record.text.trim() || !routePattern.test(record.url) || !generatedRoutes.has(record.url)) {
+      errors.push(`search-index safe structure has invalid content at record ${index}`);
+    }
+    const identity = `${record.type}:${record.url}`;
+    if (identities.has(identity)) errors.push(`search-index safe structure has duplicate URL ${record.url}`);
+    identities.add(identity);
+  }
+}
+
 export async function checkBuiltSite({ rootDir, outDir }) {
   const htmlFiles = await listHtmlFiles(outDir);
   const errors = [];
@@ -88,6 +139,11 @@ export async function checkBuiltSite({ rootDir, outDir }) {
     documents.set(file, dom.window.document);
     errors.push(...pageErrors({ document: dom.window.document, file, route }));
   }
+  const generatedRoutes = new Set(htmlFiles.map(file => routeForFile(outDir, file)));
+  const manifest = await readJsonArtifact(join(outDir, "routes.json"), "route manifest", errors);
+  if (manifest !== null) validateRouteManifest(manifest, generatedRoutes, errors);
+  const searchIndex = await readJsonArtifact(join(outDir, "assets/search-index.json"), "search-index", errors);
+  if (searchIndex !== null) validateSearchIndex(searchIndex, generatedRoutes, errors);
   for (const [file, document] of documents) {
     const route = routeForFile(outDir, file);
     const references = [
@@ -128,10 +184,17 @@ export async function checkBuiltSite({ rootDir, outDir }) {
         errors.push(`${file}: missing product detail page`);
         continue;
       }
-      const overviewText = document.querySelector("#product-overview")?.textContent.replace(/\s+/gu, " ") ?? "";
       const comparisonText = document.querySelector(`#series-comparison [data-product="${product.slug}"]`)?.textContent.replace(/\s+/gu, " ") ?? "";
-      for (const metric of product.coreMetrics) {
-        if (!overviewText.includes(metric.label) || !overviewText.includes(metric.value)) errors.push(`${file}: product metric disagreement for ${metric.label}`);
+      const metricNodes = [...document.querySelectorAll("#product-overview .core-metrics > div")];
+      if (metricNodes.length !== product.coreMetrics.length) errors.push(`${file}: product metric association count disagreement`);
+      for (const [index, metric] of product.coreMetrics.entries()) {
+        const node = metricNodes[index];
+        const label = node?.querySelector("dt")?.textContent.trim() ?? "";
+        const value = node?.querySelector(".metric-value")?.textContent.trim() ?? "";
+        const note = node?.querySelector("small")?.textContent.trim() ?? "";
+        if (label !== metric.label || value !== metric.value || note !== (metric.note ?? "")) {
+          errors.push(`${file}: product metric association disagreement for ${metric.label}`);
+        }
       }
       for (const metric of product.performanceMetrics) {
         if (!comparisonText.includes(formatPerformance(metric))) errors.push(`${file}: product metric disagreement for ${metric.precision}`);

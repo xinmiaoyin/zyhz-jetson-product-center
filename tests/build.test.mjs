@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { cp, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { JSDOM } from "jsdom";
 import { escapeHtml } from "../scripts/lib/html.mjs";
 import { writePage } from "../scripts/lib/site.mjs";
 import { buildSite } from "../scripts/build.mjs";
@@ -57,14 +58,6 @@ test("dev server serves directory pages and returns 404 for missing files", asyn
   assert.equal((await request("/missing/")).status, 404);
 });
 
-test("built site rejects broken internal links and leaked placeholders", async () => {
-  const { checkBuiltSite } = await import("../scripts/check-built-site.mjs");
-  const outDir = await mkdtemp(join(tmpdir(), "zyhz-check-"));
-  await mkdir(join(outDir, "bad"), { recursive: true });
-  await writeFile(join(outDir, "bad/index.html"), '<a href="/missing/">坏链接</a><p>' + "T" + "BD" + "</p>");
-  await assert.rejects(() => checkBuiltSite({ rootDir: process.cwd(), outDir }), /missing|placeholder/i);
-});
-
 test("built site checker enforces page, asset, accessibility and catalog invariants", async () => {
   const { checkBuiltSite } = await import("../scripts/check-built-site.mjs");
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-check-built-"));
@@ -85,6 +78,8 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   await mutate("index.html", html => html.replace("</main>", '<div id="main-content"></div></main>'), /duplicate id/i);
   await mutate("index.html", html => html.replace(/<meta name="description"[^>]*>/, ""), /description/i);
   await mutate("index.html", html => html.replace("/assets/brand/zyhz-logo.png", "/assets/missing.png"), /missing.*asset|missing.*target/i);
+  await mutate("index.html", html => html.replace("</main>", '<a href="/missing-route/">断裂链接</a></main>'), /missing.*link|missing.*target/i);
+  await mutate("index.html", html => html.replace("</main>", "<p>" + "T" + "BD" + "</p></main>"), /placeholder/i);
   await mutate("index.html", html => html.replace("</main>", '<a href="#not-present">断裂片段</a></main>'), /fragment/i);
   await mutate("index.html", html => html.replace('alt="正阳恒卓科技"', ""), /image.*alt/i);
   await mutate("index.html", html => html.replace('width="1570"', ""), /image.*size|dimensions/i);
@@ -94,6 +89,38 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
 
   const product = (await loadCatalog(rootDir)).products[0];
   await mutate(`products/${product.slug}/index.html`, html => html.replace(product.coreMetrics[0].value, "WRONG-METRIC"), /metric/i);
+  await mutate(`products/${product.slug}/index.html`, html => {
+    const dom = new JSDOM(html);
+    const values = dom.window.document.querySelectorAll("#product-overview .core-metrics > div .metric-value");
+    [values[0].textContent, values[1].textContent] = [values[1].textContent, values[0].textContent];
+    return dom.serialize();
+  }, /metric.*association|metric.*AI 性能/i);
+
+  const routesPath = join(outDir, "routes.json");
+  const routesSource = await readFile(routesPath, "utf8");
+  await unlink(routesPath);
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /route manifest.*missing/i);
+  await writeFile(routesPath, "{not json");
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /route manifest.*malformed/i);
+  const routes = JSON.parse(routesSource);
+  await writeFile(routesPath, JSON.stringify(routes.slice(1)));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /generated.*not declared|route manifest/i);
+  await writeFile(routesPath, JSON.stringify([...routes, "/ghost/"]));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /declared.*without generated|route manifest/i);
+  await writeFile(routesPath, routesSource);
+
+  const searchPath = join(outDir, "assets/search-index.json");
+  const searchSource = await readFile(searchPath, "utf8");
+  await unlink(searchPath);
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*missing/i);
+  await writeFile(searchPath, "not json");
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*malformed/i);
+  const searchRecords = JSON.parse(searchSource);
+  searchRecords[0].internalSecret = "must-not-ship";
+  await writeFile(searchPath, JSON.stringify(searchRecords));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*safe structure|search-index.*field/i);
+  await writeFile(searchPath, searchSource);
+
   const productsPath = join(rootDir, "data/products.json");
   const products = JSON.parse(await readFile(productsPath, "utf8"));
   await writeFile(productsPath, `${JSON.stringify(products.slice(0, 11), null, 2)}\n`);

@@ -55,6 +55,13 @@ test("markdown canonicalizes whitespace in external href before applying link pr
   dom.window.close();
 });
 
+test("markdown normalizes raw HTML heading ids, deduplicates globally and reserves template ids", () => {
+  const { html, headings } = renderMarkdown('## Sources Heading\n\n<h2 id="sources-heading">Raw source collision</h2>\n\n<h2 id="RAW custom id">Raw source collision</h2>');
+  const doc = new JSDOM(html).window.document;
+  assert.deepEqual([...doc.querySelectorAll("h2")].map(heading => heading.id), ["sources-heading-2", "raw-source-collision", "raw-source-collision-2"]);
+  assert.deepEqual(headings.map(heading => heading.id), ["sources-heading-2", "raw-source-collision", "raw-source-collision-2"]);
+});
+
 test("documents reject malformed front matter, unknown associations and undeclared external sources", async () => {
   const root = await mkdtemp(join(tmpdir(), "zyhz-docs-invalid-"));
   const directory = join(root, "content/docs/jetson-agx-orin-64gb");

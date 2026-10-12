@@ -22,7 +22,7 @@ function renderSpecifications(product, sources) {
 function renderSeriesComparison(product, catalog) {
   const siblings = catalog.products.filter(item => item.series === product.series);
   if (siblings.length < 2) return "";
-  return `<p class="section-intro">同系列开发套件与模组并列展示，按项目的开发、集成与部署需求选择。</p>
+  return `<p class="section-intro">同系列产品并列展示，按项目的开发、集成与部署需求选择。</p>
     <div class="comparison-scroll" role="region" aria-label="同系列参数比较，可横向滚动" tabindex="0"><table class="series-comparison-table">
     <caption class="sr-only">同系列产品核心参数</caption><thead><tr><th scope="col">产品 / 类型</th><th scope="col">AI 性能与计算口径</th><th scope="col">核心配置</th><th scope="col">选型</th></tr></thead>
     <tbody>${siblings.map(item => `<tr data-product="${e(item.slug)}"${item.slug === product.slug ? ' class="current-product"' : ""}>
@@ -45,7 +45,7 @@ function renderResources(product, sources) {
   }).join("");
   return `${product.softwareSupport.length ? `<div class="software-support"><h3>软件支持</h3>${list(product.softwareSupport)}</div>` : ""}
     <div class="resource-grid">${cards(product.documents, "技术文档")}${cards(product.downloads, "软件下载")}</div>
-    <div class="actions"><a class="text-link" href="/docs/?product=${encodeURIComponent(product.slug)}">浏览技术文档 →</a><a class="text-link" href="/downloads/?product=${encodeURIComponent(product.slug)}">前往下载中心 →</a></div>`;
+    <div class="actions"><a class="text-link" href="/docs/${encodeURIComponent(product.slug)}/product-resources/">浏览技术文档 →</a><a class="text-link" href="/downloads/?product=${encodeURIComponent(product.slug)}">前往下载中心 →</a></div>`;
 }
 
 function renderPurchasing(product, quoteUrl) {

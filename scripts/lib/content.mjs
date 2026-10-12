@@ -11,22 +11,10 @@ const plainText = html => decodeText(sanitizeHtml(html.replace(/<\/(?:p|h[1-6]|l
 
 export function renderMarkdown(markdown) {
   const headings = [];
-  const used = new Set(["main-content", "doc-query", "search-results", "search-status"]);
-  const marked = new Marked({ gfm: true, renderer: {
-    heading({ tokens, depth }) {
-      const inline = this.parser.parseInline(tokens);
-      const text = plainText(inline);
-      const base = text.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}\p{M}_-]+/gu, "-").replace(/^-+|-+$/g, "") || "section";
-      let id = base;
-      let count = 2;
-      while (used.has(id)) id = `${base}-${count++}`;
-      used.add(id);
-      headings.push({ depth, id, text });
-      return `<h${depth} id="${e(id)}">${inline}</h${depth}>\n`;
-    },
-  } });
+  const used = new Set(["main-content", "doc-query", "search-results", "search-status", "sources-heading"]);
+  const marked = new Marked({ gfm: true });
   // Render first, then restrict the resulting HTML. No raw Markdown HTML bypasses this boundary.
-  const html = sanitizeHtml(marked.parse(markdown), {
+  const sanitized = sanitizeHtml(marked.parse(markdown), {
     allowedTags: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "li", "a", "table", "thead", "tbody", "tr", "th", "td", "pre", "code", "blockquote", "strong", "em", "del", "br", "hr", "div", "span"],
     allowedAttributes: { h1: ["id"], h2: ["id"], h3: ["id"], h4: ["id"], h5: ["id"], h6: ["id"], a: ["href", "title", "rel"], ol: ["start"], code: ["class"], div: ["class"], blockquote: ["class"], span: ["class"] },
     allowedClasses: { code: [/^language-[\w-]+$/], div: ["callout", "note", "warning"], blockquote: ["callout", "note", "warning"], span: ["note", "warning"] },
@@ -43,6 +31,19 @@ export function renderMarkdown(markdown) {
       if (allowed && /^https:/i.test(href)) safe.rel = "noopener noreferrer";
       return { tagName, attribs: safe };
     } },
+  });
+  // Normalize every sanitized heading, including raw HTML accepted by Markdown,
+  // through one global namespace shared with the surrounding document template.
+  const html = sanitized.replace(/<h([1-6])(?:\s[^>]*)?>([\s\S]*?)<\/h\1>/gi, (_match, depthText, inline) => {
+    const depth = Number(depthText);
+    const text = plainText(inline);
+    const base = text.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}\p{M}_-]+/gu, "-").replace(/^-+|-+$/g, "") || "section";
+    let id = base;
+    let count = 2;
+    while (used.has(id)) id = `${base}-${count++}`;
+    used.add(id);
+    headings.push({ depth, id, text });
+    return `<h${depth} id="${e(id)}">${inline}</h${depth}>`;
   });
   return { html, headings };
 }

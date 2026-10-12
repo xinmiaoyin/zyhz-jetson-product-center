@@ -160,7 +160,7 @@ test("detail renders verified type-specific specifications and resolves evidence
       assert.ok([...doc.querySelectorAll("#technical-resources a")].some(link => link.href === source.url && link.textContent.includes(source.title)));
     }
     for (const id of product.downloads) assert.ok([...doc.querySelectorAll("#technical-resources a")].some(link => link.href === catalog.sources.find(source => source.id === id).url));
-    assert.ok(doc.querySelector(`#technical-resources a[href="/docs/?product=${product.slug}"]`));
+    assert.ok(doc.querySelector(`#technical-resources a[href="/docs/${product.slug}/product-resources/"]`));
     assert.ok(doc.querySelector(`#technical-resources a[href="/downloads/?product=${product.slug}"]`));
     if (product.productType === "developer-kit") {
       assert.deepEqual([...doc.querySelectorAll("#package-contents li")].map(el => el.textContent), product.packageContents);
@@ -188,6 +188,8 @@ test("performance output and same-series detail comparison preserve complete pre
       }
     }
     assert.doesNotMatch(doc.body.textContent, /性能排名|第[一二三四]名/);
+    assert.match(comparison.textContent, /同系列产品并列展示/);
+    assert.doesNotMatch(comparison.textContent, /开发套件与模组并列展示/);
     assert.match(comparison.textContent, /不同计算口径不可直接按数值比较/);
   }
 });
@@ -283,12 +285,14 @@ test("downloads and support data reject invalid associations and links before to
     [{ ...sampleDownload, sourceReference: "missing-source" }, /sourceReference/],
     [{ ...sampleDownload, href: "https://example.com" }, /href/],
     [{ ...available, href: "https://example.com/unverified" }, /href/],
+    [{ ...available, href: "https://developer.nvidia.com/embedded/jetpack/downloads?mirror=1" }, /href/],
     [{ ...available, href: "javascript:alert(1)" }, /href/],
     [{ ...available, href: "//evil.test/download" }, /href/],
     [{ ...available, href: "/assets/downloads/missing.pdf" }, /href/],
     [{ ...available, href: "/assets/downloads/../../data/contact.json" }, /href/],
     [{ ...sampleDownload, publishedAt: "2026-13-01" }, /publishedAt/],
     [{ ...sampleDownload, status: "ready" }, /status/],
+    [{ ...sampleDownload, unexpected: "must fail" }, /unrecognized|unexpected/i],
   ]) {
     await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([record]));
     await assert.rejects(buildSite({ rootDir, outDir }), reason);
@@ -314,6 +318,30 @@ test("downloads and support data reject invalid associations and links before to
   await writeFile(join(rootDir, "assets/downloads/sample.txt"), "Test resource");
   await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([{ ...available, href: "/assets/downloads/sample.txt" }]));
   assert.equal((await loadSupportData(rootDir, catalog)).downloads[0].href, "/assets/downloads/sample.txt");
+  await writeFile(join(rootDir, "assets/downloads/empty.txt"), "");
+  await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([{ ...available, href: "/assets/downloads/empty.txt" }]));
+  await assert.rejects(loadSupportData(rootDir, catalog), /nonempty|href/i);
+});
+
+test("local downloads reject symlink or junction path components", async (t) => {
+  const { symlink } = await import("node:fs/promises");
+  const { loadSupportData } = await import("../scripts/build.mjs");
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-support-link-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outside = join(rootDir, "outside");
+  await mkdir(outside);
+  await writeFile(join(outside, "sample.txt"), "outside resource");
+  const link = join(rootDir, "assets/downloads/linked");
+  await mkdir(join(rootDir, "assets/downloads"), { recursive: true });
+  try { await symlink(outside, link, process.platform === "win32" ? "junction" : "dir"); }
+  catch (error) {
+    if (["EPERM", "EACCES", "ENOTSUP"].includes(error.code)) return t.skip(`platform cannot create a directory link: ${error.code}`);
+    throw error;
+  }
+  const record = { ...sampleDownload, status: "available", href: "/assets/downloads/linked/sample.txt", sourceReference: "jetpack" };
+  await writeFile(join(rootDir, "data/contact.json"), JSON.stringify(sampleContact));
+  await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([record]));
+  await assert.rejects(loadSupportData(rootDir, catalog), /symlink|href/i);
 });
 
 test("build adds downloads and support while preserving all 31 prior routes and quote contexts", async () => {

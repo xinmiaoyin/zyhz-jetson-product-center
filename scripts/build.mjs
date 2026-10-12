@@ -8,6 +8,8 @@ import { renderHome } from "../templates/home.mjs";
 import { renderProductsIndex } from "../templates/products.mjs";
 import { renderProductDetail } from "../templates/product-detail.mjs";
 import { renderCompare } from "../templates/compare.mjs";
+import { loadDocuments, buildSearchIndex } from "./lib/content.mjs";
+import { renderDocsIndex, renderDocumentPage } from "../templates/docs.mjs";
 
 export async function buildSite({ rootDir, outDir }) {
   const projectDist = resolve(rootDir, "dist");
@@ -15,6 +17,7 @@ export async function buildSite({ rootDir, outDir }) {
     throw new Error("outDir must be the project's dist directory");
   }
   const catalog = await loadCatalog(rootDir);
+  const documents = await loadDocuments(rootDir, catalog);
 
   const existing = await lstat(projectDist).catch((error) => {
     if (error.code === "ENOENT") return null;
@@ -32,6 +35,9 @@ export async function buildSite({ rootDir, outDir }) {
     `/products/${product.slug}/`,
     renderProductDetail({ product, related: getRelatedProducts(product, catalog), catalog }),
   ]);
+  pages.push(["/docs/", renderDocsIndex({ documents, catalog })]);
+  for (const document of documents) pages.push([document.url, renderDocumentPage({ document, navigation: documents, catalog })]);
+  await writeFile(join(projectDist, "assets/search-index.json"), `${JSON.stringify(buildSearchIndex(documents, catalog.products), null, 2)}\n`, "utf8");
   const routes = pages.map(([route]) => route);
   for (const [route, html] of pages) await writePage({ route, html, outDir: projectDist });
   await writeFile(join(projectDist, "routes.json"), `${JSON.stringify(routes, null, 2)}\n`, "utf8");

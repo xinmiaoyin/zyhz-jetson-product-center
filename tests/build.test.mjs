@@ -21,15 +21,16 @@ test("writePage creates directory-style routes", async () => {
 
 test("buildSite writes the home page and route manifest", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-build-"));
-  for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
   const catalog = await loadCatalog(rootDir);
   const routes = ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)];
   assert.equal(routes.length, 15);
-  assert.deepEqual(result.routes, routes);
+  assert.deepEqual(result.routes.slice(0, 15), routes);
+  assert.equal(result.routes.length, 31);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
-  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), routes);
+  assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), result.routes);
   const comparison = await readFile(join(outDir, "compare/index.html"), "utf8");
   for (const product of catalog.products) assert.ok(comparison.includes(product.nameZh));
   assert.match(comparison, /type="module" src="\/assets\/client\/compare.js"/);
@@ -38,7 +39,7 @@ test("buildSite writes the home page and route manifest", async () => {
 
 test("dev server serves directory pages and returns 404 for missing files", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-server-"));
-  for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   await buildSite({ rootDir, outDir });
   const server = createDevServer({ outDir });

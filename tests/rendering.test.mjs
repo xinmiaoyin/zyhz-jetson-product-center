@@ -101,10 +101,11 @@ test("copyAssets preserves logo bytes, copies client assets and escapes fallback
 
 test("build emits catalog and twelve detail routes with local styles and image fallbacks", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-render-"));
-  for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
-  assert.deepEqual(result.routes, ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
+  assert.deepEqual(result.routes.slice(0, 15), ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
+  assert.equal(result.routes.length, 31);
   for (const path of ["index.html", "products/index.html", ...catalog.products.map(product => `products/${product.slug}/index.html`)]) {
     const doc = documentOf(await readFile(join(outDir, path), "utf8"));
     assert.equal(doc.querySelectorAll("h1").length, 1);

@@ -1,0 +1,49 @@
+.docs-heading { padding-block: 40px 24px; }
+.docs-heading h1 { font-size: clamp(28px, 3vw, 42px); }
+.docs-breadcrumb { padding-top: 24px; font-size: 14px; color: var(--text-muted); }
+.doc-search { margin-block: 16px 32px; padding: 24px; background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius); }
+.doc-search label { display: block; font-weight: 600; margin-bottom: 8px; }
+.search-controls { display: flex; gap: 8px; }
+.search-controls input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; }
+.doc-search [role="status"] { margin-top: 12px; font-size: 14px; color: var(--text-muted); }
+.doc-search ul { list-style: none; padding: 0; margin: 0; }
+.doc-search li { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.doc-search li a { color: var(--brand-700); font-weight: 600; }
+.doc-search li p { font-size: 13px; }
+[data-search-guidance] { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; font-size: 13px; }
+[data-search-guidance][hidden] { display: none; }
+.doc-search a, .docs-card a, .doc-article a, .doc-sources a { text-decoration: underline; text-underline-offset: 3px; color: var(--brand-700); }
+.docs-series { margin-top: 40px; }
+.docs-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
+.docs-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+.docs-card ul { padding-left: 20px; margin-bottom: 0; }
+.docs-card li + li { margin-top: 16px; }
+.docs-card p { margin-top: 8px; font-size: 14px; }
+.docs-layout { display: grid; grid-template-columns: 210px minmax(0, 1fr) 170px; gap: 28px; align-items: start; }
+.docs-sidebar, .doc-toc { font-size: 13px; padding-top: 24px; }
+.docs-sidebar h2, .doc-toc h2 { font-size: 16px; margin-bottom: 16px; }
+.docs-sidebar details { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.docs-sidebar summary { cursor: pointer; font-weight: 600; }
+.docs-sidebar ul, .doc-toc ul { list-style: none; padding-left: 0; }
+.docs-sidebar li + li, .doc-toc li + li { margin-top: 12px; }
+.docs-sidebar [aria-current] { color: var(--brand-700); font-weight: 600; }
+.doc-toc { position: sticky; top: 16px; }
+.doc-toc .toc-level-3 { padding-left: 12px; }
+.doc-main { min-width: 0; }
+.doc-main .docs-heading { padding-top: 24px; }
+.doc-product-back { display: inline-block; margin-top: 20px; }
+.doc-article { overflow-wrap: anywhere; line-height: 1.85; }
+.doc-article h1, .doc-article h2 { font-size: 25px; margin: 32px 0 16px; }
+.doc-article h3 { font-size: 20px; margin: 24px 0 12px; }
+.doc-article p, .doc-article ul, .doc-article ol, .doc-article table { margin-block: 16px; }
+.doc-article li + li { margin-top: 8px; }
+.doc-article blockquote, .doc-article .callout { margin: 20px 0; padding: 12px 20px; border-left: 3px solid var(--brand-700); background: var(--surface-muted); }
+.doc-article pre { padding: 20px; overflow-x: auto; background: #172321; color: #e7f3ee; border-radius: 6px; line-height: 1.6; }
+.doc-article code { font-family: Consolas, monospace; font-size: 14px; }
+.doc-article table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.doc-article th, .doc-article td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+.doc-sources { border-top: 1px solid var(--border); margin-top: 32px; padding-top: 24px; font-size: 14px; }
+.doc-sources h2 { font-size: 20px; }
+.doc-pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; border-top: 1px solid var(--border); margin-top: 24px; padding-top: 24px; font-size: 14px; }
+@media (max-width: 1080px) { .docs-layout { grid-template-columns: 180px minmax(0, 1fr); } .doc-toc { grid-column: 2; grid-row: 1; position: static; padding: 16px; background: var(--surface-muted); } .doc-main { grid-column: 2; } .docs-sidebar { grid-row: 1 / span 2; } }
+@media (max-width: 680px) { .docs-card-grid, .docs-layout { display: block; } .docs-card + .docs-card { margin-top: 16px; } .docs-sidebar { margin-bottom: 24px; } .doc-search { padding: 16px; } .search-controls { flex-wrap: wrap; } .search-controls input { flex-basis: 100%; } .docs-heading { padding-top: 24px; } .docs-card { padding: 20px; } }

@@ -81,10 +81,10 @@ async function readJsonArtifact(path, label, errors) {
   try { source = await readFile(path, "utf8"); }
   catch (error) {
     errors.push(`${label} missing: ${path}`);
-    return null;
+    return { ok: false };
   }
-  try { return JSON.parse(source); }
-  catch { errors.push(`${label} malformed JSON: ${path}`); return null; }
+  try { return { ok: true, value: JSON.parse(source) }; }
+  catch { errors.push(`${label} malformed JSON: ${path}`); return { ok: false }; }
 }
 
 function validateRouteManifest(manifest, generatedRoutes, errors) {
@@ -141,9 +141,9 @@ export async function checkBuiltSite({ rootDir, outDir }) {
   }
   const generatedRoutes = new Set(htmlFiles.map(file => routeForFile(outDir, file)));
   const manifest = await readJsonArtifact(join(outDir, "routes.json"), "route manifest", errors);
-  if (manifest !== null) validateRouteManifest(manifest, generatedRoutes, errors);
+  if (manifest.ok) validateRouteManifest(manifest.value, generatedRoutes, errors);
   const searchIndex = await readJsonArtifact(join(outDir, "assets/search-index.json"), "search-index", errors);
-  if (searchIndex !== null) validateSearchIndex(searchIndex, generatedRoutes, errors);
+  if (searchIndex.ok) validateSearchIndex(searchIndex.value, generatedRoutes, errors);
   for (const [file, document] of documents) {
     const route = routeForFile(outDir, file);
     const references = [

@@ -102,6 +102,8 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /route manifest.*missing/i);
   await writeFile(routesPath, "{not json");
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /route manifest.*malformed/i);
+  await writeFile(routesPath, "null");
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /route manifest.*array|route manifest.*canonical/i);
   const routes = JSON.parse(routesSource);
   await writeFile(routesPath, JSON.stringify(routes.slice(1)));
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /generated.*not declared|route manifest/i);
@@ -115,6 +117,8 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*missing/i);
   await writeFile(searchPath, "not json");
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*malformed/i);
+  await writeFile(searchPath, "null");
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /search-index.*safe structure/i);
   const searchRecords = JSON.parse(searchSource);
   searchRecords[0].internalSecret = "must-not-ship";
   await writeFile(searchPath, JSON.stringify(searchRecords));

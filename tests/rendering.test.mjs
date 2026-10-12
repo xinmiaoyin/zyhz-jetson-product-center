@@ -105,7 +105,7 @@ test("build emits catalog and twelve detail routes with local styles and image f
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
   assert.deepEqual(result.routes.slice(0, 15), ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
-  assert.equal(result.routes.length, 31);
+  assert.equal(result.routes.length, 33);
   for (const path of ["index.html", "products/index.html", ...catalog.products.map(product => `products/${product.slug}/index.html`)]) {
     const doc = documentOf(await readFile(join(outDir, path), "utf8"));
     assert.equal(doc.querySelectorAll("h1").length, 1);
@@ -226,4 +226,116 @@ test("detail omits empty optional sections and escapes text in populated optiona
   assert.equal(populated.querySelector("#optional-accessories li").textContent, label);
   assert.equal(populated.querySelector("#optional-accessories img"), null);
   assert.match(populated.querySelector("#purchasing").textContent, /示例 <test>/);
+});
+
+const sampleContact = { isSimulation: true, manager: "示例客户经理", phone: "400-000-0000", email: "sales@example.invalid", workHours: "工作日 9:00–18:00", qrPlaceholder: "二维码示例占位（不可扫描）" };
+const sampleDownload = { id: "d1", product: "jetson-agx-orin-64gb", type: "数据手册", version: "待发布", publishedAt: null, size: null, status: "preparing", href: null, sourceReference: "orin-spec" };
+
+test("support page clearly labels simulated contact data and escapes product context", async () => {
+  const { renderSupport } = await import("../templates/support.mjs");
+  const product = catalog.products.find(p => p.slug === "jetson-agx-orin-64gb");
+  const doc = documentOf(renderSupport({ contact: sampleContact, selectedProduct: product, catalog }));
+  assert.match(doc.querySelector("main").textContent, /模拟联系信息/);
+  assert.match(doc.querySelector("[data-support-context]").textContent, /Jetson AGX Orin 64GB/);
+  for (const label of ["客户经理（模拟）", "联系电话（模拟）", "联系邮箱（模拟）", "工作时间（模拟）"]) assert.ok(doc.body.textContent.includes(label));
+  assert.ok(doc.querySelector('a[href="tel:400-000-0000"]'));
+  assert.ok(doc.querySelector('a[href="mailto:sales@example.invalid"]'));
+  assert.match(doc.querySelector("[data-qr-placeholder]").textContent, /示例.*不可扫描/);
+  assert.equal(doc.querySelector("[data-qr-placeholder] img, [data-qr-placeholder] canvas, form"), null);
+  assert.match(doc.body.textContent, /不接收.*咨询|不收集.*信息/);
+  const unsafe = '<img src=x onerror="alert(1)">';
+  const escaped = documentOf(renderSupport({ contact: { ...sampleContact, manager: unsafe }, selectedProduct: { ...product, nameEn: unsafe } }));
+  assert.ok(escaped.querySelector("[data-support-context]").textContent.includes(unsafe));
+  assert.equal(escaped.querySelector('img[src="x"]'), null);
+});
+
+test("missing download is rendered as disabled preparation state with all records visible without JS", async () => {
+  const { renderDownloads } = await import("../templates/downloads.mjs");
+  const source = catalog.sources.find(s => s.id === "jetpack");
+  const available = { ...sampleDownload, id: "d2", type: "软件工具", version: "以官方入口为准", status: "available", href: source.url, sourceReference: source.id };
+  const doc = documentOf(renderDownloads({ downloads: [sampleDownload, available], catalog }));
+  const pending = doc.querySelector('[data-download-id="d1"]');
+  assert.match(pending.textContent, /资料准备中/);
+  assert.equal(pending.querySelector("[aria-disabled=true]").tagName, "SPAN");
+  assert.equal(pending.querySelector("a[data-download-link]"), null);
+  assert.equal(doc.querySelector('a[href=""], [data-download-id][hidden]'), null);
+  const active = doc.querySelector('[data-download-id="d2"]');
+  assert.equal(active.querySelector("a[data-download-link]").href, source.url);
+  assert.match(active.textContent, /版本.*以官方入口为准/);
+  assert.match(active.textContent, /发布日期.*未标注/);
+  assert.match(active.textContent, /大小.*官方/);
+  assert.ok(active.textContent.includes(source.title));
+  assert.equal(doc.querySelectorAll("[data-download-id]").length, 2);
+  for (const select of doc.querySelectorAll("select")) assert.ok(select.labels.length);
+});
+
+test("downloads and support data reject invalid associations and links before touching dist", async () => {
+  const { loadSupportData } = await import("../scripts/build.mjs");
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-support-invalid-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outDir = join(rootDir, "dist");
+  await mkdir(outDir);
+  await writeFile(join(outDir, "sentinel.txt"), "keep existing build");
+  await writeFile(join(rootDir, "data/contact.json"), JSON.stringify(sampleContact));
+  const available = { ...sampleDownload, status: "available", href: "https://developer.nvidia.com/embedded/jetpack/downloads", sourceReference: "jetpack" };
+  for (const [record, reason] of [
+    [{ ...sampleDownload, product: "not-a-product" }, /product/],
+    [{ ...sampleDownload, sourceReference: "missing-source" }, /sourceReference/],
+    [{ ...sampleDownload, href: "https://example.com" }, /href/],
+    [{ ...available, href: "https://example.com/unverified" }, /href/],
+    [{ ...available, href: "javascript:alert(1)" }, /href/],
+    [{ ...available, href: "//evil.test/download" }, /href/],
+    [{ ...available, href: "/assets/downloads/missing.pdf" }, /href/],
+    [{ ...available, href: "/assets/downloads/../../data/contact.json" }, /href/],
+    [{ ...sampleDownload, publishedAt: "2026-13-01" }, /publishedAt/],
+    [{ ...sampleDownload, status: "ready" }, /status/],
+  ]) {
+    await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([record]));
+    await assert.rejects(buildSite({ rootDir, outDir }), reason);
+    assert.equal(await readFile(join(outDir, "sentinel.txt"), "utf8"), "keep existing build");
+  }
+  await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([sampleDownload, sampleDownload]));
+  await assert.rejects(loadSupportData(rootDir, catalog), /duplicate/);
+  await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([available]));
+  for (const [contact, reason] of [
+    [{ ...sampleContact, isSimulation: false }, /isSimulation/],
+    [{ ...sampleContact, email: "sales@example.com" }, /email/],
+    [{ ...sampleContact, manager: "客户经理" }, /manager/],
+    [{ ...sampleContact, phone: "13800138000" }, /phone/],
+    [{ ...sampleContact, qrPlaceholder: "扫码咨询" }, /qrPlaceholder/],
+  ]) {
+    await writeFile(join(rootDir, "data/contact.json"), JSON.stringify(contact));
+    await assert.rejects(buildSite({ rootDir, outDir }), reason);
+    assert.equal(await readFile(join(outDir, "sentinel.txt"), "utf8"), "keep existing build");
+  }
+  await writeFile(join(rootDir, "data/contact.json"), JSON.stringify(sampleContact));
+  assert.equal((await loadSupportData(rootDir, catalog)).downloads[0].href, available.href);
+  await mkdir(join(rootDir, "assets/downloads"), { recursive: true });
+  await writeFile(join(rootDir, "assets/downloads/sample.txt"), "Test resource");
+  await writeFile(join(rootDir, "data/downloads.json"), JSON.stringify([{ ...available, href: "/assets/downloads/sample.txt" }]));
+  assert.equal((await loadSupportData(rootDir, catalog)).downloads[0].href, "/assets/downloads/sample.txt");
+});
+
+test("build adds downloads and support while preserving all 31 prior routes and quote contexts", async () => {
+  const { loadDocuments } = await import("../scripts/lib/content.mjs");
+  const documents = await loadDocuments(process.cwd(), catalog);
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-support-build-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outDir = join(rootDir, "dist");
+  const { routes } = await buildSite({ rootDir, outDir });
+  const priorRoutes = ["/", "/products/", "/compare/", ...catalog.products.map(p => `/products/${p.slug}/`), "/docs/", ...documents.map(d => d.url)];
+  assert.equal(priorRoutes.length, 31);
+  assert.deepEqual(routes, [...priorRoutes, "/downloads/", "/support/"]);
+  const slugs = new Set(catalog.products.map(p => p.slug));
+  for (const route of routes) {
+    const doc = documentOf(await readFile(join(outDir, route, "index.html"), "utf8"));
+    for (const link of doc.querySelectorAll('a[href*="intent=quote"]')) {
+      assert.ok(slugs.has(new URL(link.href, "https://example.test").searchParams.get("product")));
+    }
+    if (["/downloads/", "/support/"].includes(route)) {
+      assert.ok(doc.querySelector('script[type="module"][src="/assets/client/feedback.js"]'));
+      assert.equal(doc.querySelectorAll("h1").length, 1);
+    }
+  }
+  assert.ok((await readFile(join(outDir, "assets/client/feedback.js"))).length);
 });

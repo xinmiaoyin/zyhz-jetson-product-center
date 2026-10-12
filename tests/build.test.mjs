@@ -28,7 +28,7 @@ test("buildSite writes the home page and route manifest", async () => {
   const routes = ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)];
   assert.equal(routes.length, 15);
   assert.deepEqual(result.routes.slice(0, 15), routes);
-  assert.equal(result.routes.length, 31);
+  assert.equal(result.routes.length, 33);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
   assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), result.routes);
   const comparison = await readFile(join(outDir, "compare/index.html"), "utf8");

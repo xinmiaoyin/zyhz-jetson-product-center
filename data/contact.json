@@ -1,0 +1,8 @@
+{
+  "isSimulation": true,
+  "manager": "示例客户经理",
+  "phone": "400-000-0000",
+  "email": "sales@example.invalid",
+  "workHours": "工作日 9:00–18:00",
+  "qrPlaceholder": "二维码示例占位（不可扫描）"
+}

@@ -150,7 +150,7 @@ test("build emits docs routes and public search JSON alongside all existing rout
   const root = await mkdtemp(join(tmpdir(), "zyhz-docs-build-"));
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(root, folder), { recursive: true });
   const { routes } = await buildSite({ rootDir: root, outDir: join(root, "dist") });
-  assert.equal(routes.length, 31);
+  assert.equal(routes.length, 33);
   for (const route of ["/", "/products/", "/compare/", "/docs/", "/docs/jetson-agx-orin-64gb/flashing-and-jetpack/", ...catalog.products.map(p => `/products/${p.slug}/`)]) assert.ok(routes.includes(route));
   const html = await readFile(join(root, "dist/docs/jetson-agx-orin-64gb/flashing-and-jetpack/index.html"), "utf8");
   assert.match(html, /<article/);

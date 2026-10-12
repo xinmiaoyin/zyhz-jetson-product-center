@@ -233,3 +233,111 @@ test("public catalog JSON whitelists nested UI fields and preserves script-safe 
   assert.equal(dom.window.document.querySelector("#injected-script"), null);
   dom.window.close();
 });
+
+async function supportPage(search = "") {
+  const { renderSupport } = await import("../templates/support.mjs");
+  const { mountFeedback } = await import("../src/client/feedback.js");
+  const contact = { isSimulation: true, manager: "示例客户经理", phone: "400-000-0000", email: "sales@example.invalid", workHours: "工作日 9:00–18:00", qrPlaceholder: "二维码示例占位（不可扫描）" };
+  const dom = new JSDOM(renderSupport({ contact, catalog }), { url: `https://example.test/support/${search}` });
+  const root = dom.window.document.querySelector("[data-feedback-root]");
+  return { dom, root, mountFeedback };
+}
+
+test("support query accepts a known product and quote intent; unknown or malicious values stay generic", async () => {
+  for (const [query, expected] of [
+    ["?product=jetson-agx-orin-64gb&intent=quote", "当前产品：Jetson AGX Orin 64GB · 报价咨询（示例）"],
+    ["?product=jetson-agx-orin-64gb&intent=%3Cimg%20src=x%3E", "当前产品：Jetson AGX Orin 64GB · 支持咨询（示例）"],
+    ["?product=missing&intent=quote", "通用支持咨询（示例）"],
+    ["?product=%3Cimg%20src=x%20onerror=alert(1)%3E&intent=quote", "通用支持咨询（示例）"],
+    ["?product=__proto__&intent=quote", "通用支持咨询（示例）"],
+    ["", "通用支持咨询（示例）"],
+  ]) {
+    const { dom, root, mountFeedback } = await supportPage(query);
+    mountFeedback(root);
+    assert.equal(root.querySelector("[data-support-context]").textContent, expected);
+    assert.equal(root.querySelector('img[src="x"]'), null);
+    if (query.startsWith("?product=jetson-agx-orin-64gb")) assert.equal(root.querySelector("[data-support-product-link]").getAttribute("href"), "/products/jetson-agx-orin-64gb/");
+    else assert.equal(root.querySelector("[data-support-product-link]").hidden, true);
+    mountFeedback(root);
+    assert.equal(root.querySelector("[data-support-context]").textContent, expected);
+    dom.window.close();
+  }
+});
+
+test("copy success gives visible polite feedback, restores at 2000ms and remains idempotent across mounts", async t => {
+  const { dom, root, mountFeedback } = await supportPage();
+  t.after(() => dom.window.close());
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  const copied = [];
+  Object.defineProperty(dom.window.navigator, "clipboard", { value: { writeText: async text => { copied.push(text); } } });
+  mountFeedback(root); mountFeedback(root);
+  const button = root.querySelector('[data-copy="400-000-0000"]');
+  const original = button.textContent;
+  button.click();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(copied, ["400-000-0000"]);
+  assert.equal(button.textContent, "已复制");
+  assert.match(root.querySelector('[data-copy-status][aria-live="polite"]').textContent, /已复制.*模拟/);
+  t.mock.timers.tick(1999);
+  assert.equal(button.textContent, "已复制");
+  mountFeedback(root);
+  t.mock.timers.tick(1);
+  assert.equal(button.textContent, original);
+  root.querySelector('[data-copy="sales@example.invalid"]').click();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(copied, ["400-000-0000", "sales@example.invalid"]);
+});
+
+test("copy failure and unavailable clipboard expose recovery and preserve phone and email anchors", async t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  for (const clipboard of [undefined, { writeText: async () => { throw new Error("permission denied"); } }]) {
+    const { dom, root, mountFeedback } = await supportPage();
+    Object.defineProperty(dom.window.navigator, "clipboard", { value: clipboard });
+    mountFeedback(root);
+    const button = root.querySelector("[data-copy]");
+    const original = button.textContent;
+    button.click();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.match(button.textContent, /复制失败/);
+    assert.match(root.querySelector("[data-copy-status]").textContent, /手动复制/);
+    assert.ok(root.querySelector('a[href="tel:400-000-0000"]'));
+    assert.ok(root.querySelector('a[href="mailto:sales@example.invalid"]'));
+    t.mock.timers.tick(2000);
+    assert.equal(button.textContent, original);
+    dom.window.close();
+  }
+});
+
+test("download filters restore known product query, combine product and type, and reset to all records", async () => {
+  const { renderDownloads } = await import("../templates/downloads.mjs");
+  const { mountFeedback } = await import("../src/client/feedback.js");
+  const fixture = [
+    { id: "one", product: "jetson-agx-orin-64gb", type: "数据手册", version: "待发布", publishedAt: null, size: null, status: "preparing", href: null, sourceReference: "orin-spec" },
+    { id: "two", product: "jetson-agx-orin-64gb", type: "软件工具", version: "待发布", publishedAt: null, size: null, status: "preparing", href: null, sourceReference: "jetpack" },
+    { id: "three", product: "jetson-t5000", type: "软件工具", version: "待发布", publishedAt: null, size: null, status: "preparing", href: null, sourceReference: "jetpack" },
+  ];
+  const dom = new JSDOM(renderDownloads({ downloads: fixture, catalog }), { url: "https://example.test/downloads/?product=jetson-agx-orin-64gb" });
+  const root = dom.window.document.querySelector("[data-feedback-root]");
+  const visible = () => [...root.querySelectorAll("[data-download-id]")].filter(el => !el.hidden).map(el => el.dataset.downloadId);
+  assert.deepEqual(visible(), ["one", "two", "three"]);
+  mountFeedback(root); mountFeedback(root);
+  assert.deepEqual(visible(), ["one", "two"]);
+  const type = root.querySelector('[name="type"]');
+  type.value = "软件工具";
+  type.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+  assert.deepEqual(visible(), ["two"]);
+  const product = root.querySelector('[name="product"]');
+  product.value = "jetson-t5000";
+  product.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+  type.value = "数据手册";
+  type.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+  assert.deepEqual(visible(), []);
+  assert.match(root.querySelector("[data-download-status]").textContent, /没有匹配/);
+  root.querySelector("[data-download-reset]").click();
+  assert.deepEqual(visible(), ["one", "two", "three"]);
+  dom.window.close();
+  const unknown = new JSDOM(renderDownloads({ downloads: fixture, catalog }), { url: "https://example.test/downloads/?product=bad&type=bad" });
+  mountFeedback(unknown.window.document.querySelector("[data-feedback-root]"));
+  assert.equal(unknown.window.document.querySelectorAll("[data-download-id][hidden]").length, 0);
+  unknown.window.close();
+});

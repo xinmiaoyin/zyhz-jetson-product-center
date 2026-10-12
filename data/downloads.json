@@ -1,0 +1,145 @@
+[
+  {
+    "id": "jetson-agx-thor-developer-kit-software",
+    "product": "jetson-agx-thor-developer-kit",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-t5000-software",
+    "product": "jetson-t5000",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-t4000-software",
+    "product": "jetson-t4000",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-agx-orin-developer-kit-software",
+    "product": "jetson-agx-orin-developer-kit",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-agx-orin-64gb-software",
+    "product": "jetson-agx-orin-64gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-agx-orin-industrial-software",
+    "product": "jetson-agx-orin-industrial",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-agx-orin-32gb-software",
+    "product": "jetson-agx-orin-32gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-orin-nx-16gb-software",
+    "product": "jetson-orin-nx-16gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-orin-nx-8gb-software",
+    "product": "jetson-orin-nx-8gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-orin-nano-super-developer-kit-software",
+    "product": "jetson-orin-nano-super-developer-kit",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-orin-nano-8gb-software",
+    "product": "jetson-orin-nano-8gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-orin-nano-4gb-software",
+    "product": "jetson-orin-nano-4gb",
+    "type": "软件工具",
+    "version": "以官方入口为准",
+    "publishedAt": null,
+    "size": null,
+    "status": "available",
+    "href": "https://developer.nvidia.com/embedded/jetpack/downloads",
+    "sourceReference": "jetpack"
+  },
+  {
+    "id": "jetson-agx-orin-64gb-datasheet",
+    "product": "jetson-agx-orin-64gb",
+    "type": "数据手册",
+    "version": "待发布",
+    "publishedAt": null,
+    "size": null,
+    "status": "preparing",
+    "href": null,
+    "sourceReference": "orin-spec"
+  }
+]

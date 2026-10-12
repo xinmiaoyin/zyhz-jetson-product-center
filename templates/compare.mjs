@@ -20,7 +20,11 @@ export function renderCompare(catalog) {
     ];
   };
   const actions = product => `<div class="matrix-actions"><a href="/products/${e(product.slug)}/">查看详情<span class="sr-only">：${e(product.nameZh)}</span></a><button type="button" data-toggle-compare="${e(product.slug)}" aria-pressed="false" aria-label="加入对比：${e(product.nameZh)}">加入对比</button><a href="/support/?product=${encodeURIComponent(product.slug)}&amp;intent=quote">询价<span class="sr-only">：${e(product.nameZh)}</span></a></div>`;
-  const publicProducts = catalog.products.map(({ slug, series, nameZh, productType, status, coreMetrics, useCases, specGroups }) => ({ slug, series, nameZh, productType, status, coreMetrics, useCases, specGroups }));
+  const publicProducts = catalog.products.map(({ slug, series, nameZh, productType, status, coreMetrics, useCases, specGroups }) => ({
+    slug, series, nameZh, productType, status, useCases,
+    coreMetrics: coreMetrics.map(({ label, value }) => ({ label, value })),
+    specGroups: specGroups.map(({ title, rows }) => ({ title, rows: rows.map(({ label, value }) => ({ label, value })) })),
+  }));
   const body = `<div class="container compare-page" data-compare-root>
     <div class="page-heading"><p class="eyebrow">PRODUCT SELECTOR</p><h1>Jetson 产品矩阵与对比</h1><p class="lead">按项目需求筛选，选择最多四款产品，逐组核对规格。</p><p class="metric-notice">性能保留精度、稀疏性与功耗口径；不同计算口径不可直接按数值比较。模组功耗不等于整机输入功率，供货与交期请咨询。</p></div>
     <noscript>筛选、动态比较和链接分享需要启用 JavaScript；下方仍列出全部产品。</noscript>

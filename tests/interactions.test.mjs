@@ -160,3 +160,76 @@ test("oversized comparison links are explicitly reported and cleaned on mount", 
   assert.ok(!dom.window.location.search.includes(slugs[4]));
   dom.window.close();
 });
+
+test("repeated mount leaves one drawer toggle and preserves an already open drawer", () => {
+  const { dom, root } = page();
+  const products = JSON.parse(root.querySelector("#catalog-data").textContent);
+  mountCompare(root, products);
+  const trigger = root.querySelector("[data-filter-trigger]");
+  trigger.click();
+  assert.equal(trigger.getAttribute("aria-expanded"), "true");
+  assert.equal(root.querySelector("[data-filter-drawer]").hidden, false);
+  mountCompare(root, products);
+  assert.equal(trigger.getAttribute("aria-expanded"), "true");
+  trigger.click();
+  assert.equal(root.querySelector("[data-filter-drawer]").hidden, true);
+  dom.window.close();
+});
+
+test("repeated mount causes no URL write and one selection writes history only once", () => {
+  const { dom, root } = page();
+  const original = dom.window.history.replaceState.bind(dom.window.history);
+  let writes = 0;
+  dom.window.history.replaceState = (...args) => { writes++; return original(...args); };
+  mountCompare(root, JSON.parse(root.querySelector("#catalog-data").textContent));
+  assert.equal(writes, 0);
+  root.querySelector('[data-toggle-compare="jetson-t5000"]').click();
+  assert.equal(writes, 1);
+  assert.equal(dom.window.location.search, "?compare=jetson-t5000");
+  assert.equal(root.querySelector("[data-selected-count]").textContent, "1");
+  dom.window.close();
+});
+
+test("repeated mount does not resurrect a removed selection on the next addition", () => {
+  const { dom, root } = page();
+  mountCompare(root, JSON.parse(root.querySelector("#catalog-data").textContent));
+  root.querySelector('[data-toggle-compare="jetson-t5000"]').click();
+  root.querySelector('[data-toggle-compare="jetson-t4000"]').click();
+  root.querySelector('[data-remove-compare="jetson-t5000"]').click();
+  root.querySelector('[data-toggle-compare="jetson-agx-orin-64gb"]').click();
+  assert.equal(dom.window.location.search, "?compare=jetson-t4000%2Cjetson-agx-orin-64gb");
+  assert.equal(root.querySelector("[data-selected-count]").textContent, "2");
+  assert.equal(root.querySelector('[data-remove-compare="jetson-t5000"]'), null);
+  assert.equal(root.querySelector('[data-spec-product="jetson-t5000"]'), null);
+  assert.ok([...root.querySelectorAll('[data-toggle-compare="jetson-t5000"]')].every(el => el.getAttribute("aria-pressed") === "false"));
+  dom.window.close();
+});
+
+test("public catalog JSON whitelists nested UI fields and preserves script-safe display values", () => {
+  const injected = structuredClone(catalog);
+  const unsafe = '</script><script id="injected-script">alert(1)</script>';
+  for (const product of injected.products) {
+    product.internalField = "private product";
+    for (const metric of product.coreMetrics) Object.assign(metric, { internalField: "private metric", sourceReference: "private source", verifiedAt: "2099-01-01" });
+    for (const group of product.specGroups) {
+      group.internalField = "private group";
+      for (const row of group.rows) row.internalField = "private row";
+    }
+  }
+  injected.products[0].specGroups[0].rows[0].value = unsafe;
+  const dom = new JSDOM(renderCompare(injected));
+  const script = dom.window.document.querySelector("#catalog-data");
+  const products = JSON.parse(script.textContent);
+  for (const product of products) {
+    assert.deepEqual(Object.keys(product).sort(), ["coreMetrics", "nameZh", "productType", "series", "slug", "specGroups", "status", "useCases"]);
+    for (const metric of product.coreMetrics) assert.deepEqual(Object.keys(metric).sort(), ["label", "value"]);
+    for (const group of product.specGroups) {
+      assert.deepEqual(Object.keys(group).sort(), ["rows", "title"]);
+      for (const row of group.rows) assert.deepEqual(Object.keys(row).sort(), ["label", "value"]);
+    }
+  }
+  assert.doesNotMatch(script.textContent, /sourceReference|verifiedAt|internalField|<\/script>/);
+  assert.equal(products[0].specGroups[0].rows[0].value, unsafe);
+  assert.equal(dom.window.document.querySelector("#injected-script"), null);
+  dom.window.close();
+});

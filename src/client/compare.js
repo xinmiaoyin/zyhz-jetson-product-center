@@ -2,6 +2,7 @@ const fields = [["series", "series"], ["type", "types"], ["memory", "memory"], [
 const limitMessage = "最多比较 4 款产品，请先移除一款再添加。";
 const unique = values => [...new Set(values)];
 const metric = (product, label) => product.coreMetrics.find(item => item.label === label)?.value ?? "";
+const mountedRoots = new WeakSet();
 
 // Known enum values are schema vocabulary; all configuration values come from the catalog.
 export function filterOptions(products = []) {
@@ -64,6 +65,8 @@ export function toggleComparedProduct(state, slug) {
 }
 
 export function mountCompare(root, products) {
+  // Keep one state closure and one set of listeners for each page root.
+  if (mountedRoots.has(root)) return;
   const doc = root.ownerDocument;
   const win = doc.defaultView;
   const form = root.querySelector("[data-filter-form]");
@@ -191,6 +194,7 @@ export function mountCompare(root, products) {
     update(state.message);
   });
   update(state.message);
+  mountedRoots.add(root);
 }
 
 if (typeof document !== "undefined") {

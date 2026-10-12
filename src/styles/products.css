@@ -126,6 +126,62 @@
 .purchase-facts dt { color: var(--text-muted); }
 .purchase-facts dd { margin: 0; overflow-wrap: anywhere; }
 .purchasing-grid .button { margin-top: 24px; }
+.compare-page { padding-bottom: 48px; }
+.compare-page [hidden] { display: none !important; }
+.compare-toolbar, .filter-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-block: 24px; }
+.compare-toolbar p { font-size: 14px; }
+.filter-drawer { padding: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-muted); }
+.filter-heading { margin-top: 0; }
+.filter-heading h2 { font-size: 20px; }
+.filter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-bottom: 24px; }
+.filter-grid fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+.filter-grid legend { font-weight: 600; margin-bottom: 12px; }
+.filter-grid label { display: flex; align-items: flex-start; gap: 8px; margin-block: 10px; font-size: 13px; overflow-wrap: anywhere; cursor: pointer; }
+.filter-grid input { flex: 0 0 auto; margin-top: 3px; accent-color: var(--brand-700); }
+.comparison-status { min-height: 24px; color: var(--brand-700); margin-block: 16px; font-size: 14px; }
+.compare-selection { margin-bottom: 24px; padding: 16px; background: var(--surface-muted); border-radius: var(--radius); }
+.compare-selection ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; padding: 0; list-style: none; }
+.compare-selection p { font-size: 12px; }
+.compare-page button:not(.button) { cursor: pointer; border: 1px solid var(--border); border-radius: 4px; padding: 8px 12px; background: var(--surface); color: var(--brand-700); font: inherit; font-size: 13px; }
+.compare-page button[aria-pressed="true"] { background: var(--brand-100); border-color: var(--brand-700); }
+.matrix-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.matrix-table { border-collapse: collapse; width: 100%; min-width: 1440px; text-align: left; font-size: 13px; }
+.matrix-table caption { text-align: left; padding: 16px; font-size: 15px; }
+.matrix-table th, .matrix-table td { padding: 16px 12px; vertical-align: top; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+.matrix-table thead { background: var(--surface-muted); }
+.matrix-table th { font-weight: 500; }
+.matrix-table tbody th { min-width: 180px; }
+.matrix-table td:nth-child(4) { min-width: 210px; }
+.matrix-table td:nth-child(8) { min-width: 160px; }
+.matrix-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 13px; }
+.matrix-actions a { color: var(--brand-700); }
+.matrix-table .matrix-actions { min-width: 85px; flex-direction: column; align-items: flex-start; }
+.matrix-cards { display: none; }
+.matrix-card { padding: 24px; }
+.matrix-card h2 { font-size: 20px; }
+.matrix-card dl { margin-block: 16px; }
+.matrix-card dl > div, .comparison-column dl > div { padding-block: 12px; border-bottom: 1px solid var(--border); }
+.matrix-card dt, .comparison-column dt { color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+.matrix-card dd, .comparison-column dd { margin: 0; overflow-wrap: anywhere; font-size: 14px; }
+.comparison-panel { margin-top: 48px; scroll-margin-top: 24px; }
+.comparison-group { margin-top: 32px; }
+.comparison-group h3 { margin-bottom: 16px; }
+.comparison-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: start; }
+.comparison-column { min-width: 0; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius); }
+.comparison-column h4 { min-height: 48px; font-size: 16px; }
+@media (max-width: 960px) {
+  .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 679px) {
+  .compare-toolbar { flex-wrap: wrap; }
+  .filter-drawer { padding: 16px; }
+  .filter-grid { grid-template-columns: 1fr; }
+  .matrix-table-wrap { display: none; }
+  .matrix-cards { display: grid; gap: 16px; }
+  .matrix-card { padding: 20px; }
+  .comparison-columns { grid-template-columns: 1fr; }
+  .comparison-column h4 { min-height: auto; }
+}
 @media (max-width: 960px) {
   .detail-hero { gap: 24px; }
   .detail-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }

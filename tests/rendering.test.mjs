@@ -104,7 +104,7 @@ test("build emits catalog and twelve detail routes with local styles and image f
   for (const folder of ["data", "assets", "src"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
-  assert.deepEqual(result.routes, ["/", "/products/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
+  assert.deepEqual(result.routes, ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
   for (const path of ["index.html", "products/index.html", ...catalog.products.map(product => `products/${product.slug}/index.html`)]) {
     const doc = documentOf(await readFile(join(outDir, path), "utf8"));
     assert.equal(doc.querySelectorAll("h1").length, 1);

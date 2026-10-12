@@ -7,6 +7,7 @@ import { copyAssets } from "./lib/assets.mjs";
 import { renderHome } from "../templates/home.mjs";
 import { renderProductsIndex } from "../templates/products.mjs";
 import { renderProductDetail } from "../templates/product-detail.mjs";
+import { renderCompare } from "../templates/compare.mjs";
 
 export async function buildSite({ rootDir, outDir }) {
   const projectDist = resolve(rootDir, "dist");
@@ -26,7 +27,7 @@ export async function buildSite({ rootDir, outDir }) {
   await mkdir(projectDist, { recursive: true });
 
   await copyAssets({ rootDir, outDir: projectDist, products: catalog.products });
-  const pages = [["/", renderHome(catalog)], ["/products/", renderProductsIndex(catalog)]];
+  const pages = [["/", renderHome(catalog)], ["/products/", renderProductsIndex(catalog)], ["/compare/", renderCompare(catalog)]];
   for (const product of catalog.products) pages.push([
     `/products/${product.slug}/`,
     renderProductDetail({ product, related: getRelatedProducts(product, catalog), catalog }),

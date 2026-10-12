@@ -25,11 +25,15 @@ test("buildSite writes the home page and route manifest", async () => {
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
   const catalog = await loadCatalog(rootDir);
-  const routes = ["/", "/products/", ...catalog.products.map(product => `/products/${product.slug}/`)];
-  assert.equal(routes.length, 14);
+  const routes = ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)];
+  assert.equal(routes.length, 15);
   assert.deepEqual(result.routes, routes);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
   assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), routes);
+  const comparison = await readFile(join(outDir, "compare/index.html"), "utf8");
+  for (const product of catalog.products) assert.ok(comparison.includes(product.nameZh));
+  assert.match(comparison, /type="module" src="\/assets\/client\/compare.js"/);
+  assert.match(await readFile(join(outDir, "assets/client/compare.js"), "utf8"), /mountCompare/);
 });
 
 test("dev server serves directory pages and returns 404 for missing files", async () => {

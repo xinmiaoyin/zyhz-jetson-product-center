@@ -53,11 +53,12 @@ test("fifth comparison is rejected without mutating state and removal creates a 
   assert.deepEqual(toggleComparedProduct(empty(), "a").state.compare, ["a"]);
 });
 
-test("static matrix includes all twelve products and equivalent accessible mobile cards without JavaScript", () => {
+test("static performance matrix includes all twelve comparable products and accessible mobile cards without JavaScript", () => {
   const { dom, root, doc } = page("", false);
+  const comparable = catalog.products.filter(product => product.performanceMetrics?.length);
   for (const selector of [".matrix-table tbody tr", ".matrix-card"]) {
-    assert.deepEqual(visibleSlugs(root, selector), catalog.products.map(p => p.slug));
-    for (const product of catalog.products) {
+    assert.deepEqual(visibleSlugs(root, selector), comparable.map(p => p.slug));
+    for (const product of comparable) {
       const item = [...root.querySelectorAll(selector)].find(el => el.dataset.product === product.slug);
       for (const value of [product.nameZh, ...product.coreMetrics.slice(0, 3).map(m => m.value), ...product.useCases, product.specGroups.flatMap(g => g.rows).find(r => r.label === "GPU").value]) assert.ok(item.textContent.includes(value), value);
       assert.ok(item.querySelector(`a[href="/products/${product.slug}/"]`));
@@ -69,6 +70,21 @@ test("static matrix includes all twelve products and equivalent accessible mobil
   assert.ok(doc.querySelector('script[type="module"][src="/assets/client/compare.js"]'));
   assert.deepEqual([...new Set([...root.querySelectorAll("form input")].map(input => input.name))], ["series", "type", "memory", "power", "industrial", "useCase", "status"]);
   for (const input of root.querySelectorAll("form input")) assert.ok(input.labels.length && input.labels[0].textContent.trim());
+  dom.window.close();
+});
+
+test("system links stay accessible while unsupported selections are dropped from a shared comparison URL", () => {
+  const { dom, root } = page("?compare=mi-12x4,jetson-t5000,c1201");
+  assert.equal(root.querySelector("[data-result-count]").textContent, "12");
+  assert.equal(root.querySelector("[data-selected-count]").textContent, "1");
+  assert.equal(dom.window.location.search, "?compare=jetson-t5000");
+  const links = root.querySelector("#other-products");
+  assert.ok(links);
+  for (const slug of ["mi-12x4", "mi-19x2", "mi-19x3", "mi-11x8", "mi-13x8", "c1201"]) {
+    assert.ok(links.querySelector(`a[href="/products/${slug}/"]`));
+    assert.ok([...links.querySelectorAll('a[href^="/support/"]')].some(link => link.getAttribute("href") === `/support/?product=${slug}&intent=quote`));
+    assert.equal(root.querySelector(`[data-toggle-compare="${slug}"], [data-spec-product="${slug}"]`), null);
+  }
   dom.window.close();
 });
 

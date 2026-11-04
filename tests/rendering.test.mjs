@@ -23,6 +23,7 @@ test("home renders all series once and useful non-JS links", () => {
     assert.ok(links[0].textContent.includes(series.name));
   }
   assert.equal(doc.querySelectorAll("#matrix-preview tbody tr").length, 4);
+  assert.equal(doc.querySelector('#matrix-preview a[href="/products/mi-12x4/"]'), null);
   assert.ok(doc.querySelector('a[href="/compare/"]'));
   assert.ok(doc.querySelector('a[href="/support/"]'));
   assert.ok(doc.querySelector('a[href="/docs/"]'));
@@ -35,9 +36,9 @@ test("home renders all series once and useful non-JS links", () => {
   }
 });
 
-test("product index exposes twelve grouped products with complete source metrics and actions", () => {
+test("product index exposes eighteen grouped products with complete source metrics and appropriate actions", () => {
   const doc = documentOf(renderProductsIndex(catalog));
-  assert.equal(doc.querySelectorAll("article[data-product]").length, 12);
+  assert.equal(doc.querySelectorAll("article[data-product]").length, 18);
   for (const product of catalog.products) {
     const card = doc.querySelector(`#${product.series} article[data-product="${product.slug}"]`);
     assert.ok(card, product.slug);
@@ -46,10 +47,33 @@ test("product index exposes twelve grouped products with complete source metrics
     assert.deepEqual([...card.querySelectorAll("dd .metric-value")].map(el => el.textContent), product.coreMetrics.map(metric => metric.value));
     assert.equal(card.querySelector(".status-badge").textContent, "供货请咨询");
     assert.ok(card.querySelector(`a[href="/products/${product.slug}/"]`));
-    assert.ok(card.querySelector(`a[href="/compare/?compare=${product.slug}"]`));
+    assert.equal(Boolean(card.querySelector(`a[href="/compare/?compare=${product.slug}"]`)), Boolean(product.performanceMetrics?.length));
     assert.equal(card.querySelector('a[href^="/support/"]').getAttribute("href"), `/support/?product=${product.slug}&intent=quote`);
     assert.equal(card.querySelector("img.product-image").getAttribute("src"), product.heroImage);
     assert.equal(card.querySelector("img.product-image").dataset.fallback, `/assets/product-fallbacks/${product.slug}.svg`);
+  }
+});
+
+const systemModels = [
+  ["mi-12x4", "边缘计算盒", "png"],
+  ["mi-19x2", "边缘计算盒", "jpg"],
+  ["mi-19x3", "边缘计算盒", "png"],
+  ["mi-11x8", "边缘计算盒", "png"],
+  ["mi-13x8", "边缘计算盒", "png"],
+  ["c1201", "载板", "png"],
+];
+
+test("the fifth catalog series groups six locally illustrated systems with Chinese type labels", () => {
+  const doc = documentOf(renderProductsIndex(catalog));
+  const section = doc.querySelector(".catalog-section:last-child");
+  assert.equal(section.id, "zyhz-systems");
+  assert.equal(section.querySelector("h2").textContent, "正阳恒卓整机与载板");
+  assert.deepEqual([...section.querySelectorAll("article")].map(card => card.dataset.product), systemModels.map(([slug]) => slug));
+  for (const [slug, type, extension] of systemModels) {
+    const card = section.querySelector(`[data-product="${slug}"]`);
+    assert.equal(card.querySelector(".product-type").textContent, type);
+    assert.equal(card.querySelector("img").getAttribute("src"), `/assets/products/${slug}/hero.${extension}`);
+    assert.equal(card.querySelector(".product-visual noscript"), null);
   }
 });
 
@@ -140,7 +164,7 @@ test("AGX Orin 64GB detail follows the approved sales-first order with four metr
 
 test("detail renders verified type-specific specifications and resolves evidence and resource links", async () => {
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
-  for (const product of catalog.products) {
+  for (const product of catalog.products.filter(item => item.performanceMetrics?.length)) {
     const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
     const tables = [...doc.querySelectorAll("#specifications table")];
     assert.equal(tables.length, product.specGroups.length);
@@ -172,15 +196,24 @@ test("detail renders verified type-specific specifications and resolves evidence
   }
 });
 
-test("detail renders first-party products without optional performance metrics", async () => {
+test("system detail follows the sales-first order with a local manual and a contextual quote", async () => {
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
-  for (const slug of ["mi-12x4", "mi-19x2", "mi-19x3", "mi-11x8", "mi-13x8", "c1201"]) {
+  for (const [slug, type, extension] of systemModels) {
     const product = catalog.products.find(item => item.slug === slug);
     assert.equal(product.performanceMetrics, undefined);
-    const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
+    const doc = documentOf(renderProductDetail({ product, related: getRelatedProducts(product, catalog), catalog }));
     assert.equal(doc.querySelector("h1").textContent, product.nameZh);
+    assert.deepEqual([...doc.querySelectorAll("main > section")].map(el => el.id), ["product-overview", "highlights", "use-cases", "specifications", "product-manuals", "purchasing", "related-products"]);
+    assert.equal(doc.querySelector("#product-overview .product-type").textContent, type);
+    assert.equal(doc.querySelector("#product-overview img").getAttribute("src"), `/assets/products/${slug}/hero.${extension}`);
+    assert.deepEqual([...doc.querySelectorAll("#product-overview .metric-value")].map(el => el.textContent), product.coreMetrics.map(metric => metric.value));
+    assert.equal(doc.querySelector('#product-overview a[href*="intent=quote"]').getAttribute("href"), `/support/?product=${slug}&intent=quote`);
     assert.ok(doc.querySelector("#specifications tbody tr"));
-    assert.equal(doc.querySelector("#series-comparison"), null);
+    assert.match(doc.querySelector(`#product-manuals a[href="/assets/manuals/${slug}.html"]`).textContent, /产品手册/);
+    assert.equal(doc.querySelector("#product-manuals h2").textContent, "产品手册");
+    assert.equal(doc.querySelector("#purchasing h2").textContent, "采购咨询");
+    assert.deepEqual([...doc.querySelectorAll("#related-products article")].map(el => el.dataset.product), product.relatedProducts);
+    assert.equal(doc.querySelector('main a[href^="/downloads/"]'), null);
   }
 });
 

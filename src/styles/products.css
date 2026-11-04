@@ -13,6 +13,7 @@
 .series-card:hover { border-color: var(--brand-700); }
 .product-visual { position: relative; background: var(--surface-muted); aspect-ratio: 8 / 5; overflow: hidden; }
 .product-image, .product-fallback { width: 100%; height: 100%; object-fit: contain; }
+.product-visual-local .product-image { display: block; box-sizing: border-box; padding: clamp(8px, 2vw, 20px); }
 .product-visual noscript .product-fallback { position: absolute; inset: 0; background: var(--surface-muted); }
 .series-visual { aspect-ratio: 8 / 5; border-bottom: 1px solid var(--border); }
 .series-card-body { padding: 16px 24px 24px; }
@@ -67,7 +68,7 @@
 .core-metrics dt { color: var(--text-muted); }
 .core-metrics dd { margin: 0; overflow-wrap: anywhere; }
 .core-metrics small { display: block; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-.card-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--border); font-size: 13px; }
+.card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--border); font-size: 13px; }
 .breadcrumb { padding-block: 24px; font-size: 13px; color: var(--text-muted); }
 .breadcrumb ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
 .breadcrumb li + li::before { content: "/"; margin-right: 8px; color: var(--border); }
@@ -158,6 +159,10 @@
 .matrix-table .matrix-actions { min-width: 85px; flex-direction: column; align-items: flex-start; }
 .matrix-cards { display: none; }
 .matrix-card { padding: 24px; }
+.other-products { margin-top: 48px; }
+.other-products .product-card { padding: 24px; }
+.other-products .product-type { margin-bottom: 8px; }
+.other-products .matrix-actions { margin-top: auto; }
 .matrix-card h2 { font-size: 20px; }
 .matrix-card dl { margin-block: 16px; }
 .matrix-card dl > div, .comparison-column dl > div { padding-block: 12px; border-bottom: 1px solid var(--border); }

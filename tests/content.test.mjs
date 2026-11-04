@@ -31,7 +31,9 @@ test("markdown keeps Chinese heading anchors unique and commands inert after san
 test("documents cover all twelve products with fifteen verified customer articles", async () => {
   const documents = await loadDocuments(process.cwd(), catalog);
   assert.ok(documents.length >= 15);
-  for (const product of catalog.products) assert.ok(documents.some(doc => doc.product === product.slug && doc.slug === "product-resources"));
+  const nvidiaProducts = catalog.products.filter(product => product.series !== "zyhz-systems");
+  assert.equal(nvidiaProducts.length, 12);
+  for (const product of nvidiaProducts) assert.ok(documents.some(doc => doc.product === product.slug && doc.slug === "product-resources"), product.slug);
   for (const doc of documents) {
     assert.ok(catalog.products.some(product => product.slug === doc.product));
     assert.ok(doc.sourceReferences.length);
@@ -89,7 +91,7 @@ test("search index whitelists public text and prioritizes normalized exact title
   products[0].internalSecret = "DO_NOT_PUBLISH";
   documents[0].internalSecret = "DO_NOT_PUBLISH";
   const records = buildSearchIndex(documents, products);
-  assert.equal(records.length, documents.length + 12);
+  assert.equal(records.length, documents.length + products.length);
   assert.ok(records.some(record => record.text.includes("AGX Orin 64GB")));
   assert.ok(records.some(record => record.text.includes("系统刷写")));
   assert.doesNotMatch(JSON.stringify(records), /DO_NOT_PUBLISH|sourceReferences|checkedAt|verifiedAt|heroImage|internalSku/);
@@ -157,12 +159,13 @@ test("build emits docs routes and public search JSON alongside all existing rout
   const root = await mkdtemp(join(tmpdir(), "zyhz-docs-build-"));
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(root, folder), { recursive: true });
   const { routes } = await buildSite({ rootDir: root, outDir: join(root, "dist") });
-  assert.equal(routes.length, 33);
+  const documents = await loadDocuments(root, catalog);
+  assert.equal(routes.length, 6 + catalog.products.length + documents.length);
   for (const route of ["/", "/products/", "/compare/", "/docs/", "/docs/jetson-agx-orin-64gb/flashing-and-jetpack/", ...catalog.products.map(p => `/products/${p.slug}/`)]) assert.ok(routes.includes(route));
   const html = await readFile(join(root, "dist/docs/jetson-agx-orin-64gb/flashing-and-jetpack/index.html"), "utf8");
   assert.match(html, /<article/);
   assert.match(html, /系统刷写/);
   const records = JSON.parse(await readFile(join(root, "dist/assets/search-index.json"), "utf8"));
-  assert.equal(records.length, 27);
+  assert.equal(records.length, documents.length + catalog.products.length);
   assert.ok(searchIndex(records, "系统刷写").length);
 });

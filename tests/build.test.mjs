@@ -8,6 +8,7 @@ import { escapeHtml } from "../scripts/lib/html.mjs";
 import { writePage } from "../scripts/lib/site.mjs";
 import { buildSite } from "../scripts/build.mjs";
 import { createDevServer } from "../scripts/dev-server.mjs";
+import { loadDocuments } from "../scripts/lib/content.mjs";
 import { loadCatalog } from "../scripts/lib/products.mjs";
 
 test("escapeHtml protects generated markup", () => {
@@ -27,9 +28,9 @@ test("buildSite writes the home page and route manifest", async () => {
   const result = await buildSite({ rootDir, outDir });
   const catalog = await loadCatalog(rootDir);
   const routes = ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)];
-  assert.equal(routes.length, 15);
-  assert.deepEqual(result.routes.slice(0, 15), routes);
-  assert.equal(result.routes.length, 33);
+  assert.equal(result.routes.filter(route => /^\/products\/[^/]+\/$/.test(route)).length, 18);
+  assert.deepEqual(result.routes.slice(0, routes.length), routes);
+  assert.equal(result.routes.length, routes.length + (await loadDocuments(rootDir, catalog)).length + 3);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
   assert.deepEqual(JSON.parse(await readFile(join(outDir, "routes.json"), "utf8")), result.routes);
   const comparison = await readFile(join(outDir, "compare/index.html"), "utf8");
@@ -63,9 +64,9 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-check-built-"));
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
-  await buildSite({ rootDir, outDir });
+  const { routes: builtRoutes } = await buildSite({ rootDir, outDir });
   const valid = await checkBuiltSite({ rootDir, outDir });
-  assert.equal(valid.pages, 33);
+  assert.equal(valid.pages, builtRoutes.length);
   assert.ok(valid.links > 100);
 
   const mutate = async (relative, transform, reason) => {
@@ -95,6 +96,17 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
     [values[0].textContent, values[1].textContent] = [values[1].textContent, values[0].textContent];
     return dom.serialize();
   }, /metric.*association|metric.*AI 性能/i);
+
+  await mutate("products/mi-12x4/index.html", html => html.replace("product=mi-12x4&amp;intent=quote", "product=c1201&amp;intent=quote"), /quote.*slug/i);
+  await mutate("assets/manuals/mi-12x4.html", () => "  ", /manual.*empty/i);
+  await mutate("assets/manuals/mi-12x4.html", html => html + "<!-- 隐溪科技 -->", /prohibited.*brand/i);
+  await mutate("assets/manuals/mi-12x4.html", html => html + "<!-- D:/jetson/private.html -->", /absolute.*path/i);
+
+  const imagePath = join(outDir, "assets/products/mi-12x4/hero.png");
+  const image = await readFile(imagePath);
+  await writeFile(imagePath, image.subarray(0, 32));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i);
+  await writeFile(imagePath, image);
 
   const routesPath = join(outDir, "routes.json");
   const routesSource = await readFile(routesPath, "utf8");
@@ -128,7 +140,7 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   const productsPath = join(rootDir, "data/products.json");
   const products = JSON.parse(await readFile(productsPath, "utf8"));
   await writeFile(productsPath, `${JSON.stringify(products.slice(0, 11), null, 2)}\n`);
-  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /product count/i);
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /exactly eighteen products/i);
 });
 
 test("dev server sends PNG assets with the correct media type", async () => {
@@ -144,4 +156,27 @@ test("dev server sends PNG assets with the correct media type", async () => {
   }));
   assert.equal(result.status, 200);
   assert.equal(result.headers["Content-Type"], "image/png");
+});
+
+test("build publishes six standalone branded manuals and their product images", async () => {
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-publish-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outDir = join(rootDir, "dist");
+  await buildSite({ rootDir, outDir });
+  const models = [["mi-12x4", "png"], ["mi-19x2", "jpg"], ["mi-19x3", "png"], ["mi-11x8", "png"], ["mi-13x8", "png"], ["c1201", "png"]];
+  for (const [slug, extension] of models) {
+    const manual = "/assets/manuals/" + slug + ".html";
+    const image = "/assets/products/" + slug + "/hero." + extension;
+    const html = await readFile(join(outDir, manual), "utf8");
+    assert.match(html, /正阳恒卓/);
+    assert.doesNotMatch(html, /隐溪科技|file:\/\/|\b[a-z]:[\\/]|\/mnt\/[a-z]\/jetson/iu);
+    assert.match(html, /data:image\/(?:png|jpeg);base64,/i);
+    assert.ok((await readFile(join(outDir, image))).length > 0);
+    const detail = await readFile(join(outDir, "products", slug, "index.html"), "utf8");
+    assert.ok(detail.includes('href="' + manual + '"'), slug);
+    assert.ok(detail.includes('src="' + image + '"'), slug);
+    assert.ok(detail.includes('href="/support/?product=' + slug + '&amp;intent=quote"'), slug);
+  }
+  await writeFile(join(rootDir, "assets/manuals/mi-12x4.html"), " ");
+  await assert.rejects(buildSite({ rootDir, outDir }), /manual.*empty/i);
 });

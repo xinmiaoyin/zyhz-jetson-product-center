@@ -1,6 +1,8 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { crc32, inflateSync } from "node:zlib";
+import { assertPublicContent, validateManuals } from "./build.mjs";
 import { JSDOM } from "jsdom";
 import { formatPerformance, loadCatalog } from "./lib/products.mjs";
 
@@ -8,7 +10,7 @@ async function listHtmlFiles(directory) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await listHtmlFiles(path));
+    if (entry.isDirectory() && entry.name !== "assets") files.push(...await listHtmlFiles(path));
     else if (entry.isFile() && extname(entry.name).toLowerCase() === ".html") files.push(path);
   }
   return files.sort();
@@ -100,8 +102,7 @@ function validateRouteManifest(manifest, generatedRoutes, errors) {
 
 function validateSearchIndex(records, generatedRoutes, errors) {
   const safeKeys = ["product", "text", "title", "type", "url"];
-  const docsRoutes = [...generatedRoutes].filter(route => /^\/docs\/[^/]+\/[^/]+\/$/.test(route));
-  const expectedCount = 12 + docsRoutes.length;
+  const expectedCount = [...generatedRoutes].filter(route => /^\/(?:products\/[^/]+|docs\/[^/]+\/[^/]+)\/$/.test(route)).length;
   if (!Array.isArray(records) || records.length !== expectedCount) {
     errors.push(`search-index safe structure requires exactly ${expectedCount} records`);
     return;
@@ -127,13 +128,61 @@ function validateSearchIndex(records, generatedRoutes, errors) {
   }
 }
 
+function validatePng(image) {
+  if (!image.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex"))) return false;
+  const data = [];
+  for (let offset = 8; offset + 12 <= image.length;) {
+    const length = image.readUInt32BE(offset);
+    const end = offset + 8 + length;
+    if (end + 4 > image.length || crc32(image.subarray(offset + 4, end)) !== image.readUInt32BE(end)) return false;
+    const type = image.toString("ascii", offset + 4, offset + 8);
+    if (offset === 8 && (type !== "IHDR" || length !== 13 || !image.readUInt32BE(16) || !image.readUInt32BE(20))) return false;
+    if (type === "IDAT") data.push(image.subarray(offset + 8, end));
+    if (type === "IEND") return length === 0 && end + 4 === image.length && inflateSync(Buffer.concat(data), { maxOutputLength: 64 * 1024 * 1024 }).length > 0;
+    offset = end + 4;
+  }
+  return false;
+}
+
+function validateJpeg(image) {
+  if (image.length < 4 || image.readUInt16BE(0) !== 0xffd8) return false;
+  const endOfImage = image.lastIndexOf(Buffer.from("ffd9", "hex"));
+  let hasFrame = false;
+  for (let offset = 2; offset + 4 < image.length;) {
+    if (image[offset] !== 0xff) return false;
+    const marker = image[offset + 1];
+    const length = image.readUInt16BE(offset + 2);
+    const end = offset + 2 + length;
+    if (length < 2 || end > image.length) return false;
+    if (marker === 0xc0 || marker === 0xc2) hasFrame = length >= 8 && image.readUInt16BE(offset + 5) > 0 && image.readUInt16BE(offset + 7) > 0;
+    if (marker === 0xda) return hasFrame && end < endOfImage;
+    offset = end;
+  }
+  return false;
+}
+
+async function validateProductImage(outDir, url) {
+  try {
+    const image = await readFile(join(outDir, url));
+    const valid = url.endsWith(".png") ? validatePng(image) : url.endsWith(".jpg") && validateJpeg(image);
+    if (valid) return;
+  } catch { /* Report missing and unreadable image data uniformly. */ }
+  throw new Error("invalid product image: " + url);
+}
+
 export async function checkBuiltSite({ rootDir, outDir }) {
+  const catalog = await loadCatalog(rootDir);
+  await validateManuals(outDir, catalog);
+  for (const product of catalog.products) {
+    if (product.heroImage.startsWith("/assets/")) await validateProductImage(outDir, product.heroImage);
+  }
   const htmlFiles = await listHtmlFiles(outDir);
   const errors = [];
   let links = 0;
   const documents = new Map();
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
+    assertPublicContent(html, file);
     const route = routeForFile(outDir, file);
     const dom = new JSDOM(html, { url: `https://site.invalid${route}` });
     documents.set(file, dom.window.document);
@@ -143,7 +192,10 @@ export async function checkBuiltSite({ rootDir, outDir }) {
   const manifest = await readJsonArtifact(join(outDir, "routes.json"), "route manifest", errors);
   if (manifest.ok) validateRouteManifest(manifest.value, generatedRoutes, errors);
   const searchIndex = await readJsonArtifact(join(outDir, "assets/search-index.json"), "search-index", errors);
-  if (searchIndex.ok) validateSearchIndex(searchIndex.value, generatedRoutes, errors);
+  if (searchIndex.ok) {
+    assertPublicContent(JSON.stringify(searchIndex.value), "search-index");
+    validateSearchIndex(searchIndex.value, generatedRoutes, errors);
+  }
   for (const [file, document] of documents) {
     const route = routeForFile(outDir, file);
     const references = [
@@ -158,6 +210,11 @@ export async function checkBuiltSite({ rootDir, outDir }) {
         continue;
       }
       if (!target.internal) continue;
+      if (target.url.pathname === "/support/" && target.url.searchParams.get("intent") === "quote") {
+        const slug = target.url.searchParams.get("product");
+        const expected = reference.node.closest("[data-product]")?.dataset.product ?? /^\/products\/([^/]+)\/$/.exec(route)?.[1];
+        if (!catalog.products.some(product => product.slug === slug) || (expected && slug !== expected)) errors.push(file + ": incorrect quote product slug " + slug);
+      }
       if (!(await targetExists(outDir, target.url.pathname))) {
         errors.push(`${file}: missing internal ${reference.kind} target ${target.url.pathname}`);
         continue;
@@ -171,34 +228,29 @@ export async function checkBuiltSite({ rootDir, outDir }) {
     }
   }
 
-  const rawProducts = JSON.parse(await readFile(join(rootDir, "data/products.json"), "utf8"));
-  if (!Array.isArray(rawProducts) || rawProducts.length !== 12) errors.push(`${rootDir}: product count must be exactly 12`);
-  if (Array.isArray(rawProducts) && rawProducts.length === 12) {
-    const catalog = await loadCatalog(rootDir);
-    const detailFiles = htmlFiles.filter(file => /^\/products\/[^/]+\/$/.test(routeForFile(outDir, file)));
-    if (detailFiles.length !== 12) errors.push(`${outDir}: product detail page count must be exactly 12`);
-    for (const product of catalog.products) {
-      const file = join(outDir, "products", product.slug, "index.html");
-      const document = documents.get(file);
-      if (!document) {
-        errors.push(`${file}: missing product detail page`);
-        continue;
+  const detailRoutes = [...generatedRoutes].filter(route => /^\/products\/[^/]+\/$/.test(route));
+  if (detailRoutes.length !== catalog.products.length) errors.push("product detail page count does not match catalog");
+  for (const product of catalog.products) {
+    const file = join(outDir, "products", product.slug, "index.html");
+    const document = documents.get(file);
+    if (!document) {
+      errors.push(`${file}: missing product detail page`);
+      continue;
+    }
+    const comparisonText = document.querySelector(`#series-comparison [data-product="${product.slug}"]`)?.textContent.replace(/\s+/gu, " ") ?? "";
+    const metricNodes = [...document.querySelectorAll("#product-overview .core-metrics > div")];
+    if (metricNodes.length !== product.coreMetrics.length) errors.push(`${file}: product metric association count disagreement`);
+    for (const [index, metric] of product.coreMetrics.entries()) {
+      const node = metricNodes[index];
+      const label = node?.querySelector("dt")?.textContent.trim() ?? "";
+      const value = node?.querySelector(".metric-value")?.textContent.trim() ?? "";
+      const note = node?.querySelector("small")?.textContent.trim() ?? "";
+      if (label !== metric.label || value !== metric.value || note !== (metric.note ?? "")) {
+        errors.push(`${file}: product metric association disagreement for ${metric.label}`);
       }
-      const comparisonText = document.querySelector(`#series-comparison [data-product="${product.slug}"]`)?.textContent.replace(/\s+/gu, " ") ?? "";
-      const metricNodes = [...document.querySelectorAll("#product-overview .core-metrics > div")];
-      if (metricNodes.length !== product.coreMetrics.length) errors.push(`${file}: product metric association count disagreement`);
-      for (const [index, metric] of product.coreMetrics.entries()) {
-        const node = metricNodes[index];
-        const label = node?.querySelector("dt")?.textContent.trim() ?? "";
-        const value = node?.querySelector(".metric-value")?.textContent.trim() ?? "";
-        const note = node?.querySelector("small")?.textContent.trim() ?? "";
-        if (label !== metric.label || value !== metric.value || note !== (metric.note ?? "")) {
-          errors.push(`${file}: product metric association disagreement for ${metric.label}`);
-        }
-      }
-      for (const metric of product.performanceMetrics) {
-        if (!comparisonText.includes(formatPerformance(metric))) errors.push(`${file}: product metric disagreement for ${metric.precision}`);
-      }
+    }
+    for (const metric of product.performanceMetrics ?? []) {
+      if (!comparisonText.includes(formatPerformance(metric))) errors.push(`${file}: product metric disagreement for ${metric.precision}`);
     }
   }
   if (errors.length) throw new Error(errors.join("\n"));

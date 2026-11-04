@@ -123,13 +123,13 @@ test("copyAssets preserves logo bytes, copies client assets and escapes fallback
   assert.ok(doc.documentElement.textContent.includes('Product <script> & "name"'));
 });
 
-test("build emits catalog and twelve detail routes with local styles and image fallbacks", async () => {
+test("build emits catalog detail routes with local styles and image fallbacks", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-render-"));
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   const result = await buildSite({ rootDir, outDir });
-  assert.deepEqual(result.routes.slice(0, 15), ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)]);
-  assert.equal(result.routes.length, 33);
+  const catalogRoutes = ["/", "/products/", "/compare/", ...catalog.products.map(product => "/products/" + product.slug + "/")];
+  assert.deepEqual(result.routes.slice(0, catalogRoutes.length), catalogRoutes);
   for (const path of ["index.html", "products/index.html", ...catalog.products.map(product => `products/${product.slug}/index.html`)]) {
     const doc = documentOf(await readFile(join(outDir, path), "utf8"));
     assert.equal(doc.querySelectorAll("h1").length, 1);
@@ -389,7 +389,7 @@ test("local downloads reject symlink or junction path components", async (t) => 
   await assert.rejects(loadSupportData(rootDir, catalog), /symlink|href/i);
 });
 
-test("build adds downloads and support while preserving all 31 prior routes and quote contexts", async () => {
+test("build adds downloads and support while preserving prior routes and quote contexts", async () => {
   const { loadDocuments } = await import("../scripts/lib/content.mjs");
   const documents = await loadDocuments(process.cwd(), catalog);
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-support-build-"));
@@ -397,7 +397,6 @@ test("build adds downloads and support while preserving all 31 prior routes and 
   const outDir = join(rootDir, "dist");
   const { routes } = await buildSite({ rootDir, outDir });
   const priorRoutes = ["/", "/products/", "/compare/", ...catalog.products.map(p => `/products/${p.slug}/`), "/docs/", ...documents.map(d => d.url)];
-  assert.equal(priorRoutes.length, 31);
   assert.deepEqual(routes, [...priorRoutes, "/downloads/", "/support/"]);
   const slugs = new Set(catalog.products.map(p => p.slug));
   for (const route of routes) {

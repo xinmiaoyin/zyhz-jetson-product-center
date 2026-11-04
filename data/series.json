@@ -18,5 +18,10 @@
     "slug": "orin-nano",
     "name": "Jetson Orin Nano",
     "order": 4
+  },
+  {
+    "slug": "zyhz-systems",
+    "name": "正阳恒卓整机与载板",
+    "order": 5
   }
 ]

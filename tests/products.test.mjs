@@ -17,11 +17,14 @@ async function fixture(t, mutate) {
   return root;
 }
 
-test("catalog validates all twelve unique products and series order", async () => {
+test("catalog validates all eighteen unique products and five ordered series", async () => {
   const catalog = await loadCatalog(process.cwd());
-  assert.equal(catalog.products.length, 12);
-  assert.equal(new Set(catalog.products.map(p => p.slug)).size, 12);
-  assert.deepEqual(catalog.series.map(s => s.slug), ["thor", "agx-orin", "orin-nx", "orin-nano"]);
+  assert.equal(catalog.products.length, 18);
+  assert.equal(new Set(catalog.products.map(p => p.slug)).size, 18);
+  assert.deepEqual(catalog.series.map(({ slug, order }) => [slug, order]), [
+    ["thor", 1], ["agx-orin", 2], ["orin-nx", 3], ["orin-nano", 4], ["zyhz-systems", 5],
+  ]);
+  assert.equal(catalog.series[4].name, "正阳恒卓整机与载板");
   assert.deepEqual(new Set(catalog.products.map(p => p.series)), new Set(catalog.series.map(s => s.slug)));
   for (const product of catalog.products) assert.ok(productSchema.safeParse(product).success);
   assert.deepEqual(catalog.products.map(({ slug, series, productType }) => [slug, series, productType]), [
@@ -37,12 +40,64 @@ test("catalog validates all twelve unique products and series order", async () =
     ["jetson-orin-nano-super-developer-kit", "orin-nano", "developer-kit"],
     ["jetson-orin-nano-8gb", "orin-nano", "production-module"],
     ["jetson-orin-nano-4gb", "orin-nano", "production-module"],
+    ["mi-12x4", "zyhz-systems", "edge-computer"],
+    ["mi-19x2", "zyhz-systems", "edge-computer"],
+    ["mi-19x3", "zyhz-systems", "edge-computer"],
+    ["mi-11x8", "zyhz-systems", "edge-computer"],
+    ["mi-13x8", "zyhz-systems", "edge-computer"],
+    ["c1201", "zyhz-systems", "carrier-board"],
   ]);
+});
+
+test("ZYHZ products use local manuals and images with optional performance metrics", async () => {
+  const catalog = await loadCatalog(process.cwd());
+  for (const [slug, model, extension] of [
+    ["mi-12x4", "MI-12x4", "png"],
+    ["mi-19x2", "MI-19x2", "jpg"],
+    ["mi-19x3", "MI-19x3", "png"],
+    ["mi-11x8", "MI-11x8-S", "png"],
+    ["mi-13x8", "MI-13x8", "png"],
+    ["c1201", "C1201", "png"],
+  ]) {
+    const product = getProduct(slug, catalog);
+    assert.equal(product.officialPartNumber, model);
+    assert.equal(product.performanceMetrics, undefined);
+    assert.equal(product.heroImage, `/assets/products/${slug}/hero.${extension}`);
+    const manualId = `${slug}-manual`;
+    assert.ok(product.documents.includes(manualId));
+    assert.ok(product.sourceReferences.includes(manualId));
+    assert.ok(product.specGroups.flatMap(g => g.rows).every(row => row.sourceReference === manualId));
+    assert.deepEqual(
+      catalog.sources.filter(s => s.id === manualId).map(({ publisher, url }) => [publisher, url]),
+      [["正阳恒卓", `/assets/manuals/${slug}.html`]],
+    );
+  }
+});
+
+test("product schema accepts the ZYHZ branch without NVIDIA performance or type-specific rows", async () => {
+  const [original] = JSON.parse(await readFile("data/products.json", "utf8"));
+  const { performanceMetrics, ...product } = original;
+  const candidate = {
+    ...product,
+    series: "zyhz-systems",
+    productType: "edge-computer",
+    heroImage: "/assets/products/mi-12x4/hero.png",
+    coreMetrics: product.coreMetrics.map(() => ({ label: "接口", value: "HDMI" })),
+    specGroups: [{ title: "接口", rows: [{ label: "显示", value: "HDMI", sourceReference: "mi-12x4-manual", verifiedAt: "2026-11-05" }] }],
+  };
+  assert.ok(productSchema.safeParse(candidate).success);
+  assert.equal(productSchema.safeParse({ ...candidate, productType: "developer-kit" }).success, false);
+  assert.equal(productSchema.safeParse({ ...candidate, series: "thor" }).success, false);
+  for (const path of ["//example.com/hero.png", "/assets/../hero.png", "/assets/%2e%2e/hero.png", "/assets/..\\hero.png", "/assets/hero.png?q=1"]) {
+    const result = productSchema.safeParse({ ...candidate, heroImage: path });
+    assert.equal(result.success, false, path);
+    assert.ok(result.error.issues.some(issue => issue.path[0] === "heroImage"), path);
+  }
 });
 
 test("review performance display uses only complete validated metrics", async () => {
   const catalog = await loadCatalog(process.cwd());
-  for (const product of catalog.products) {
+  for (const product of catalog.products.filter(p => p.series !== "zyhz-systems")) {
     assert.ok(product.performanceMetrics.length);
     assert.ok(product.performanceMetrics.some(m => formatPerformance(m) === product.coreMetrics[0].value));
     assert.ok(product.specGroups.flatMap(g => g.rows).filter(r => r.label === "AI 性能").every(r => product.performanceMetrics.some(m => formatPerformance(m) === r.value)));
@@ -114,7 +169,7 @@ test("performance strings preserve precision, density and power context", async 
   assert.equal(formatPerformance({ label: "AI", value: 2070, unit: "TFLOPS", precision: "FP4", sparsity: "sparse", powerMode: "130 W", sourceReference: "thor", verifiedAt: "2026-10-10" }), "2070 TFLOPS · FP4 · sparse（稀疏） · 130 W");
   assert.match(formatPerformance({ label: "GPU", value: 85, unit: "TOPS", precision: "INT8", sparsity: "dense", powerMode: "官方峰值模式", sourceReference: "orin", verifiedAt: "2026-10-10" }), /INT8.*dense（稠密）.*官方峰值模式/);
   const { products } = await loadCatalog(process.cwd());
-  for (const p of products) for (const metric of p.performanceMetrics) {
+  for (const p of products) for (const metric of p.performanceMetrics ?? []) {
     assert.match(formatPerformance(metric), new RegExp(metric.precision));
     assert.ok(metric.sourceReference);
   }
@@ -134,7 +189,7 @@ test("relationships and all individual specification sources resolve", async () 
       assert.ok(ids.has(row.sourceReference));
       assert.match(row.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
     }
-    assert.ok(catalog.sources.some(s => s.url === product.heroImage));
+    if (product.series !== "zyhz-systems") assert.ok(catalog.sources.some(s => s.url === product.heroImage));
   }
 });
 
@@ -162,6 +217,7 @@ const invalidCases = [
   ["date without matching source check", p => { p[0].specGroups[0].rows[0].verifiedAt = "2026-10-09"; }, /verifiedAt.*checkedAt/],
   ["unmarked internal SKU", p => { p[0].internalSku = "ZY-123"; }, /internalSku/],
   ["unregistered image", p => { p[0].heroImage = "https://www.nvidia.com/unknown.png"; }, /heroImage/],
+  ["local NVIDIA image", p => { p[0].heroImage = "/assets/products/mi-12x4/hero.png"; }, /heroImage.*URL/i],
   ["developer kit without package", p => { p[0].packageContents = []; }, /packageContents/],
   ["module without connector", p => { const m = p.find(x => x.slug === "jetson-t5000"); for (const g of m.specGroups) g.rows = g.rows.filter(r => r.label !== "连接器"); }, /连接器/],
   ["industrial without temperature", p => { const m = p.find(x => x.productType === "industrial-module"); for (const g of m.specGroups) g.rows = g.rows.filter(r => r.label !== "工作温度"); }, /工作温度/],
@@ -185,6 +241,26 @@ test("catalog rejects broken series and duplicate source IDs", async t => {
   await writeFile(join(root, "data/sources.json"), JSON.stringify(sources));
   await writeFile(join(root, "data/series.json"), "[]");
   await assert.rejects(loadCatalog(root), /series/);
+});
+
+test("catalog rejects a registered ZYHZ source on an NVIDIA product", async t => {
+  const root = await fixture(t, products => { products[0].sourceReferences.push("first-party-manual"); });
+  const path = join(root, "data/sources.json");
+  const sources = JSON.parse(await readFile(path, "utf8"));
+  sources.push({
+    id: "first-party-manual", title: "正阳恒卓产品手册", url: "/assets/manuals/c1201.html",
+    publisher: "正阳恒卓", checkedAt: "2026-11-05",
+  });
+  await writeFile(path, JSON.stringify(sources));
+  await assert.rejects(loadCatalog(root), /jetson-agx-thor-developer-kit sourceReferences\.\d+:.*NVIDIA/);
+});
+
+test("catalog rejects a registered NVIDIA source on a ZYHZ product", async t => {
+  const root = await fixture(t, products => {
+    const product = getProduct("mi-12x4", { products });
+    product.sourceReferences.push("thor-spec");
+  });
+  await assert.rejects(loadCatalog(root), /mi-12x4 sourceReferences\.\d+:.*正阳恒卓/);
 });
 
 test("catalog build validation fails before creating or changing dist", async t => {

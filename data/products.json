@@ -2307,5 +2307,933 @@
     ],
     "verifiedAt": "2026-10-10",
     "imageAlt": "NVIDIA Jetson Orin Nano 系列 官方产品图"
+  },
+  {
+    "slug": "mi-12x4",
+    "series": "zyhz-systems",
+    "nameZh": "MI-12x4 边缘计算盒",
+    "nameEn": "MI-12x4 Edge Computer",
+    "productType": "edge-computer",
+    "status": "contact-sales",
+    "shortPositioning": "面向机器视觉和无人驾驶应用的小型可扩展边缘计算盒",
+    "heroImage": "/assets/products/mi-12x4/hero.png",
+    "officialPartNumber": "MI-12x4",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson Xavier NX / Orin Nano / Orin NX"
+      },
+      {
+        "label": "电源",
+        "value": "标准版 9–19 V DC（规格表）；宽压版 9–36 V DC",
+        "note": "手册介绍将标准版下限列为 10 V，订购时请确认所选版本的输入范围"
+      },
+      {
+        "label": "尺寸",
+        "value": "210 × 107 × 50 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +55 °C（0.5 m/s 气流）；−20 至 +65 °C（主动散热）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson Orin Nano 和 Orin NX 模组的 Super 模式",
+      "标配两路独立千兆网口，另可扩展三路独立千兆网口",
+      "可选配两组 GMSL2 转接板，每组支持四路 GMSL2",
+      "两路隔离 DB9 支持 RS232 和 RS485 组合，可通过转接卡扩展四路串口",
+      "默认采用无风扇被动散热，可选装内置 50 mm 风扇"
+    ],
+    "useCases": [
+      "机器视觉",
+      "车载无人驾驶",
+      "多传感器时间同步（域控版）"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "MI-12x4",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson Xavier NX / Orin Nano / Orin NX",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "标准版 9–19 V DC（规格表）；宽压版 9–36 V DC；手册介绍将标准版下限列为 10 V，订购时请确认所选版本的输入范围",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络",
+            "value": "2 路独立 GbE，另可扩展 3 路独立 GbE",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "显示与 USB",
+            "value": "HDMI 2.0 Type-A；2 个 USB Type-A（USB 2.0 / 3.0）；USB Type-C OTG 烧录口",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "串口与 CAN",
+            "value": "2 个隔离 DB9（RS232 / RS485），可扩展 4 路串口；1 路 CAN，可选转接卡扩展 2 路",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储与通信",
+            "value": "M.2 2242 Key M（PCIe x1）、M.2 2280 Key M（PCIe x4）、M.2 3050 Key B（4G / 5G）、M.2 2230 Key E（Wi-Fi / 蓝牙），带 Nano SIM 卡槽",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "板卡扩展",
+            "value": "2 个 Mini PCIe，支持 GMSL2、GPS、CAN 或 THS 时间同步板；12 针复合接口提供 GPIO、I²C 和 SPI",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "机身与版本",
+        "rows": [
+          {
+            "label": "安装与重量",
+            "value": "壁挂式安装；净重 1.2 kg",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "防护与散热",
+            "value": "IP50；默认被动散热，可选内置风扇",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "域控版",
+            "value": "采用宽压输入，支持外部或内部 PPS 扇出及 JetPack 实时内核",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "210 × 107 × 50 mm",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +55 °C（0.5 m/s 气流）；−20 至 +65 °C（主动散热）",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "mi-12x4-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "mi-12x4-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-19x3",
+      "mi-11x8",
+      "jetson-orin-nx-16gb"
+    ],
+    "sourceReferences": [
+      "mi-12x4-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "MI-12x4 边缘计算盒 外观"
+  },
+  {
+    "slug": "mi-19x2",
+    "series": "zyhz-systems",
+    "nameZh": "MI-19x2 边缘计算盒",
+    "nameEn": "MI-19x2 Edge Computer",
+    "productType": "edge-computer",
+    "status": "contact-sales",
+    "shortPositioning": "采用工业级器件的小型边缘计算盒，兼顾开发验证和批量部署",
+    "heroImage": "/assets/products/mi-19x2/hero.jpg",
+    "officialPartNumber": "MI-19x2",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）"
+      },
+      {
+        "label": "电源",
+        "value": "DC5521，9–19 V DC"
+      },
+      {
+        "label": "尺寸",
+        "value": "128 × 96 × 60 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +55 °C（主动散热）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson Orin Nano 和 Orin NX 模组的 Super 模式",
+      "设备内主板安装孔位兼容 NVIDIA 官方载板",
+      "支持通过 NVIDIA SDK Manager 刷机，也可通过命令行刷写正阳恒卓镜像包",
+      "提供两路 M.2 Key M SSD 扩展与两路 MIPI 相机接口"
+    ],
+    "useCases": [
+      "边缘应用开发验证",
+      "紧凑型视觉终端",
+      "边缘设备批量部署"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "MI-19x2",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "DC5521，9–19 V DC",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络与显示",
+            "value": "1 路独立 GbE；HDMI 2.0 Type-A",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "USB 与控制",
+            "value": "4 个 USB Type-A（USB 2.0 或 3.0）；USB Type-C OTG 烧录口；CAN 总线接口",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储与无线",
+            "value": "M.2 2230 Key M（PCIe x2）、M.2 2280 Key M（PCIe x4）、M.2 Key E（Wi-Fi）",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "相机与扩展排针",
+            "value": "2 路 2-lane MIPI 相机接口；40 针扩展接口与 12 针按键排针",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "安装与散热",
+        "rows": [
+          {
+            "label": "安装与重量",
+            "value": "壁挂式安装；净重 0.85 kg",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "散热",
+            "value": "主动散热，提供 5 V 四针风扇接口",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "128 × 96 × 60 mm",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +55 °C（主动散热）",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "mi-19x2-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "mi-19x2-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-19x3",
+      "c1201",
+      "jetson-orin-nano-8gb"
+    ],
+    "sourceReferences": [
+      "mi-19x2-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "MI-19x2 边缘计算盒 外观"
+  },
+  {
+    "slug": "mi-19x3",
+    "series": "zyhz-systems",
+    "nameZh": "MI-19x3 边缘计算盒",
+    "nameEn": "MI-19x3 Edge Computer",
+    "productType": "edge-computer",
+    "status": "contact-sales",
+    "shortPositioning": "提供双独立千兆网口和被动散热的紧凑型边缘计算盒",
+    "heroImage": "/assets/products/mi-19x3/hero.png",
+    "officialPartNumber": "MI-19x3",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）"
+      },
+      {
+        "label": "电源",
+        "value": "DC5521，9–19 V DC（标配 12 V 电源适配器）"
+      },
+      {
+        "label": "尺寸",
+        "value": "170 × 108 × 50 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +55 °C（被动散热，0.5 m/s 气流）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson Orin Nano 和 Orin NX 模组的 Super 模式",
+      "双独立 GbE 分别采用 SoC 直出和 PCIe 扩展",
+      "设备内主板安装孔位兼容 NVIDIA 官方载板",
+      "支持 NVIDIA SDK Manager 和命令行镜像刷写，提供 REC 与 PWR 按键"
+    ],
+    "useCases": [
+      "双网口边缘终端",
+      "嵌入式视觉应用验证",
+      "紧凑机柜或壁挂部署"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "MI-19x3",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "DC5521，9–19 V DC（标配 12 V 电源适配器）",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络与显示",
+            "value": "2 路独立 GbE（SoC 直出与 PCIe 扩展各一路）；HDMI 2.0 Type-A",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "USB 与控制",
+            "value": "4 个 USB Type-A（USB 2.0 或 3.0）；USB Type-C OTG 烧录口；CAN 总线接口",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储与无线",
+            "value": "M.2 2230 Key M（PCIe x2）、M.2 2280 Key M（PCIe x4）、M.2 Key E（Wi-Fi）",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "相机与扩展排针",
+            "value": "2 路 22 针 CSI MIPI 相机接口；40 针扩展接口与 12 针按键排针",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "安装与供电选件",
+        "rows": [
+          {
+            "label": "安装与重量",
+            "value": "壁挂式安装；净重 0.9 kg",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "供电选件",
+            "value": "15EDGWB 3.81 mm 两针连接器",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "170 × 108 × 50 mm",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +55 °C（被动散热，0.5 m/s 气流）",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "mi-19x3-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "mi-19x3-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-19x2",
+      "mi-12x4",
+      "c1201"
+    ],
+    "sourceReferences": [
+      "mi-19x3-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "MI-19x3 边缘计算盒 外观"
+  },
+  {
+    "slug": "mi-11x8",
+    "series": "zyhz-systems",
+    "nameZh": "MI-11x8 边缘计算盒",
+    "nameEn": "MI-11x8 Edge Computer",
+    "productType": "edge-computer",
+    "status": "contact-sales",
+    "shortPositioning": "面向边缘推理部署的工业计算盒，支持双存储和移动通信扩展",
+    "heroImage": "/assets/products/mi-11x8/hero.png",
+    "officialPartNumber": "MI-11x8-S",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson Orin NX / Orin Nano"
+      },
+      {
+        "label": "电源",
+        "value": "12–24 V DC"
+      },
+      {
+        "label": "尺寸",
+        "value": "274 × 170 × 78 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +60 °C（0.5 m/s 气流）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson Orin NX 和 Orin Nano 模组，采用工业级整机设计",
+      "采用被动散热设计，提供壁挂安装方式",
+      "两个 M.2 2242 Key M 插槽支持双 SSD 扩展",
+      "支持扩展 4G、5G 和 Wi-Fi 模块，可用于 5G 边缘部署大模型"
+    ],
+    "useCases": [
+      "5G 边缘推理",
+      "现场视觉采集",
+      "本地存储与推理一体部署"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "MI-11x8-S",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson Orin NX / Orin Nano",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "12–24 V DC",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络与显示",
+            "value": "2 路独立 GbE；HDMI 2.0 Type-A",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "USB 与控制",
+            "value": "4 个 USB 3.0 Type-A；USB Micro-B OTG 烧录口；CAN 总线接口",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储与通信",
+            "value": "2 个 M.2 2242 Key M；M.2 3050 Key B（4G / 5G）；全长 Mini PCIe；Nano SIM 卡槽",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "相机与扩展排针",
+            "value": "2 路 4-lane MIPI 相机接口；40 针扩展接口",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "安装与散热",
+        "rows": [
+          {
+            "label": "安装与重量",
+            "value": "壁挂式安装；净重 3.1 kg",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "散热",
+            "value": "被动散热设计；提供 12 V 四针风扇接口",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "274 × 170 × 78 mm",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +60 °C（0.5 m/s 气流）",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "mi-11x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "mi-11x8-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-13x8",
+      "mi-12x4",
+      "jetson-orin-nx-16gb"
+    ],
+    "sourceReferences": [
+      "mi-11x8-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "MI-11x8 边缘计算盒 外观"
+  },
+  {
+    "slug": "mi-13x8",
+    "series": "zyhz-systems",
+    "nameZh": "MI-13x8 边缘计算盒",
+    "nameEn": "MI-13x8 Edge Computer",
+    "productType": "edge-computer",
+    "status": "contact-sales",
+    "shortPositioning": "面向现场推理和存算一体部署的 Jetson AGX Orin 工业计算盒",
+    "heroImage": "/assets/products/mi-13x8/hero.png",
+    "officialPartNumber": "MI-13x8",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson AGX Orin 32 GB / 64 GB"
+      },
+      {
+        "label": "电源",
+        "value": "24–29 V DC"
+      },
+      {
+        "label": "尺寸",
+        "value": "274 × 170 × 78 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +60 °C（0.5 m/s 气流）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson AGX Orin 32 GB 和 64 GB 模组",
+      "采用被动散热与工业级整机设计，支持壁挂安装",
+      "两个 PCIe x4 M.2 Key M 插槽支持双 SSD 扩展",
+      "配有两个以太网口并提供 10G MGBE 扩展接口",
+      "支持 4G、5G 和 Wi-Fi 模块扩展，适合边缘联网部署"
+    ],
+    "useCases": [
+      "现场 AI 推理",
+      "5G 边缘大模型部署",
+      "本地存算一体部署"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "MI-13x8",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson AGX Orin 32 GB / 64 GB",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "24–29 V DC",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络",
+            "value": "2 个独立以太网口（eth0 最高 2.5 Gbps，eth1 最高 1 Gbps）；1 路 10G MGBE 扩展接口",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "显示与 USB",
+            "value": "HDMI 2.0 Type-A；4 个 USB Type-A（USB 2.0 / 3.0）；USB Type-C OTG 烧录口",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储",
+            "value": "M.2 2242 Key M 与 M.2 2242 / 2260 / 2280 Key M，各提供 PCIe x4",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "通信与控制",
+            "value": "M.2 3050 Key B 和全长 Mini PCIe 共用 Nano SIM 卡槽；CAN 总线接口",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "相机与扩展排针",
+            "value": "2 路 4-lane MIPI 相机接口；40 针扩展接口和 12 针按键排针",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "安装与散热",
+        "rows": [
+          {
+            "label": "安装与重量",
+            "value": "壁挂式安装；净重 3.5 kg",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "散热",
+            "value": "被动散热设计；提供 5 V 四针风扇接口",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "274 × 170 × 78 mm",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +60 °C（0.5 m/s 气流）",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "mi-13x8-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "mi-13x8-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-11x8",
+      "jetson-agx-orin-64gb",
+      "jetson-agx-orin-32gb"
+    ],
+    "sourceReferences": [
+      "mi-13x8-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "MI-13x8 边缘计算盒 外观"
+  },
+  {
+    "slug": "c1201",
+    "series": "zyhz-systems",
+    "nameZh": "C1201 载板",
+    "nameEn": "C1201 Carrier Board",
+    "productType": "carrier-board",
+    "status": "contact-sales",
+    "shortPositioning": "兼容 Orin Nano / NX 开发套件载板安装孔位的开发验证与集成载板",
+    "heroImage": "/assets/products/c1201/hero.png",
+    "officialPartNumber": "C1201",
+    "coreMetrics": [
+      {
+        "label": "AI 模组",
+        "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）"
+      },
+      {
+        "label": "电源",
+        "value": "DC5521，9–19 V DC"
+      },
+      {
+        "label": "尺寸",
+        "value": "100 × 79 mm"
+      },
+      {
+        "label": "工作温度",
+        "value": "−20 至 +55 °C（主动散热）"
+      }
+    ],
+    "highlights": [
+      "支持 Jetson Orin Nano 和 Orin NX 模组的 Super 模式",
+      "安装孔位兼容 NVIDIA Orin Nano / NX 开发套件官方载板",
+      "支持 HDMI 2.0 显示输出和两路 MIPI 相机接口",
+      "可通过 NVIDIA SDK Manager 或命令行刷写镜像",
+      "采用工业级器件，适合从开发验证转向商用集成"
+    ],
+    "useCases": [
+      "Orin Nano / NX 开发验证",
+      "定制设备集成",
+      "嵌入式视觉原型"
+    ],
+    "specGroups": [
+      {
+        "title": "系统与供电",
+        "rows": [
+          {
+            "label": "型号",
+            "value": "C1201",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "AI 模组",
+            "value": "Jetson Nano / NX、Orin Nano / Orin NX（手册列示）",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "电源",
+            "value": "DC5521，9–19 V DC",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          {
+            "label": "网络与显示",
+            "value": "1 路独立 GbE；HDMI 2.0 Type-A",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "USB 与控制",
+            "value": "4 个 USB Type-A（USB 2.0 或 3.0）；USB Type-C OTG 烧录口；CAN 总线接口",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储与无线",
+            "value": "M.2 2230 Key M（PCIe x2）、M.2 2280 Key M（PCIe x4）、M.2 Key E（Wi-Fi）",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "相机与扩展排针",
+            "value": "2 路 2-lane MIPI 相机接口；40 针扩展接口和 12 针按键排针",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "安装与散热",
+        "rows": [
+          {
+            "label": "安装",
+            "value": "M2.5 螺钉固定",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "散热",
+            "value": "主动散热，提供 5 V 四针风扇接口",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      },
+      {
+        "title": "尺寸与工作环境",
+        "rows": [
+          {
+            "label": "尺寸",
+            "value": "100 × 79 mm",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "工作温度",
+            "value": "−20 至 +55 °C（主动散热）",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          },
+          {
+            "label": "存储温度",
+            "value": "−40 至 +85 °C",
+            "sourceReference": "c1201-manual",
+            "verifiedAt": "2026-11-05"
+          }
+        ]
+      }
+    ],
+    "softwareSupport": [],
+    "documents": [
+      "c1201-manual"
+    ],
+    "downloads": [],
+    "packageContents": [],
+    "optionalAccessories": [],
+    "relatedProducts": [
+      "mi-19x2",
+      "mi-19x3",
+      "jetson-orin-nano-super-developer-kit"
+    ],
+    "sourceReferences": [
+      "c1201-manual"
+    ],
+    "verifiedAt": "2026-11-05",
+    "imageAlt": "C1201 载板 外观"
   }
 ]

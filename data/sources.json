@@ -110,5 +110,47 @@
     "url": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_1736846491/nv_image.coreimg.jpeg/1787666716022/jetson-agx-orin-developer-kit-assets-2c50-d-2x.jpeg",
     "publisher": "NVIDIA",
     "checkedAt": "2026-10-10"
+  },
+  {
+    "id": "mi-12x4-manual",
+    "title": "MI-12x4 边缘计算盒｜正阳恒卓产品手册",
+    "url": "/assets/manuals/mi-12x4.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
+  },
+  {
+    "id": "mi-19x2-manual",
+    "title": "MI-19x2 边缘计算盒｜正阳恒卓产品手册",
+    "url": "/assets/manuals/mi-19x2.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
+  },
+  {
+    "id": "mi-19x3-manual",
+    "title": "MI-19x3 边缘计算盒｜正阳恒卓产品手册",
+    "url": "/assets/manuals/mi-19x3.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
+  },
+  {
+    "id": "mi-11x8-manual",
+    "title": "MI-11x8 边缘计算盒｜正阳恒卓产品手册",
+    "url": "/assets/manuals/mi-11x8.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
+  },
+  {
+    "id": "mi-13x8-manual",
+    "title": "MI-13x8 边缘计算盒｜正阳恒卓产品手册",
+    "url": "/assets/manuals/mi-13x8.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
+  },
+  {
+    "id": "c1201-manual",
+    "title": "C1201 载板｜正阳恒卓产品手册",
+    "url": "/assets/manuals/c1201.html",
+    "publisher": "正阳恒卓",
+    "checkedAt": "2026-11-05"
   }
 ]

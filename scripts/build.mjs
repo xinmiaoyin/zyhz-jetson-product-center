@@ -5,6 +5,7 @@ import { z } from "zod";
 import { writePage } from "./lib/site.mjs";
 import { loadCatalog, getRelatedProducts } from "./lib/products.mjs";
 import { copyAssets } from "./lib/assets.mjs";
+import { validateLocalProductAssets } from "./lib/local-product-assets.mjs";
 import { renderHome } from "../templates/home.mjs";
 import { renderProductsIndex } from "../templates/products.mjs";
 import { renderProductDetail } from "../templates/product-detail.mjs";
@@ -70,26 +71,13 @@ export async function loadSupportData(rootDir, catalog) {
   return { contact, downloads };
 }
 
-export function assertPublicContent(source, name) {
-  if (source.includes("隐溪科技")) throw new Error(name + ": prohibited brand");
-  if (/file:\/\/|\b[a-z]:[\\/]|\/mnt\/[a-z]\/jetson/iu.test(source)) throw new Error(name + ": absolute workspace path");
-}
-
-export async function validateManuals(directory, catalog) {
-  for (const { url } of catalog.sources.filter(source => source.url.startsWith("/assets/manuals/"))) {
-    const manual = await readFile(join(directory, url), "utf8");
-    if (!manual.trim()) throw new Error(url + ": manual is empty");
-    assertPublicContent(manual, url);
-  }
-}
-
 export async function buildSite({ rootDir, outDir }) {
   const projectDist = resolve(rootDir, "dist");
   if (resolve(outDir) !== projectDist) {
     throw new Error("outDir must be the project's dist directory");
   }
   const catalog = await loadCatalog(rootDir);
-  await validateManuals(rootDir, catalog);
+  await validateLocalProductAssets(rootDir, catalog);
   const documents = await loadDocuments(rootDir, catalog);
   const { contact, downloads } = await loadSupportData(rootDir, catalog);
 

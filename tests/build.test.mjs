@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { cp, mkdtemp, readFile, unlink, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, symlink, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { crc32, deflateSync } from "node:zlib";
@@ -208,4 +208,73 @@ test("built site checker rejects corrupt product PNG scanlines with valid chunk 
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i, "short scanline");
   await writeFile(imagePath, png([5, 30, 40, 50, 1, 2, 3]));
   await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i, "unknown filter");
+});
+
+test("local media preflight preserves an existing dist when source assets are invalid", async t => {
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-media-preflight-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outDir = join(rootDir, "dist");
+  await mkdir(outDir);
+  const sentinel = join(outDir, "previous.txt");
+  const image = join(rootDir, "assets/products/mi-12x4/hero.png");
+  const original = await readFile(image);
+  const manual = join(rootDir, "assets/manuals/mi-12x4.html");
+  const originalManual = await readFile(manual);
+
+  async function expectSafeFailure(expected) {
+    await writeFile(sentinel, "previous build");
+    try {
+      await assert.rejects(buildSite({ rootDir, outDir }), expected);
+    } finally {
+      assert.equal(await readFile(sentinel, "utf8").catch(error => error.code), "previous build");
+    }
+  }
+
+  await t.test("missing hero", async () => {
+    await unlink(image);
+    try { await expectSafeFailure(/product image.*mi-12x4.*unavailable/i); }
+    finally { await writeFile(image, original); }
+  });
+  await t.test("empty hero", async () => {
+    await writeFile(image, "");
+    try { await expectSafeFailure(/product image.*mi-12x4.*empty/i); }
+    finally { await writeFile(image, original); }
+  });
+  await t.test("corrupt hero", async () => {
+    await writeFile(image, original.subarray(0, 32));
+    try { await expectSafeFailure(/invalid product image.*mi-12x4/i); }
+    finally { await writeFile(image, original); }
+  });
+  await t.test("missing and empty manual", async () => {
+    await unlink(manual);
+    try {
+      await expectSafeFailure(/manual.*mi-12x4.*unavailable/i);
+      await writeFile(manual, "");
+      await expectSafeFailure(/manual.*mi-12x4.*empty/i);
+    } finally { await writeFile(manual, originalManual); }
+  });
+  await t.test("hero URL with path traversal", async () => {
+    const path = join(rootDir, "data/products.json");
+    const originalData = await readFile(path, "utf8");
+    const escapedData = originalData.replace("/assets/products/mi-12x4/hero.png", "/assets/../outside.png");
+    await writeFile(path, escapedData);
+    try { await expectSafeFailure(/mi-12x4.*heroImage/i); }
+    finally { await writeFile(path, originalData); }
+  });
+  await t.test("hero through a directory symlink or junction", async t => {
+    const outside = await mkdtemp(join(tmpdir(), "zyhz-media-outside-"));
+    await writeFile(join(outside, "hero.png"), original);
+    const folder = join(rootDir, "assets/products/mi-12x4-linked");
+    try { await symlink(outside, folder, process.platform === "win32" ? "junction" : "dir"); }
+    catch (error) {
+      if (!["EPERM", "EACCES", "ENOSYS", "ENOTSUP"].includes(error.code)) throw error;
+      t.skip("platform cannot create a directory link: " + error.code);
+      return;
+    }
+    const products = join(rootDir, "data/products.json");
+    const originalData = await readFile(products, "utf8");
+    await writeFile(products, originalData.replace("/assets/products/mi-12x4/hero.png", "/assets/products/mi-12x4-linked/hero.png"));
+    try { await expectSafeFailure(/product image.*mi-12x4-linked.*symlink/i); }
+    finally { await writeFile(products, originalData); }
+  });
 });

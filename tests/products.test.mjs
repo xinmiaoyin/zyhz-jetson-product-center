@@ -53,7 +53,7 @@ test("ZYHZ products use local manuals and images with optional performance metri
   const catalog = await loadCatalog(process.cwd());
   for (const [slug, model, extension] of [
     ["mi-12x4", "MI-12x4", "png"],
-    ["mi-19x2", "MI-19x2", "jpg"],
+    ["mi-19x2", "MI-19x2", "png"],
     ["mi-19x3", "MI-19x3", "png"],
     ["mi-11x8", "MI-11x8-S", "png"],
     ["mi-13x8", "MI-13x8", "png"],

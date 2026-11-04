@@ -56,7 +56,7 @@ test("product index exposes eighteen grouped products with complete source metri
 
 const systemModels = [
   ["mi-12x4", "边缘计算盒", "png"],
-  ["mi-19x2", "边缘计算盒", "jpg"],
+  ["mi-19x2", "边缘计算盒", "png"],
   ["mi-19x3", "边缘计算盒", "png"],
   ["mi-11x8", "边缘计算盒", "png"],
   ["mi-13x8", "边缘计算盒", "png"],

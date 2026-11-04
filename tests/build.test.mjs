@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { cp, mkdtemp, readFile, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { crc32, deflateSync } from "node:zlib";
 import { JSDOM } from "jsdom";
 import { escapeHtml } from "../scripts/lib/html.mjs";
 import { writePage } from "../scripts/lib/site.mjs";
@@ -102,12 +103,6 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   await mutate("assets/manuals/mi-12x4.html", html => html + "<!-- 隐溪科技 -->", /prohibited.*brand/i);
   await mutate("assets/manuals/mi-12x4.html", html => html + "<!-- D:/jetson/private.html -->", /absolute.*path/i);
 
-  const imagePath = join(outDir, "assets/products/mi-12x4/hero.png");
-  const image = await readFile(imagePath);
-  await writeFile(imagePath, image.subarray(0, 32));
-  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i);
-  await writeFile(imagePath, image);
-
   const routesPath = join(outDir, "routes.json");
   const routesSource = await readFile(routesPath, "utf8");
   await unlink(routesPath);
@@ -163,7 +158,7 @@ test("build publishes six standalone branded manuals and their product images", 
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   await buildSite({ rootDir, outDir });
-  const models = [["mi-12x4", "png"], ["mi-19x2", "jpg"], ["mi-19x3", "png"], ["mi-11x8", "png"], ["mi-13x8", "png"], ["c1201", "png"]];
+  const models = [["mi-12x4", "png"], ["mi-19x2", "png"], ["mi-19x3", "png"], ["mi-11x8", "png"], ["mi-13x8", "png"], ["c1201", "png"]];
   for (const [slug, extension] of models) {
     const manual = "/assets/manuals/" + slug + ".html";
     const image = "/assets/products/" + slug + "/hero." + extension;
@@ -179,4 +174,38 @@ test("build publishes six standalone branded manuals and their product images", 
   }
   await writeFile(join(rootDir, "assets/manuals/mi-12x4.html"), " ");
   await assert.rejects(buildSite({ rootDir, outDir }), /manual.*empty/i);
+});
+
+test("built site checker rejects corrupt product PNG scanlines with valid chunk CRCs", async () => {
+  const { checkBuiltSite } = await import("../scripts/check-built-site.mjs");
+  const rootDir = await mkdtemp(join(tmpdir(), "zyhz-invalid-png-"));
+  for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
+  const outDir = join(rootDir, "dist");
+  await buildSite({ rootDir, outDir });
+  const imagePath = join(outDir, "assets/products/mi-12x4/hero.png");
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(2, 0);
+  header.writeUInt32BE(1, 4);
+  header[8] = 8;
+  header[9] = 2;
+  function chunk(type, data) {
+    const length = Buffer.alloc(4);
+    length.writeUInt32BE(data.length);
+    const payload = Buffer.concat([Buffer.from(type, "ascii"), data]);
+    const checksum = Buffer.alloc(4);
+    checksum.writeUInt32BE(crc32(payload));
+    return Buffer.concat([length, payload, checksum]);
+  }
+  function png(scanline) {
+    return Buffer.concat([
+      Buffer.from("89504e470d0a1a0a", "hex"), chunk("IHDR", header),
+      chunk("IDAT", deflateSync(Buffer.from(scanline))), chunk("IEND", Buffer.alloc(0)),
+    ]);
+  }
+  await writeFile(imagePath, png([1, 30, 40, 50, 1, 2, 3]));
+  await checkBuiltSite({ rootDir, outDir });
+  await writeFile(imagePath, png([0]));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i, "short scanline");
+  await writeFile(imagePath, png([5, 30, 40, 50, 1, 2, 3]));
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /invalid product image/i, "unknown filter");
 });

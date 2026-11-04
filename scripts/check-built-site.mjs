@@ -128,35 +128,80 @@ function validateSearchIndex(records, generatedRoutes, errors) {
   }
 }
 
-function validatePng(image) {
-  if (!image.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex"))) return false;
-  const data = [];
-  for (let offset = 8; offset + 12 <= image.length;) {
-    const length = image.readUInt32BE(offset);
-    const end = offset + 8 + length;
-    if (end + 4 > image.length || crc32(image.subarray(offset + 4, end)) !== image.readUInt32BE(end)) return false;
-    const type = image.toString("ascii", offset + 4, offset + 8);
-    if (offset === 8 && (type !== "IHDR" || length !== 13 || !image.readUInt32BE(16) || !image.readUInt32BE(20))) return false;
-    if (type === "IDAT") data.push(image.subarray(offset + 8, end));
-    if (type === "IEND") return length === 0 && end + 4 === image.length && inflateSync(Buffer.concat(data), { maxOutputLength: 64 * 1024 * 1024 }).length > 0;
-    offset = end + 4;
-  }
-  return false;
+function paeth(left, up, upperLeft) {
+  const estimate = left + up - upperLeft;
+  const leftDistance = Math.abs(estimate - left);
+  const upDistance = Math.abs(estimate - up);
+  const cornerDistance = Math.abs(estimate - upperLeft);
+  if (leftDistance <= upDistance && leftDistance <= cornerDistance) return left;
+  return upDistance <= cornerDistance ? up : upperLeft;
 }
 
-function validateJpeg(image) {
-  if (image.length < 4 || image.readUInt16BE(0) !== 0xffd8) return false;
-  const endOfImage = image.lastIndexOf(Buffer.from("ffd9", "hex"));
-  let hasFrame = false;
-  for (let offset = 2; offset + 4 < image.length;) {
-    if (image[offset] !== 0xff) return false;
-    const marker = image[offset + 1];
-    const length = image.readUInt16BE(offset + 2);
-    const end = offset + 2 + length;
-    if (length < 2 || end > image.length) return false;
-    if (marker === 0xc0 || marker === 0xc2) hasFrame = length >= 8 && image.readUInt16BE(offset + 5) > 0 && image.readUInt16BE(offset + 7) > 0;
-    if (marker === 0xda) return hasFrame && end < endOfImage;
-    offset = end;
+function decodePngScanlines(compressed, width, height, channels) {
+  const stride = width * channels + 1;
+  const expectedLength = height * stride;
+  if (expectedLength > 64 * 1024 * 1024) return false;
+  const { buffer: pixels, engine } = inflateSync(compressed, { info: true, maxOutputLength: expectedLength });
+  if (pixels.length !== expectedLength || engine.bytesWritten !== compressed.length) return false;
+  for (let row = 0; row < height; row++) {
+    const start = row * stride;
+    const filter = pixels[start];
+    if (filter > 4) return false;
+    if (filter === 0) continue;
+    for (let column = 1; column < stride; column++) {
+      const i = start + column;
+      const left = column > channels ? pixels[i - channels] : 0;
+      const up = row > 0 ? pixels[i - stride] : 0;
+      const upperLeft = row > 0 && column > channels ? pixels[i - stride - channels] : 0;
+      let prediction;
+      switch (filter) {
+        case 1: prediction = left; break;
+        case 2: prediction = up; break;
+        case 3: prediction = (left + up) >>> 1; break;
+        case 4: prediction = paeth(left, up, upperLeft); break;
+      }
+      pixels[i] = (pixels[i] + prediction) & 255;
+    }
+  }
+  return true;
+}
+
+function validatePng(image) {
+  const signature = Buffer.from("89504e470d0a1a0a", "hex");
+  if (!image.subarray(0, 8).equals(signature)) return false;
+  const data = [];
+  let width, height, channels;
+  let paletteSeen = false;
+  let dataClosed = false;
+  for (let offset = signature.length; offset + 12 <= image.length;) {
+    const length = image.readUInt32BE(offset);
+    const start = offset + 8;
+    const end = start + length;
+    if (end + 4 > image.length || crc32(image.subarray(offset + 4, end)) !== image.readUInt32BE(end)) return false;
+    const type = image.toString("latin1", offset + 4, start);
+    if (!/^[A-Za-z]{2}[A-Z][A-Za-z]$/.test(type)) return false;
+    if (offset === signature.length) {
+      if (type !== "IHDR" || length !== 13) return false;
+      width = image.readUInt32BE(start);
+      height = image.readUInt32BE(start + 4);
+      const [depth, color, compression, filter, interlace] = image.subarray(start + 8, end);
+      // Published product media uses non-interlaced, 8-bit RGB or RGBA PNG.
+      if (!width || !height || depth !== 8 || ![2, 6].includes(color) || compression || filter || interlace) return false;
+      channels = color === 2 ? 3 : 4;
+    } else if (type === "IDAT") {
+      if (dataClosed) return false;
+      data.push(image.subarray(start, end));
+    } else if (type === "IEND") {
+      return length === 0 && end + 4 === image.length && data.length > 0
+        && decodePngScanlines(Buffer.concat(data), width, height, channels);
+    } else if (type === "PLTE") {
+      if (paletteSeen || data.length || !length || length > 768 || length % 3) return false;
+      paletteSeen = true;
+    } else {
+      if (/^[A-Z]/.test(type)) return false;
+      if (data.length) dataClosed = true;
+    }
+    offset = end + 4;
   }
   return false;
 }
@@ -164,8 +209,7 @@ function validateJpeg(image) {
 async function validateProductImage(outDir, url) {
   try {
     const image = await readFile(join(outDir, url));
-    const valid = url.endsWith(".png") ? validatePng(image) : url.endsWith(".jpg") && validateJpeg(image);
-    if (valid) return;
+    if (url.endsWith(".png") && validatePng(image)) return;
   } catch { /* Report missing and unreadable image data uniformly. */ }
   throw new Error("invalid product image: " + url);
 }

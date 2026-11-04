@@ -20,7 +20,8 @@ function renderSpecifications(product, sources) {
 }
 
 function renderSeriesComparison(product, catalog) {
-  const siblings = catalog.products.filter(item => item.series === product.series);
+  if (!product.performanceMetrics?.length) return "";
+  const siblings = catalog.products.filter(item => item.series === product.series && item.performanceMetrics?.length);
   if (siblings.length < 2) return "";
   return `<p class="section-intro">同系列产品并列展示，按项目的开发、集成与部署需求选择。</p>
     <div class="comparison-scroll" role="region" aria-label="同系列参数比较，可横向滚动" tabindex="0"><table class="series-comparison-table">

@@ -172,9 +172,21 @@ test("detail renders verified type-specific specifications and resolves evidence
   }
 });
 
+test("detail renders first-party products without optional performance metrics", async () => {
+  const { renderProductDetail } = await import("../templates/product-detail.mjs");
+  for (const slug of ["mi-12x4", "mi-19x2", "mi-19x3", "mi-11x8", "mi-13x8", "c1201"]) {
+    const product = catalog.products.find(item => item.slug === slug);
+    assert.equal(product.performanceMetrics, undefined);
+    const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
+    assert.equal(doc.querySelector("h1").textContent, product.nameZh);
+    assert.ok(doc.querySelector("#specifications tbody tr"));
+    assert.equal(doc.querySelector("#series-comparison"), null);
+  }
+});
+
 test("performance output and same-series detail comparison preserve complete precision context without ranking", async () => {
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
-  for (const product of catalog.products) {
+  for (const product of catalog.products.filter(item => item.performanceMetrics?.length)) {
     const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
     const comparison = doc.querySelector("#series-comparison");
     const siblings = catalog.products.filter(item => item.series === product.series);

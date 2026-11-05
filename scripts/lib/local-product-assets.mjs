@@ -29,7 +29,13 @@ async function readLocalAsset(directory, url, kind) {
 }
 
 export async function validateLocalProductAssets(directory, catalog) {
-  for (const { url } of catalog.sources.filter(source => source.url.startsWith("/assets/manuals/"))) {
+  const sourceById = new Map(catalog.sources.map(source => [source.id, source]));
+  const manualUrls = new Set(catalog.products
+    .filter(product => product.series === "zyhz-systems")
+    .flatMap(product => product.documents)
+    .map(id => sourceById.get(id)?.url)
+    .filter(Boolean));
+  for (const url of manualUrls) {
     const manual = (await readLocalAsset(directory, url, "manual")).toString("utf8");
     if (!manual.trim()) throw new Error("manual " + url + ": asset is empty");
     assertPublicContent(manual, url);

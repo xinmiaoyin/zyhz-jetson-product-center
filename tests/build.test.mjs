@@ -253,6 +253,16 @@ test("local media preflight preserves an existing dist when source assets are in
       await expectSafeFailure(/manual.*mi-12x4.*empty/i);
     } finally { await writeFile(manual, originalManual); }
   });
+  await t.test("referenced manual outside the conventional manuals folder", async () => {
+    const sources = join(rootDir, "data/sources.json");
+    const originalSources = await readFile(sources, "utf8");
+    await writeFile(sources, originalSources.replace(
+      "/assets/manuals/mi-12x4.html",
+      "/assets/guides/mi-12x4.html",
+    ));
+    try { await expectSafeFailure(/manual.*guides\/mi-12x4.*unavailable/i); }
+    finally { await writeFile(sources, originalSources); }
+  });
   await t.test("hero URL with path traversal", async () => {
     const path = join(rootDir, "data/products.json");
     const originalData = await readFile(path, "utf8");

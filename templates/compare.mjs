@@ -4,8 +4,8 @@ import { productTypeLabels, statusLabels } from "./products.mjs";
 import { filterOptions } from "../src/client/compare.js";
 
 export function renderCompare(catalog) {
-  const comparable = catalog.products.filter(product => product.performanceMetrics?.length);
-  const otherProducts = catalog.products.filter(product => !product.performanceMetrics?.length);
+  const comparable = catalog.products.filter(product => product.series !== "zyhz-systems" && product.performanceMetrics?.length);
+  const otherProducts = catalog.products.filter(product => product.series === "zyhz-systems" || !product.performanceMetrics?.length);
   const options = filterOptions(comparable);
   const seriesNames = Object.fromEntries(catalog.series.map(series => [series.slug, series.name]));
   const filters = [["series", "产品系列", seriesNames], ["type", "产品形态", productTypeLabels], ["memory", "内存配置", {}], ["power", "模组功耗配置", {}], ["industrial", "工业要求", {}], ["useCase", "推荐应用", {}], ["status", "供货状态", statusLabels]];
@@ -21,7 +21,7 @@ export function renderCompare(catalog) {
       ["推荐应用", product.useCases.join("、")], ["供货状态", statusLabels[product.status]],
     ];
   };
-  const actions = product => `<div class="matrix-actions"><a href="/products/${e(product.slug)}/">查看详情<span class="sr-only">：${e(product.nameZh)}</span></a>${product.performanceMetrics?.length ? `<button type="button" data-toggle-compare="${e(product.slug)}" aria-pressed="false" aria-label="加入对比：${e(product.nameZh)}">加入对比</button>` : ""}<a href="/support/?product=${encodeURIComponent(product.slug)}&amp;intent=quote">询价<span class="sr-only">：${e(product.nameZh)}</span></a></div>`;
+  const actions = product => `<div class="matrix-actions"><a href="/products/${e(product.slug)}/">查看详情<span class="sr-only">：${e(product.nameZh)}</span></a>${product.series !== "zyhz-systems" && product.performanceMetrics?.length ? `<button type="button" data-toggle-compare="${e(product.slug)}" aria-pressed="false" aria-label="加入对比：${e(product.nameZh)}">加入对比</button>` : ""}<a href="/support/?product=${encodeURIComponent(product.slug)}&amp;intent=quote">询价<span class="sr-only">：${e(product.nameZh)}</span></a></div>`;
   const publicProducts = comparable.map(({ slug, series, nameZh, productType, status, coreMetrics, useCases, specGroups }) => ({
     slug, series, nameZh, productType, status, useCases,
     coreMetrics: coreMetrics.map(({ label, value }) => ({ label, value })),

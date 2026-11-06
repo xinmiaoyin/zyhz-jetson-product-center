@@ -55,7 +55,7 @@ test("fifth comparison is rejected without mutating state and removal creates a 
 
 test("static performance matrix includes all twelve comparable products and accessible mobile cards without JavaScript", () => {
   const { dom, root, doc } = page("", false);
-  const comparable = catalog.products.filter(product => product.performanceMetrics?.length);
+  const comparable = catalog.products.filter(product => product.series !== "zyhz-systems" && product.performanceMetrics?.length);
   for (const selector of [".matrix-table tbody tr", ".matrix-card"]) {
     assert.deepEqual(visibleSlugs(root, selector), comparable.map(p => p.slug));
     for (const product of comparable) {
@@ -74,13 +74,13 @@ test("static performance matrix includes all twelve comparable products and acce
 });
 
 test("system links stay accessible while unsupported selections are dropped from a shared comparison URL", () => {
-  const { dom, root } = page("?compare=mi-12x4,jetson-t5000,c1201");
+  const { dom, root } = page("?compare=mi-12x4,jetson-t5000,c1201,vision-training-kit");
   assert.equal(root.querySelector("[data-result-count]").textContent, "12");
   assert.equal(root.querySelector("[data-selected-count]").textContent, "1");
   assert.equal(dom.window.location.search, "?compare=jetson-t5000");
   const links = root.querySelector("#other-products");
   assert.ok(links);
-  for (const slug of ["mi-12x4", "mi-19x2", "mi-19x3", "mi-11x8", "mi-13x8", "c1201"]) {
+  for (const slug of ["mi-12x4", "mi-19x2", "mi-19x3", "mi-11x8", "mi-13x8", "c1201", "vision-training-kit"]) {
     assert.ok(links.querySelector(`a[href="/products/${slug}/"]`));
     assert.ok([...links.querySelectorAll('a[href^="/support/"]')].some(link => link.getAttribute("href") === `/support/?product=${slug}&intent=quote`));
     assert.equal(root.querySelector(`[data-toggle-compare="${slug}"], [data-spec-product="${slug}"]`), null);

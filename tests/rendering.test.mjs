@@ -36,9 +36,9 @@ test("home renders all series once and useful non-JS links", () => {
   }
 });
 
-test("product index exposes eighteen grouped products with complete source metrics and appropriate actions", () => {
+test("product index exposes nineteen grouped products with complete source metrics and appropriate actions", () => {
   const doc = documentOf(renderProductsIndex(catalog));
-  assert.equal(doc.querySelectorAll("article[data-product]").length, 18);
+  assert.equal(doc.querySelectorAll("article[data-product]").length, 19);
   for (const product of catalog.products) {
     const card = doc.querySelector(`#${product.series} article[data-product="${product.slug}"]`);
     assert.ok(card, product.slug);
@@ -47,9 +47,9 @@ test("product index exposes eighteen grouped products with complete source metri
     assert.deepEqual([...card.querySelectorAll("dd .metric-value")].map(el => el.textContent), product.coreMetrics.map(metric => metric.value));
     assert.equal(card.querySelector(".status-badge").textContent, "供货请咨询");
     assert.ok(card.querySelector(`a[href="/products/${product.slug}/"]`));
-    assert.equal(Boolean(card.querySelector(`a[href="/compare/?compare=${product.slug}"]`)), Boolean(product.performanceMetrics?.length));
+    assert.equal(Boolean(card.querySelector(`a[href="/compare/?compare=${product.slug}"]`)), Boolean(product.performanceMetrics?.length && product.series !== "zyhz-systems"));
     assert.equal(card.querySelector('a[href^="/support/"]').getAttribute("href"), `/support/?product=${product.slug}&intent=quote`);
-    assert.equal(card.querySelector("img.product-image").getAttribute("src"), product.heroImage);
+    assert.equal(card.querySelector("img.product-image").getAttribute("src"), product.displayImage ?? product.heroImage);
     assert.equal(card.querySelector("img.product-image").dataset.fallback, `/assets/product-fallbacks/${product.slug}.svg`);
   }
 });
@@ -61,9 +61,10 @@ const systemModels = [
   ["mi-11x8", "边缘计算盒", "png"],
   ["mi-13x8", "边缘计算盒", "png"],
   ["c1201", "载板", "png"],
+  ["vision-training-kit", "视觉实训设备", "png"],
 ];
 
-test("the fifth catalog series groups six locally illustrated systems with Chinese type labels", () => {
+test("the fifth catalog series groups seven locally illustrated systems with Chinese type labels", () => {
   const doc = documentOf(renderProductsIndex(catalog));
   const section = doc.querySelector(".catalog-section:last-child");
   assert.equal(section.id, "zyhz-systems");
@@ -164,7 +165,7 @@ test("AGX Orin 64GB detail follows the approved sales-first order with four metr
 
 test("detail renders verified type-specific specifications and resolves evidence and resource links", async () => {
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
-  for (const product of catalog.products.filter(item => item.performanceMetrics?.length)) {
+  for (const product of catalog.products.filter(item => item.series !== "zyhz-systems" && item.performanceMetrics?.length)) {
     const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
     const tables = [...doc.querySelectorAll("#specifications table")];
     assert.equal(tables.length, product.specGroups.length);
@@ -200,7 +201,6 @@ test("system detail follows the sales-first order with a local manual and a cont
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
   for (const [slug, type, extension] of systemModels) {
     const product = catalog.products.find(item => item.slug === slug);
-    assert.equal(product.performanceMetrics, undefined);
     const doc = documentOf(renderProductDetail({ product, related: getRelatedProducts(product, catalog), catalog }));
     assert.equal(doc.querySelector("h1").textContent, product.nameZh);
     assert.deepEqual([...doc.querySelectorAll("main > section")].map(el => el.id), ["product-overview", "highlights", "use-cases", "specifications", "product-manuals", "purchasing", "related-products"]);
@@ -219,7 +219,7 @@ test("system detail follows the sales-first order with a local manual and a cont
 
 test("performance output and same-series detail comparison preserve complete precision context without ranking", async () => {
   const { renderProductDetail } = await import("../templates/product-detail.mjs");
-  for (const product of catalog.products.filter(item => item.performanceMetrics?.length)) {
+  for (const product of catalog.products.filter(item => item.series !== "zyhz-systems" && item.performanceMetrics?.length)) {
     const doc = documentOf(renderProductDetail({ product, related: [], catalog }));
     const comparison = doc.querySelector("#series-comparison");
     const siblings = catalog.products.filter(item => item.series === product.series);

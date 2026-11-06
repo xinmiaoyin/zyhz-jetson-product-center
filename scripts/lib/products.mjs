@@ -47,6 +47,7 @@ const nvidiaProductSchema = z.object({
   series: z.enum(nvidiaSeries),
   productType: z.enum(["developer-kit", "production-module", "industrial-module"]),
   heroImage: officialUrl,
+  displayImage: localAssetUrl.optional(),
   performanceMetrics: z.array(performanceMetricSchema).min(1),
 }).superRefine((product, ctx) => {
   const labels = new Set(product.specGroups.flatMap(group => group.rows.map(row => row.label)));
@@ -66,7 +67,7 @@ const nvidiaProductSchema = z.object({
 const zyhzProductSchema = z.object({
   ...productFields,
   series: z.literal(zyhzSeries),
-  productType: z.enum(["edge-computer", "carrier-board"]),
+  productType: z.enum(["edge-computer", "carrier-board", "vision-training-system"]),
   heroImage: localAssetUrl,
   performanceMetrics: z.array(performanceMetricSchema).optional(),
 });
@@ -119,7 +120,7 @@ export async function loadCatalog(rootDir) {
   for (const [name, result] of [["series", seriesResult], ["sources", sourcesResult]]) {
     if (!result.success) for (const issue of result.error.issues) errors.push(`${name}.${issue.path.join(".")}: ${issue.message}`);
   }
-  if (!Array.isArray(raw.products) || raw.products.length !== 18) errors.push("catalog products: exactly eighteen products required");
+  if (!Array.isArray(raw.products) || raw.products.length !== 19) errors.push("catalog products: exactly nineteen products required");
   const products = [];
   for (const [index, item] of (Array.isArray(raw.products) ? raw.products : []).entries()) {
     const result = productSchema.safeParse(item);

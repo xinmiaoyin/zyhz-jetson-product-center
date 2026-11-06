@@ -7,19 +7,21 @@ export const productTypeLabels = {
   "industrial-module": "工业模组",
   "edge-computer": "边缘计算盒",
   "carrier-board": "载板",
+  "vision-training-system": "视觉实训设备",
 };
 export const statusLabels = { available: "可供货", new: "新品", "contact-sales": "供货请咨询" };
 
 export function renderProductImage(product, className = "", loading = "lazy") {
+  const image = product.displayImage ?? product.heroImage;
   const fallback = `/assets/product-fallbacks/${product.slug}.svg`;
   const fallbackAlt = `${product.nameZh}，产品图片暂不可用`;
-  const localImage = product.heroImage.startsWith("/assets/");
+  const localImage = image.startsWith("/assets/");
   const fallbackMarkup = localImage ? "" : `<noscript><img class="product-fallback" src="${e(fallback)}" alt="${e(fallbackAlt)}" width="640" height="400" loading="${e(loading)}"></noscript>`;
-  return `<div class="product-visual${localImage ? " product-visual-local" : ""} ${e(className)}"><img class="product-image" src="${e(product.heroImage)}" data-fallback="${e(fallback)}" data-fallback-alt="${e(fallbackAlt)}" onerror="this.onerror=null;this.alt=this.dataset.fallbackAlt;this.src=this.dataset.fallback" alt="${e(product.imageAlt)}" width="640" height="400" loading="${e(loading)}" decoding="async">${fallbackMarkup}</div>`;
+  return `<div class="product-visual${localImage ? " product-visual-local" : ""} ${e(className)}"><img class="product-image" src="${e(image)}" data-fallback="${e(fallback)}" data-fallback-alt="${e(fallbackAlt)}" onerror="this.onerror=null;this.alt=this.dataset.fallbackAlt;this.src=this.dataset.fallback" alt="${e(product.imageAlt)}" width="640" height="400" loading="${e(loading)}" decoding="async">${fallbackMarkup}</div>`;
 }
 
 export function renderProductCard(product) {
-  const compareLink = product.performanceMetrics?.length ? `<a href="/compare/?compare=${encodeURIComponent(product.slug)}">加入对比<span class="sr-only">：${e(product.nameZh)}</span></a>` : "";
+  const compareLink = product.performanceMetrics?.length && product.series !== "zyhz-systems" ? `<a href="/compare/?compare=${encodeURIComponent(product.slug)}">加入对比<span class="sr-only">：${e(product.nameZh)}</span></a>` : "";
   return `<article class="product-card" data-product="${e(product.slug)}">
     ${renderProductImage(product)}
     <div class="product-card-body">

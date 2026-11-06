@@ -5,7 +5,7 @@ import { productTypeLabels, renderProductImage } from "./products.mjs";
 export function renderHome(catalog) {
   const representatives = catalog.series.map(series => ({ series, product: catalog.products.find(product => product.series === series.slug) }));
   const performanceRepresentatives = catalog.series.flatMap(series => {
-    const product = catalog.products.find(product => product.series === series.slug && product.performanceMetrics?.length);
+    const product = catalog.products.find(product => product.series === series.slug && product.series !== "zyhz-systems" && product.performanceMetrics?.length);
     return product ? [{ series, product }] : [];
   });
   const useCases = [...new Set(catalog.products.flatMap(product => product.useCases))].slice(0, 6);

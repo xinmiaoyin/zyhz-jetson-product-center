@@ -210,6 +210,7 @@
     "status": "contact-sales",
     "shortPositioning": "面向物理 AI 量产系统的大内存 Blackwell 模组",
     "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-thor/_jcr_content/root/responsivegrid/nv_container_copy/nv_container_1143095/nv_container_852351204/nv_image.coreimg.jpeg/1784156864542/jetson-thor-highlights-ari-1920x1080.jpeg",
+    "displayImage": "/assets/products/jetson-t5000/display.png",
     "officialPartNumber": "900-13834-0080-001",
     "coreMetrics": [
       {
@@ -791,6 +792,7 @@
     "status": "contact-sales",
     "shortPositioning": "面向机器人与多路视觉推理的高内存 Orin 量产模组",
     "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser.coreimg.jpeg/1787666716551/nvidia-jetson-agx-orin-3c33-d-2x.jpeg",
+    "displayImage": "/assets/products/jetson-agx-orin-64gb/display.png",
     "officialPartNumber": "900-13701-0050-000",
     "coreMetrics": [
       {
@@ -1376,6 +1378,7 @@
     "status": "contact-sales",
     "shortPositioning": "面向紧凑型机器人与边缘视觉系统的 16GB 模组",
     "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy.coreimg.jpeg/1787666716561/nvidia-jetson-orin-nx-3c33-d-2x.jpeg",
+    "displayImage": "/assets/products/jetson-orin-nx-16gb/display.png",
     "officialPartNumber": "900-13767-0000-001",
     "coreMetrics": [
       {
@@ -1942,6 +1945,7 @@
     "status": "contact-sales",
     "shortPositioning": "面向紧凑型视觉设备与入门边缘 AI 的 8GB 量产模组",
     "heroImage": "https://www.nvidia.com/content/nvidiaGDC/us/en_US/autonomous-machines/embedded-systems/jetson-orin/_jcr_content/root/responsivegrid/nv_container_copy_1594721673/nv_container/nv_teaser_copy_1995786452.coreimg.jpeg/1787666716572/nvidia-jetson-orin-nano-3c33-d-2x.jpeg",
+    "displayImage": "/assets/products/jetson-orin-nano-8gb/display.png",
     "officialPartNumber": "900-13767-0030-000",
     "coreMetrics": [
       {
@@ -3235,5 +3239,89 @@
     ],
     "verifiedAt": "2026-11-05",
     "imageAlt": "C1201 载板 外观"
+  },
+  {
+    "slug": "vision-training-kit",
+    "series": "zyhz-systems",
+    "nameZh": "视觉实训开发套件",
+    "nameEn": "Vision Training Development Kit",
+    "productType": "vision-training-system",
+    "status": "contact-sales",
+    "shortPositioning": "面向中医药图像采集、识别、模型部署与计算机视觉教学实训的一体化设备",
+    "heroImage": "/assets/products/vision-training-kit/hero.png",
+    "officialPartNumber": "ZY-VISION-TRAINING-KIT",
+    "coreMetrics": [
+      { "label": "AI 性能", "value": "157 TOPS · INT8 · sparse（稀疏） · Super 模式" },
+      { "label": "内存", "value": "16GB 128-bit LPDDR5" },
+      { "label": "相机", "value": "2000 万像素工业相机" },
+      { "label": "触控显示", "value": "≥19 英寸电容触控屏" }
+    ],
+    "performanceMetrics": [
+      {
+        "label": "最高 AI 性能",
+        "value": 157,
+        "unit": "TOPS",
+        "precision": "INT8",
+        "sparsity": "sparse",
+        "powerMode": "Super 模式",
+        "sourceReference": "vision-training-kit-manual",
+        "verifiedAt": "2026-11-06"
+      }
+    ],
+    "highlights": [
+      "集成 Jetson Orin 边缘 AI 计算平台，支持现场模型推理与教学实验",
+      "2000 万像素 Sony IMX183 工业相机提供高分辨率样本采集",
+      "配置无影灯与样本台，便于建立稳定、可重复的图像采集条件",
+      "电容触控屏支持结果展示、交互操作与实训演示",
+      "提供网络、USB、HDMI、CAN 与 RTC 等接口，便于设备集成与二次开发"
+    ],
+    "useCases": [
+      "中医药样本图像采集与识别",
+      "计算机视觉教学实训",
+      "边缘 AI 模型部署与验证"
+    ],
+    "specGroups": [
+      {
+        "title": "AI 计算平台",
+        "rows": [
+          { "label": "AI 性能", "value": "157 TOPS · INT8 · sparse（稀疏） · Super 模式", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "GPU", "value": "1024 核 NVIDIA Ampere GPU，32 个 Tensor Core", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "CPU", "value": "8 核 Arm Cortex-A78AE v8.2 64 位 CPU，最高 2.0 GHz", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "内存", "value": "16GB 128-bit LPDDR5，102.4 GB/s", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" }
+        ]
+      },
+      {
+        "title": "图像采集与显示",
+        "rows": [
+          { "label": "工业相机", "value": "2000 万像素，5496 × 3672，Sony IMX183，USB 3.0", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "触控屏", "value": "19 英寸及以上电容触控屏", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "采集结构", "value": "无影灯、样本台与相机支架一体化集成", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" }
+        ]
+      },
+      {
+        "title": "接口与扩展",
+        "rows": [
+          { "label": "网络", "value": "1 路千兆以太网", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "USB", "value": "4 × USB 3.2 Gen 2 Type-A；1 × USB Type-C", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "显示与控制", "value": "HDMI 2.0、CAN 总线与 RTC", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" }
+        ]
+      },
+      {
+        "title": "交付与集成",
+        "rows": [
+          { "label": "整机组成", "value": "AI 计算平台、工业相机、触控屏、无影灯、样本台及连接线缆", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" },
+          { "label": "部署方式", "value": "支持现场采集、本地推理和结果显示", "sourceReference": "vision-training-kit-manual", "verifiedAt": "2026-11-06" }
+        ]
+      }
+    ],
+    "softwareSupport": ["JetPack SDK", "CUDA", "TensorRT", "OpenCV"],
+    "documents": ["vision-training-kit-manual"],
+    "downloads": [],
+    "packageContents": ["视觉实训一体机", "2000 万像素工业相机", "电容触控屏", "无影灯与样本台", "电源与连接线缆"],
+    "optionalAccessories": ["扩展相机与镜头", "样本固定夹具", "定制化训练与部署服务"],
+    "relatedProducts": ["jetson-orin-nano-super-developer-kit", "mi-19x2", "mi-19x3"],
+    "sourceReferences": ["vision-training-kit-manual"],
+    "verifiedAt": "2026-11-06",
+    "imageAlt": "视觉实训开发套件整机与触控屏"
   }
 ]

@@ -17,10 +17,10 @@ async function fixture(t, mutate) {
   return root;
 }
 
-test("catalog validates all eighteen unique products and five ordered series", async () => {
+test("catalog validates all nineteen unique products and five ordered series", async () => {
   const catalog = await loadCatalog(process.cwd());
-  assert.equal(catalog.products.length, 18);
-  assert.equal(new Set(catalog.products.map(p => p.slug)).size, 18);
+  assert.equal(catalog.products.length, 19);
+  assert.equal(new Set(catalog.products.map(p => p.slug)).size, 19);
   assert.deepEqual(catalog.series.map(({ slug, order }) => [slug, order]), [
     ["thor", 1], ["agx-orin", 2], ["orin-nx", 3], ["orin-nano", 4], ["zyhz-systems", 5],
   ]);
@@ -46,7 +46,38 @@ test("catalog validates all eighteen unique products and five ordered series", a
     ["mi-11x8", "zyhz-systems", "edge-computer"],
     ["mi-13x8", "zyhz-systems", "edge-computer"],
     ["c1201", "zyhz-systems", "carrier-board"],
+    ["vision-training-kit", "zyhz-systems", "vision-training-system"],
   ]);
+});
+
+test("approved NVIDIA modules use local display images without replacing official hero evidence", async () => {
+  const catalog = await loadCatalog(process.cwd());
+  for (const slug of ["jetson-agx-orin-64gb", "jetson-orin-nx-16gb", "jetson-orin-nano-8gb", "jetson-t5000"]) {
+    const product = getProduct(slug, catalog);
+    assert.equal(product.displayImage, `/assets/products/${slug}/display.png`);
+    assert.match(product.heroImage, /^https:\/\//);
+    assert.ok(catalog.sources.some(source => source.url === product.heroImage && product.sourceReferences.includes(source.id)));
+  }
+  for (const product of catalog.products.filter(item => !["jetson-agx-orin-64gb", "jetson-orin-nx-16gb", "jetson-orin-nano-8gb", "jetson-t5000"].includes(item.slug))) {
+    assert.equal(product.displayImage, undefined, product.slug);
+  }
+});
+
+test("visual training kit publishes the approved 157 TOPS evidence and procurement entry points", async () => {
+  const catalog = await loadCatalog(process.cwd());
+  const product = getProduct("vision-training-kit", catalog);
+  assert.equal(product.productType, "vision-training-system");
+  assert.equal(product.heroImage, "/assets/products/vision-training-kit/hero.png");
+  assert.equal(product.performanceMetrics.length, 1);
+  assert.equal(formatPerformance(product.performanceMetrics[0]), "157 TOPS · INT8 · sparse（稀疏） · Super 模式");
+  assert.deepEqual(product.coreMetrics.map(metric => metric.value), [
+    "157 TOPS · INT8 · sparse（稀疏） · Super 模式",
+    "16GB 128-bit LPDDR5",
+    "2000 万像素工业相机",
+    "≥19 英寸电容触控屏",
+  ]);
+  assert.deepEqual(product.documents, ["vision-training-kit-manual"]);
+  assert.ok(product.relatedProducts.includes("jetson-orin-nano-super-developer-kit"));
 });
 
 test("ZYHZ products use local manuals and images with optional performance metrics", async () => {
@@ -86,12 +117,20 @@ test("product schema accepts the ZYHZ branch without NVIDIA performance or type-
     specGroups: [{ title: "接口", rows: [{ label: "显示", value: "HDMI", sourceReference: "mi-12x4-manual", verifiedAt: "2026-11-05" }] }],
   };
   assert.ok(productSchema.safeParse(candidate).success);
+  assert.ok(productSchema.safeParse({ ...candidate, productType: "vision-training-system" }).success);
   assert.equal(productSchema.safeParse({ ...candidate, productType: "developer-kit" }).success, false);
   assert.equal(productSchema.safeParse({ ...candidate, series: "thor" }).success, false);
   for (const path of ["//example.com/hero.png", "/assets/../hero.png", "/assets/%2e%2e/hero.png", "/assets/..\\hero.png", "/assets/hero.png?q=1"]) {
     const result = productSchema.safeParse({ ...candidate, heroImage: path });
     assert.equal(result.success, false, path);
     assert.ok(result.error.issues.some(issue => issue.path[0] === "heroImage"), path);
+  }
+  const nvidia = JSON.parse(await readFile("data/products.json", "utf8"))[0];
+  assert.ok(productSchema.safeParse({ ...nvidia, displayImage: "/assets/products/jetson-agx-thor-developer-kit/display.png" }).success);
+  for (const displayImage of ["https://example.com/display.png", "/assets/../display.png", "/images/display.png"]) {
+    const result = productSchema.safeParse({ ...nvidia, displayImage });
+    assert.equal(result.success, false, displayImage);
+    assert.ok(result.error.issues.some(issue => issue.path[0] === "displayImage"), displayImage);
   }
 });
 

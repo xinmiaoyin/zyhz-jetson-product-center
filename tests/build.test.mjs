@@ -29,7 +29,7 @@ test("buildSite writes the home page and route manifest", async () => {
   const result = await buildSite({ rootDir, outDir });
   const catalog = await loadCatalog(rootDir);
   const routes = ["/", "/products/", "/compare/", ...catalog.products.map(product => `/products/${product.slug}/`)];
-  assert.equal(result.routes.filter(route => /^\/products\/[^/]+\/$/.test(route)).length, 18);
+  assert.equal(result.routes.filter(route => /^\/products\/[^/]+\/$/.test(route)).length, 19);
   assert.deepEqual(result.routes.slice(0, routes.length), routes);
   assert.equal(result.routes.length, routes.length + (await loadDocuments(rootDir, catalog)).length + 3);
   assert.match(await readFile(join(outDir, "index.html"), "utf8"), /<!doctype html>/i);
@@ -135,7 +135,7 @@ test("built site checker enforces page, asset, accessibility and catalog invaria
   const productsPath = join(rootDir, "data/products.json");
   const products = JSON.parse(await readFile(productsPath, "utf8"));
   await writeFile(productsPath, `${JSON.stringify(products.slice(0, 11), null, 2)}\n`);
-  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /exactly eighteen products/i);
+  await assert.rejects(checkBuiltSite({ rootDir, outDir }), /exactly nineteen products/i);
 });
 
 test("dev server sends PNG assets with the correct media type", async () => {
@@ -153,12 +153,12 @@ test("dev server sends PNG assets with the correct media type", async () => {
   assert.equal(result.headers["Content-Type"], "image/png");
 });
 
-test("build publishes six standalone branded manuals and their product images", async () => {
+test("build publishes seven standalone branded manuals and their product images", async () => {
   const rootDir = await mkdtemp(join(tmpdir(), "zyhz-publish-"));
   for (const folder of ["data", "assets", "src", "content"]) await cp(join(process.cwd(), folder), join(rootDir, folder), { recursive: true });
   const outDir = join(rootDir, "dist");
   await buildSite({ rootDir, outDir });
-  const models = [["mi-12x4", "png"], ["mi-19x2", "png"], ["mi-19x3", "png"], ["mi-11x8", "png"], ["mi-13x8", "png"], ["c1201", "png"]];
+  const models = [["mi-12x4", "png"], ["mi-19x2", "png"], ["mi-19x3", "png"], ["mi-11x8", "png"], ["mi-13x8", "png"], ["c1201", "png"], ["vision-training-kit", "png"]];
   for (const [slug, extension] of models) {
     const manual = "/assets/manuals/" + slug + ".html";
     const image = "/assets/products/" + slug + "/hero." + extension;
@@ -166,6 +166,11 @@ test("build publishes six standalone branded manuals and their product images", 
     assert.match(html, /正阳恒卓/);
     assert.doesNotMatch(html, /隐溪科技|file:\/\/|\b[a-z]:[\\/]|\/mnt\/[a-z]\/jetson/iu);
     assert.match(html, /data:image\/(?:png|jpeg);base64,/i);
+    if (slug === "vision-training-kit") {
+      assert.doesNotMatch(html, /北京中医药大学|客户名称|采购数量|投标|比选|报价|(?:¥|人民币)\s*\d/iu);
+      assert.match(html, /157 TOPS/);
+      assert.match(html, /2000 万像素/);
+    }
     assert.ok((await readFile(join(outDir, image))).length > 0);
     const detail = await readFile(join(outDir, "products", slug, "index.html"), "utf8");
     assert.ok(detail.includes('href="' + manual + '"'), slug);
@@ -244,6 +249,16 @@ test("local media preflight preserves an existing dist when source assets are in
     await writeFile(image, original.subarray(0, 32));
     try { await expectSafeFailure(/invalid product image.*mi-12x4/i); }
     finally { await writeFile(image, original); }
+  });
+  await t.test("missing and corrupt NVIDIA display image", async () => {
+    const display = join(rootDir, "assets/products/jetson-t5000/display.png");
+    const originalDisplay = await readFile(display);
+    await unlink(display);
+    try {
+      await expectSafeFailure(/product image.*jetson-t5000.*unavailable/i);
+      await writeFile(display, originalDisplay.subarray(0, 32));
+      await expectSafeFailure(/invalid product image.*jetson-t5000/i);
+    } finally { await writeFile(display, originalDisplay); }
   });
   await t.test("missing and empty manual", async () => {
     await unlink(manual);

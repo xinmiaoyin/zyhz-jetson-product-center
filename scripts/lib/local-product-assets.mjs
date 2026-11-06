@@ -40,12 +40,16 @@ export async function validateLocalProductAssets(directory, catalog) {
     if (!manual.trim()) throw new Error("manual " + url + ": asset is empty");
     assertPublicContent(manual, url);
   }
-  for (const { heroImage } of catalog.products.filter(product => product.series === "zyhz-systems")) {
-    const image = await readLocalAsset(directory, heroImage, "product image");
+  const imageUrls = new Set(catalog.products.flatMap(product => [
+    ...(product.series === "zyhz-systems" ? [product.heroImage] : []),
+    ...(product.displayImage ? [product.displayImage] : []),
+  ]));
+  for (const imageUrl of imageUrls) {
+    const image = await readLocalAsset(directory, imageUrl, "product image");
     let valid;
-    try { valid = heroImage.endsWith(".png") && validatePng(image); }
-    catch (error) { throw new Error("invalid product image: " + heroImage, { cause: error }); }
-    if (!valid) throw new Error("invalid product image: " + heroImage);
+    try { valid = imageUrl.endsWith(".png") && validatePng(image); }
+    catch (error) { throw new Error("invalid product image: " + imageUrl, { cause: error }); }
+    if (!valid) throw new Error("invalid product image: " + imageUrl);
   }
 }
 

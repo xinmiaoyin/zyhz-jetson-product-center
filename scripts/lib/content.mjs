@@ -105,7 +105,20 @@ export async function loadDocuments(rootDir, catalog) {
 export function buildSearchIndex(documents, products) {
   // Explicit public projections: never serialize source records or whole product/document objects.
   return [
-    ...products.map(product => ({ title: product.nameZh, product: product.nameZh, type: "product", url: `/products/${product.slug}/`, text: [product.nameZh, product.nameEn, product.shortPositioning, ...product.highlights, ...product.useCases].join(" ") })),
+    ...products.map(product => ({
+      title: product.nameZh,
+      product: product.nameZh,
+      type: "product",
+      url: `/products/${product.slug}/`,
+      text: [
+        product.nameZh,
+        product.nameEn,
+        product.shortPositioning,
+        ...product.coreMetrics.flatMap(metric => [metric.label, metric.value, metric.note ?? ""]),
+        ...product.highlights,
+        ...product.useCases,
+      ].filter(Boolean).join(" "),
+    })),
     ...documents.map(document => ({ title: document.title, product: products.find(p => p.slug === document.product)?.nameZh ?? "", type: "document", url: document.url, text: `${document.title} ${document.summary} ${document.text}` })),
   ];
 }

@@ -169,3 +169,11 @@ test("build emits docs routes and public search JSON alongside all existing rout
   assert.equal(records.length, documents.length + catalog.products.length);
   assert.ok(searchIndex(records, "系统刷写").length);
 });
+
+test("visual training product is searchable without leaking customer or tender context", async () => {
+  const records = buildSearchIndex(await loadDocuments(process.cwd(), catalog), catalog.products);
+  const product = records.find(record => record.url === "/products/vision-training-kit/");
+  assert.ok(product);
+  assert.match(product.text, /视觉实训.*157 TOPS/s);
+  assert.doesNotMatch(product.text, /北京中医药大学|采购数量|投标|比选|报价/iu);
+});

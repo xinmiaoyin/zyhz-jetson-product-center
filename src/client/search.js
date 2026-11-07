@@ -1,3 +1,5 @@
+import { sitePath } from "./site-path.js";
+
 const normalize = value => String(value ?? "").normalize("NFKC").toLowerCase().replace(/\s+/gu, " ").trim();
 
 export function searchIndex(records, query) {
@@ -29,7 +31,7 @@ export function mountSearch(root, fetcher = globalThis.fetch.bind(globalThis)) {
     if (!query) { status.textContent = "输入产品名称或技术关键词，也可按下方目录浏览。"; return; }
     status.textContent = "正在搜索…";
     try {
-      pending ??= fetcher("/assets/search-index.json").then(response => {
+      pending ??= fetcher(sitePath("/assets/search-index.json", doc)).then(response => {
         if (!response.ok) throw new Error("search index unavailable");
         return response.json();
       });
@@ -42,7 +44,7 @@ export function mountSearch(root, fetcher = globalThis.fetch.bind(globalThis)) {
         if (typeof record.url !== "string" || !/^\/(?:docs|products)\/[a-z0-9/-]*$/.test(record.url)) continue;
         const item = doc.createElement("li");
         const link = doc.createElement("a");
-        link.href = record.url;
+        link.href = sitePath(record.url, doc);
         link.textContent = record.title;
         const meta = doc.createElement("p");
         meta.className = "muted";

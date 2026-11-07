@@ -1,3 +1,5 @@
+import { sitePath } from "./site-path.js";
+
 const mounted = new WeakSet();
 
 export function mountFeedback(root) {
@@ -39,7 +41,7 @@ export function mountFeedback(root) {
       const selected = options.find(option => option.value && option.value === product.value);
       context.textContent = selected ? `当前产品：${selected.textContent} · ${intent}（示例）` : "通用支持咨询（示例）";
       link.hidden = !selected;
-      if (selected) link.href = `/products/${selected.value}/`;
+      if (selected) link.href = sitePath(`/products/${selected.value}/`, root.ownerDocument);
       else link.removeAttribute("href");
     };
     root.querySelector("[data-support-controls]").hidden = false;

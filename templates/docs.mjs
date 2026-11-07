@@ -6,7 +6,7 @@ function search(catalog) {
   return `<section class="doc-search" data-doc-search aria-label="本地搜索"><form role="search"><label for="doc-query">搜索产品与技术文档</label><div class="search-controls"><input id="doc-query" type="search" name="q" placeholder="例如：AGX Orin、系统刷写" aria-describedby="search-status" aria-controls="search-results"><button class="button button-small" type="submit">搜索</button><button class="button button-small button-secondary" data-search-clear type="button">清除</button></div></form><p id="search-status" role="status" aria-live="polite">输入关键词，或按下方目录浏览。</p><ul id="search-results" data-search-results></ul><div data-search-guidance><span>按系列选型：</span>${catalog.series.map(series => `<a href="/products/#${e(series.slug)}">${e(series.name)}</a>`).join("")}</div></section>`;
 }
 function layout({ title, description, route, body }) {
-  return renderLayout({ title, description, route, body, styles: ["/assets/styles/docs.css"], noscript: "文档正文、来源与目录均可直接阅读；只有动态搜索需要 JavaScript。" }).replace("</head>", '<script type="module" src="/assets/client/search.js"></script>\n</head>');
+  return renderLayout({ title, description, route, body, styles: ["/assets/styles/docs.css"], scripts: ["/assets/client/search.js"], noscript: "文档正文、来源与目录均可直接阅读；只有动态搜索需要 JavaScript。" });
 }
 
 export function renderDocsIndex({ documents, catalog }) {

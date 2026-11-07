@@ -95,6 +95,17 @@ test("layout supplies metadata, accessible navigation and escaped content", () =
   assert.notEqual(documentOf(renderHome(catalog)).title, documentOf(renderProductsIndex(catalog)).title);
 });
 
+test("layout prefixes root-local links and assets for GitHub Pages project hosting", () => {
+  const doc = documentOf(renderLayout({ title: "Pages", description: "Pages deployment", route: "/products/", body: '<a href="/support/">Support</a><img src="/assets/example.png" data-fallback="/assets/fallback.svg">', scripts: ["/assets/client/example.js"], basePath: "/zyhz-jetson-product-center" }));
+  assert.equal(doc.documentElement.dataset.basePath, "/zyhz-jetson-product-center");
+  assert.equal(doc.querySelector("a.brand").getAttribute("href"), "/zyhz-jetson-product-center/");
+  assert.equal(doc.querySelector('nav a[aria-current="page"]').getAttribute("href"), "/zyhz-jetson-product-center/products/");
+  assert.equal(doc.querySelector("main a").getAttribute("href"), "/zyhz-jetson-product-center/support/");
+  assert.equal(doc.querySelector("main img").getAttribute("src"), "/zyhz-jetson-product-center/assets/example.png");
+  assert.equal(doc.querySelector("main img").dataset.fallback, "/zyhz-jetson-product-center/assets/fallback.svg");
+  assert.equal(doc.querySelector("script").getAttribute("src"), "/zyhz-jetson-product-center/assets/client/example.js");
+});
+
 test("remote product images switch to local fallback on load failure", () => {
   const dom = new JSDOM(renderProductsIndex(catalog), { runScripts: "dangerously", url: "https://example.test" });
   const img = dom.window.document.querySelector("img.product-image");

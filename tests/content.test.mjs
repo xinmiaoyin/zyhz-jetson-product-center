@@ -28,12 +28,11 @@ test("markdown keeps Chinese heading anchors unique and commands inert after san
   dom.window.close();
 });
 
-test("documents cover all twelve products with fifteen verified customer articles", async () => {
+test("documents cover all nineteen products with customer-facing resource articles", async () => {
   const documents = await loadDocuments(process.cwd(), catalog);
-  assert.ok(documents.length >= 15);
-  const nvidiaProducts = catalog.products.filter(product => product.series !== "zyhz-systems");
-  assert.equal(nvidiaProducts.length, 12);
-  for (const product of nvidiaProducts) assert.ok(documents.some(doc => doc.product === product.slug && doc.slug === "product-resources"), product.slug);
+  assert.ok(documents.length >= 22);
+  assert.equal(catalog.products.length, 19);
+  for (const product of catalog.products) assert.ok(documents.some(doc => doc.product === product.slug && doc.slug === "product-resources"), product.slug);
   for (const doc of documents) {
     assert.ok(catalog.products.some(product => product.slug === doc.product));
     assert.ok(doc.sourceReferences.length);
